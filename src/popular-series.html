@@ -1,0 +1,1752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>!function(){var t=localStorage.getItem('theme')||((window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light');document.documentElement.setAttribute('data-theme',t)}();</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Popular Series — Malaysia's Leading Tax E-Learning Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="templates/css-variables.css">
+<link rel="stylesheet" href="templates/css-topbar.css">
+<link rel="stylesheet" href="templates/css-footer.css">
+<style>
+
+/* ── Course Card ── */
+.tc-card {
+  border-radius: 14px; overflow: hidden; cursor: pointer; position: relative;
+  background: var(--card-bg); transition: transform 0.22s ease, box-shadow 0.22s ease;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.07); border: 1px solid var(--border-lighter);
+  flex-shrink: 0;
+}
+.tc-card:hover { transform: translateY(-5px) scale(1.015); box-shadow: 0 6px 20px rgba(0,0,0,0.14); }
+.tc-card--event { width: 290px; }
+.tc-card--event .tc-thumb { height: 170px; }
+.tc-card--event .tc-bar { background: var(--card-bg); padding: 12px 14px 0px 14px; }
+.tc-card--event .tc-tag { font-size: 12px; font-family: var(--font-secondary); color: var(--content-card-text); }
+.tc-card--event .tc-dur { font-size: 12px; }
+.tc-dates { background: var(--card-bg); padding: 9px 12px 14px; display: flex; flex-direction: column; gap: 6px; }
+.tc-date-row { display: flex; align-items: flex-start; gap: 8px; font-family: var(--font-primary); font-size: 14px; color: var(--grey-600); }
+.tc-date-row svg { width: 14px; height: 14px; stroke: var(--primary-500); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; margin-top: 2px; }
+.tc-speaker { flex: 1; white-space: normal; word-break: break-word; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.tc-thumb { position: relative; overflow: hidden; height: 170px; border-radius: 14px 14px 0 0; }
+.tc-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.tc-play-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.22s ease, background 0.22s ease; z-index: 4; pointer-events: none; }
+.tc-card:hover .tc-play-overlay { opacity: 1; background: rgba(0,0,0,0.50); }
+.tc-play { width: 52px; height: 52px; border-radius: 50%; background: var(--primary-500); display: flex; align-items: center; justify-content: center; transition: transform 0.18s ease; }
+.tc-card:hover .tc-play { transform: scale(1.08); }
+.tc-play svg { width: 20px; height: 20px; fill: var(--card-bg); stroke: none; margin-left: 4px; }
+.tc-heart { position: absolute; bottom: 12px; right: 12px; width: 32px; height: 32px; border-radius: 50%; background: rgba(0,0,0,0.38); border: none; padding: 0; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 6; transition: background 0.18s, transform 0.15s; }
+.tc-heart:hover { background: rgba(0,0,0,0.60); transform: scale(1.1); }
+.tc-heart svg { width: 18px; height: 18px; stroke: #fff; fill: none; stroke-width: 2; }
+.tc-heart.tc-heart--active { background: #e53e3e; }
+.tc-heart.tc-heart--active svg { fill: #fff; stroke: #fff; }
+.tc-seekbar { position: absolute; bottom: 0; left: 0; right: 0; height: 4px; background: rgba(255,255,255,0.18); z-index: 5; }
+.tc-seekbar-fill { height: 100%; background: var(--progress-green); border-radius: 0 2px 2px 0; }
+.tc-play-center { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.tc-resume-label { font-family: var(--font-primary); font-size: 11px; font-weight: 600; color: #fff; text-transform: uppercase; letter-spacing: 1.5px; }.tc-bar { display: flex; align-items: center; gap: 8px; padding: 12px 14px 0px 14px; background: var(--grey-150); min-height: 40px; }
+.tc-bar-right { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+.tc-bar-tags { flex: 1; min-width: 0; overflow: visible; position: relative; }
+.tc-merged-badge { display: inline-block; max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; vertical-align: middle; cursor: default; }
+.tc-tag { max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex-shrink: 0; border-radius: 4px !important; }
+
+/* ── Tooltip system ── */
+[data-tooltip] { position: relative; }
+[data-tooltip]::before,
+[data-tooltip]::after {
+  position: absolute; opacity: 0; visibility: hidden;
+  transition: opacity 0.15s, visibility 0.15s; pointer-events: none; z-index: 9999;
+}
+[data-tooltip]::after {
+  content: attr(data-tooltip);
+  background: var(--tooltip-bg); color: var(--tooltip-text);
+  font-family: var(--font-secondary); font-size: var(--fs-12); font-weight: 500;
+  padding: var(--space-6) var(--space-12); border-radius: var(--radius-md);
+  white-space: nowrap; line-height: 1.4; box-shadow: var(--shadow-md);
+}
+[data-tooltip]::before { content: ''; border: 5px solid transparent; }
+[data-tooltip]:hover::before,
+[data-tooltip]:hover::after { opacity: 1; visibility: visible; }
+[data-tooltip]::after, [data-tooltip-pos="top"]::after {
+  bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%);
+}
+[data-tooltip]::before, [data-tooltip-pos="top"]::before {
+  bottom: calc(100% + -2px); left: 50%; transform: translateX(-50%);
+  border-top-color: var(--tooltip-bg);
+}
+
+.tc-dur { font-family: var(--font-secondary); font-size: 12px; color: var(--content-card-text); white-space: nowrap; display: flex; align-items: center; gap: 5px; flex-shrink: 0; }
+.tc-dur svg { width: 12px; height: 12px; stroke: var(--content-card-text); fill: none; stroke-width: 2; }
+
+/* ============================================================
+   SERIES PAGE SPECIFIC STYLES
+   ============================================================ */
+
+/* ── Series Header Row (title + dropdown) ── */
+.series-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  gap: 16px;
+}
+.series-header-row h1 { margin: 0; font-weight: 600; }
+
+/* ── Series Tabs → Dropdown ── */
+.series-tabs-dropdown {
+  position: relative;
+  display: inline-block;
+  flex-shrink: 0;
+}
+.series-dropdown-trigger {
+  font-family: var(--font-secondary);
+  font-size: var(--fs-16);
+  font-weight: 400;
+  color: var(--input-text);
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-8) var(--space-16);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-8);
+  transition: border-color 0.15s, background 0.15s;
+  min-width: 280px;
+}
+.series-dropdown-trigger:hover { border-color: var(--primary-500); }
+.series-dropdown-trigger:disabled,
+.series-dropdown-trigger[aria-disabled="true"] {
+  background: var(--input-disabled-bg);
+  border-color: var(--input-disabled-border);
+  color: var(--input-disabled-text);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+.series-dropdown-chevron {
+  width: 16px; height: 16px;
+  stroke: var(--grey-500); fill: none; stroke-width: 2;
+  stroke-linecap: round; stroke-linejoin: round;
+  margin-left: auto; flex-shrink: 0;
+  transition: transform 0.2s;
+  pointer-events: none;
+}
+.series-tabs-dropdown.dd-open .series-dropdown-chevron { transform: rotate(180deg); }
+.series-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  min-width: 100%;
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  z-index: 200;
+  display: none;
+  padding: var(--space-4) 0;
+}
+.series-tabs-dropdown.dd-open .series-dropdown-menu { display: block; }
+.series-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  padding: var(--space-8) var(--space-16);
+  font-family: var(--font-secondary);
+  font-size: var(--fs-16);
+  color: var(--input-text);
+  cursor: pointer;
+  transition: background 0.1s;
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: left;
+}
+.series-dropdown-item:hover { background: var(--primary-50); color: var(--primary-500); }
+.series-dropdown-item.dd-active { background: var(--primary-50); color: var(--primary-500); font-weight: 600; }
+[data-theme="dark"] .series-dropdown-trigger:hover { border-color: var(--primary-500); }
+[data-theme="dark"] .series-dropdown-item.dd-active { background: var(--primary-100); color: var(--primary-500); }
+[data-theme="dark"] .series-dropdown-item:hover { background: var(--primary-100); color: var(--primary-500); }
+
+/* ── Series Detail Panel ── */
+.series-detail {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 32px;
+  margin-bottom: 32px;
+  border: 1px solid var(--border-lighter);
+}
+.series-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+  gap: 24px;
+}
+.series-detail-title {
+  font-family: var(--font-primary);
+  font-weight: 600;
+  color: var(--grey-800);
+  margin: 0;
+}
+.series-detail-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.series-detail-stat {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-secondary);
+  font-size: var(--fs-14);
+  color: var(--content-card-text);
+}
+.series-detail-stat svg {
+  width: 16px; height: 16px;
+  stroke: currentColor; fill: none; stroke-width: 2;
+  stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0;
+}
+.series-detail-desc {
+  font-family: var(--font-secondary);
+  font-size: var(--fs-16);
+  color: var(--grey-600);
+  line-height: 1.6;
+  max-width: none;
+}
+.btn-resume {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: var(--primary-500);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-md);
+  font-family: var(--font-primary);
+  font-size: var(--fs-14);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.btn-resume:hover { background: var(--primary-600); }
+.btn-resume svg { width: 16px; height: 16px; fill: currentColor; stroke: none; }
+[data-theme="dark"] .btn-resume { color: var(--neutral-white); }
+[data-theme="dark"] .btn-resume svg { fill: currentColor; }
+[data-theme="dark"] .btn-resume:hover { background: var(--primary-600); }
+
+/* ── Course Grid ── */
+.series-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+/* Cards scale to fill column; thumb maintains 290×170 aspect ratio */
+.series-grid .tc-card,
+.series-grid .tc-card--event { width: 100%; }
+.series-grid .tc-card--event .tc-thumb { height: auto; aspect-ratio: 290 / 170; }
+
+/* ── Page Content ── */
+body { background: var(--web-bg-light-blue); }
+
+.series-page-content {
+  padding: 48px 0 64px;
+}
+
+/* ── Series panel (tab content) ── */
+.series-panel { display: none; }
+.series-panel.active { display: block; }
+
+
+/* ── Tablet: fixed 290px card width, wrap to next line ── */
+@media (min-width: 769px) and (max-width: 1100px) {
+  .series-grid {
+    grid-template-columns: repeat(auto-fill, 290px);
+    gap: 24px;
+    justify-content: center;
+  }
+  .series-grid .tc-card,
+  .series-grid .tc-card--event { width: 290px; }
+}
+
+/* ── Tablet portrait: cards fill the grid in 2 columns ── */
+@media (min-width: 769px) and (max-width: 1100px) and (orientation: portrait) {
+  .series-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+  .series-grid .tc-card,
+  .series-grid .tc-card--event { width: 100%; }
+  .series-grid .tc-card--event .tc-thumb { height: auto; aspect-ratio: 290 / 170; }
+}
+
+/* ── Page-specific mobile responsive ── */
+@media (max-width: 768px) {
+  .series-page-content { padding: 24px 0 32px; }
+  .series-detail { padding: 20px; }
+  .series-detail-header { flex-direction: column; gap: 16px; }
+  .series-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .series-header-row { flex-direction: column; align-items: flex-start; gap: 12px; margin-bottom: 16px; }
+  .series-tabs-dropdown { display: block; width: 100%; }
+  .series-dropdown-trigger { width: 100%; min-width: 0; }
+  .series-dropdown-menu { width: 100%; }
+  /* Mobile: cards stretch wider than desktop — let thumb grow proportionally */
+  .series-grid .tc-card--event .tc-thumb { height: auto; aspect-ratio: 290 / 170; }
+}
+
+@media (max-width: 480px) {
+  .series-grid { grid-template-columns: 1fr; }
+}
+
+/* ── Course Hover Popover ── */
+.course-popover {
+  position: fixed;
+  width: 300px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.45), 0 4px 16px rgba(0,0,0,0.2);
+  z-index: 9999;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-8px) scale(0.97);
+  transition: opacity 0.22s ease, transform 0.22s ease;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  max-height: 80vh;
+}
+.course-popover.popover-open {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(0) scale(1);
+}
+/* Video area */
+.cp-video {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/9;
+  overflow: hidden;
+  background: #000;
+  flex-shrink: 0;
+}
+.cp-video video,
+.cp-video img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
+/* Close button */
+.cp-close {
+  display: flex;
+  position: absolute; top: 8px; right: 8px;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.55);
+  border: none; cursor: pointer;
+  align-items: center; justify-content: center;
+  color: #fff; padding: 0;
+  z-index: 10;
+}
+.cp-close svg { width: 14px; height: 14px; }
+.tc-thumb-badge {
+  position: absolute;
+  top: 14px; left: 11px;
+  font-size: 9px; font-weight: 700;
+  letter-spacing: 1px; text-transform: uppercase;
+  padding: 4px 10px; border-radius: 6px; line-height: 1;
+  pointer-events: none; display: flex; align-items: center; gap: 5px; color: #fff; z-index: 3;
+}
+.tc-thumb-badge svg { width: 11px; height: 11px; flex-shrink: 0; vertical-align: middle; display: block; }
+.tc-thumb-badge--course { background: rgba(0,0,0,0.3); }
+.cp-video-bar {
+  display: none;
+}
+.cp-video-bar-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--primary-500);
+  border-radius: 0 2px 2px 0;
+  animation: cpVideoPlay 8s linear forwards;
+  animation-play-state: paused;
+}
+.tc-card--watched:hover .cp-video-bar-fill { animation-play-state: running; }
+@keyframes cpVideoPlay { from { width: 45%; } to { width: 100%; } }
+.cp-live-dot {
+  position: absolute;
+  top: 10px; left: 10px;
+  display: flex; align-items: center; gap: 5px;
+  background: rgba(0,0,0,0.55);
+  border-radius: 20px;
+  padding: 3px 8px 3px 6px;
+  font-size: 10px; font-weight: 700;
+  color: #fff; text-transform: uppercase; letter-spacing: 1px;
+}
+.cp-live-dot-icon {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: #e53e3e;
+  animation: cpDotBlink 1.2s ease-in-out infinite;
+}
+@keyframes cpDotBlink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+.cp-progress-text {
+  position: absolute;
+  bottom: 10px; right: 10px;
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+  font-size: 10px; font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 4px;
+  letter-spacing: 0.3px;
+}
+/* Popover body */
+.cp-body { padding: 14px 16px 16px; font-family: var(--font-secondary); font-size: 14px; color: var(--grey-700); overflow-y: auto; flex: 1; min-height: 0; -webkit-overflow-scrolling: touch; }
+.cp-body::-webkit-scrollbar { width: 4px; }
+.cp-body::-webkit-scrollbar-track { background: transparent; }
+.cp-body::-webkit-scrollbar-thumb { background: var(--grey-300); border-radius: 4px; }
+.cp-body::-webkit-scrollbar-thumb:hover { background: var(--grey-400); }
+[data-theme="dark"] .cp-body::-webkit-scrollbar-thumb { background: var(--grey-600); }
+[data-theme="dark"] .cp-body::-webkit-scrollbar-thumb:hover { background: var(--grey-500); }
+.cp-body { scrollbar-width: thin; scrollbar-color: var(--grey-300) transparent; }
+[data-theme="dark"] .cp-body { scrollbar-color: var(--grey-600) transparent; }
+.cp-meta {
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 8px;
+}
+.cp-meta .badge { border-radius: var(--radius-sm); font-family: var(--font-secondary); }
+.cp-date {
+  font-family: var(--font-secondary);
+  font-size: 11px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 1px;
+  
+}
+.cp-title {
+  font-family: var(--font-primary);
+  font-size: 16px; font-weight: 700;
+  color: var(--grey-800);
+  line-height: 1.35;
+  margin: 0 0 10px;
+}
+.cp-stats {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 12px;
+}
+.cp-stat {
+  display: flex; align-items: center; gap: 5px;
+  font-family: var(--font-secondary);
+  font-size: 14px; 
+}
+.cp-stat svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 2; flex-shrink: 0; }
+.cp-divider { height: 1px; background: var(--card-border); margin: 12px 0; }
+.cp-learn-label {
+  font-family: var(--font-secondary);
+  font-size: 14px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 1px;
+  
+  margin-bottom: 9px;
+}
+.cp-outcomes { list-style: none; padding: 0; margin: 0 0 14px; display: flex; flex-direction: column; gap: 7px; }
+.cp-outcomes li {
+  display: flex; align-items: flex-start; gap: 8px;
+  font-family: var(--font-secondary);
+  font-size: 14px; line-height: 1.45;
+  
+}
+.cp-outcomes li svg {
+  width: 15px; height: 15px; flex-shrink: 0; margin-top: 1px;
+  stroke: var(--primary-500); fill: none; stroke-width: 2.5;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+/* Progress bar row */
+.cp-progress-row {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 12px;
+}
+.cp-progress-track {
+  flex: 1; height: 5px;
+  background: var(--card-border);
+  border-radius: 3px; overflow: hidden;
+}
+.cp-progress-fill {
+  height: 100%; width: 45%;
+  background: var(--progress-green, #38a169);
+  border-radius: 3px;
+}
+.cp-progress-pct { font-size: 14px; font-weight: 600;  flex-shrink: 0; }
+/* CTA button — extends .btn-resume with full width; hidden on desktop */
+.cp-cta { width: 100%; justify-content: center; display: none; }
+
+
+/* ── Backdrop: hidden by default, activated on mobile/tablet via JS class ── */
+.cp-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9998; opacity: 0; pointer-events: none; transition: opacity 0.22s ease; }
+.cp-backdrop.active { opacity: 1; pointer-events: auto; }
+
+/* ── Mobile: centered modal (content height, 16px side padding) ── */
+@media (max-width: 768px) {
+  .tc-play-overlay { display: none !important; }
+  .cp-cta { display: flex !important; }
+  .course-popover {
+    left: 16px !important; right: 16px !important;
+    top: 50% !important; bottom: auto !important;
+    width: auto !important; max-width: none !important;
+    height: auto !important; max-height: 90dvh !important;
+    border-radius: var(--radius-lg) !important;
+    transform: translateY(calc(-50% + 20px)) !important; opacity: 0 !important;
+    overflow: hidden; display: flex; flex-direction: column;
+    transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.25s ease !important;
+  }
+  .course-popover.popover-open {
+    pointer-events: auto !important;
+    transform: translateY(-50%) !important;
+    opacity: 1 !important;
+  }
+  .cp-video { flex-shrink: 0; }
+  .cp-body { overflow-y: auto; -webkit-overflow-scrolling: touch; flex: 1; min-height: 0; }
+  .cp-close { display: flex; }
+  .cp-video-bar { display: none; }
+}
+
+/* ── Tablet portrait: centered modal (30px viewport padding) ── */
+@media (min-width: 768px) and (max-width: 1100px) and (orientation: portrait) {
+  .tc-play-overlay { display: none !important; }
+  .cp-cta { display: flex !important; }
+  .course-popover {
+    left: 30px !important; right: 30px !important;
+    top: 50% !important; bottom: auto !important;
+    width: auto !important; max-width: none !important;
+    height: auto !important; max-height: calc(100dvh - 60px) !important;
+    border-radius: var(--radius-lg) !important;
+    transform: translateY(calc(-50% + 20px)) !important;
+    opacity: 0 !important;
+    overflow: hidden; display: flex; flex-direction: column;
+    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.25s ease !important;
+  }
+  .course-popover.popover-open {
+    pointer-events: auto !important;
+    transform: translateY(-50%) !important;
+    opacity: 1 !important;
+  }
+  .cp-video { flex-shrink: 0; max-height: 40dvh; }
+  .cp-body { overflow-y: auto; -webkit-overflow-scrolling: touch; flex: 1; min-height: 0; }
+  .cp-close { display: flex; }
+  .cp-video-bar { display: none; }
+}
+</style>
+</head>
+<body>
+
+
+
+<!-- #include "templates/header.html" -->
+
+<!-- #include "templates/mobile-menu.html" -->
+
+<!-- #include "templates/main-nav.html" -->
+
+
+<!-- ============================================================
+     SERIES PAGE CONTENT
+     ============================================================ -->
+<div class="series-page-content">
+  <div class="container">
+    <!-- Series Header: title + dropdown right-aligned -->
+    <div class="series-header-row">
+      <h2>Popular Series</h2>
+      <div class="series-tabs-dropdown" id="series-tabs-dropdown">
+      <button class="series-dropdown-trigger" onclick="toggleSeriesDropdown(event)" id="series-dropdown-btn" aria-haspopup="listbox" aria-expanded="false">
+        <span id="series-dropdown-label">Tax Planning for New Business</span>
+        <svg class="series-dropdown-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="series-dropdown-menu" role="listbox">
+        <button class="series-dropdown-item dd-active" onclick="showSeries(0, 'Tax Planning for New Business')" role="option" aria-selected="true">Tax Planning for New Business</button>
+        <button class="series-dropdown-item" onclick="showSeries(1, 'A Must Watch for HR/ Payroll Team')" role="option" aria-selected="false">A Must Watch for HR/ Payroll Team</button>
+        <button class="series-dropdown-item" onclick="showSeries(2, 'SME &amp; Freelancer Tax')" role="option" aria-selected="false">SME &amp; Freelancer Tax</button>
+        <button class="series-dropdown-item" onclick="showSeries(3, 'Advanced Tax Planning &amp; Optimization')" role="option" aria-selected="false">Advanced Tax Planning &amp; Optimization</button>
+        <button class="series-dropdown-item" onclick="showSeries(4, 'Career &amp; Certification for Tax Professionals')" role="option" aria-selected="false">Career &amp; Certification for Tax Professionals</button>
+      </div>
+    </div>
+    </div><!-- /.series-header-row -->
+
+    <!-- Series 1: Tax Planning for New Business -->
+    <div class="series-panel active" id="series-0">
+      <div class="series-detail">
+        <div class="series-detail-header">
+          <div>
+            <h3 class="series-detail-title">Tax Planning for New Business</h3>
+            <div class="series-detail-meta">
+              <span class="series-detail-stat">
+                <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="15" y2="6"/><line x1="3" y1="12" x2="15" y2="12"/><line x1="3" y1="18" x2="15" y2="18"/><polygon points="17 10 23 14 17 18"/></svg>
+                6 courses
+              </span>
+              <span class="series-detail-stat">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <span id="series-total-dur">20 hr 30 min</span>
+              </span>
+            </div>
+          </div>
+          <button class="btn-resume">
+            <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            Resume Playing
+          </button>
+        </div>
+        <p class="series-detail-desc">Explore the series and unlock the secrets to effective tax planning. Learn how to navigate tax planning for your new business, including understanding the tax implications of website development fees and a detailed comparison of the types of business structures.</p>
+      </div>
+
+      <div class="series-grid">
+        <div class="tc-card tc-card--event" id="card-s0-c1">
+          <div class="tc-thumb">
+            <img src="assets/images/course-images/20.png" alt="Business Training Expenses">
+            <div class="tc-play-overlay"><div class="tc-play-center"><div class="tc-play"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><div class="tc-resume-label">Learn More</div></div></div>
+            <button class="tc-heart" onclick="toggleHeart(this)" aria-label="Add to wishlist"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+          </div>
+          <div class="tc-bar">
+            <span class="badge badge-sm badge-pill badge-bonus-outline tc-tag">Expenses</span>
+            <div class="tc-bar-right">
+              <span class="tc-dur"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>6 min</span>
+            </div>
+          </div>
+          <div class="tc-dates"><div class="tc-date-row"><svg viewBox="0 0 24 24" class="tc-speaker-icon" title="Speaker"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="tc-speaker" title="Speaker: Zen Chow, YYC Executive Director & Country Tax Leader">Zen Chow, YYC Executive Director & Country Tax Leader</span></div></div>
+          <div class="course-popover" id="popover-s0-c1">
+            <div class="cp-video">
+              <video autoplay muted loop playsinline poster="assets/images/course-images/20.png"><source src="assets/videos/Business Training Expenses.mp4" type="video/mp4"></video>
+              <span class="tc-thumb-badge tc-thumb-badge--course"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Course</span>
+              <div class="cp-live-dot"><div class="cp-live-dot-icon"></div>Preview</div>
+              <div class="cp-video-bar"><div class="cp-video-bar-fill"></div></div>
+              <button class="cp-close" aria-label="Close" onclick="document.getElementById('popover-s0-c1').classList.remove('popover-open')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+            <div class="cp-body">
+              <div class="cp-meta"><span class="badge badge-sm badge-pill badge-bonus-outline">Expenses</span><span class="cp-date">12 Mar 2025</span></div>
+              <h3 class="cp-title">Business Training Expenses</h3>
+              <div class="cp-stats">
+                <span class="cp-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>6 min | CPE</span>
+                <span class="cp-stat"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>1 Module</span>
+              </div>
+              <div class="cp-divider"></div>
+              <p class="cp-learn-label">What you will learn</p>
+              <ul class="cp-outcomes">
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Identifying deductible training costs for your business</li>
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Eligibility conditions for claiming employee training expenses</li>
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Differentiating personal vs business learning expenses</li>
+              </ul>
+              <button class="btn-resume cp-cta" onclick="window.location.href='#'"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Play</button>
+            </div>
+          </div>
+        </div>
+        <div class="tc-card tc-card--event" id="card-s0-c2">
+          <div class="tc-thumb">
+            <img src="assets/images/course-images/21.png" alt="Sole Prop / Partnership / LLP / Company">
+            <div class="tc-play-overlay"><div class="tc-play-center"><div class="tc-play"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><div class="tc-resume-label">Learn More</div></div></div>
+            <button class="tc-heart" onclick="toggleHeart(this)" aria-label="Add to wishlist"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+          </div>
+          <div class="tc-bar">
+            <span class="badge badge-sm badge-pill badge-bonus-outline tc-tag">Income Tax</span>
+            <div class="tc-bar-right">
+              <span class="tc-dur"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>36 min</span>
+            </div>
+          </div>
+          <div class="tc-dates"><div class="tc-date-row"><svg viewBox="0 0 24 24" class="tc-speaker-icon" title="Speaker"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="tc-speaker" title="Speaker: Datin Shin Yap, YYC CEO & Finance Expert">Datin Shin Yap, YYC CEO & Finance Expert</span></div></div>
+          <div class="course-popover" id="popover-s0-c2">
+            <div class="cp-video">
+              <video autoplay muted loop playsinline poster="assets/images/course-images/21.png"><source src="assets/videos/Business Training Expenses.mp4" type="video/mp4"></video>
+              <span class="tc-thumb-badge tc-thumb-badge--course"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Course</span>
+              <div class="cp-live-dot"><div class="cp-live-dot-icon"></div>Preview</div>
+              <div class="cp-video-bar"><div class="cp-video-bar-fill"></div></div>
+              <button class="cp-close" aria-label="Close" onclick="document.getElementById('popover-s0-c2').classList.remove('popover-open')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+            <div class="cp-body">
+              <div class="cp-meta"><span class="badge badge-sm badge-pill badge-bonus-outline">Income Tax</span><span class="cp-date">20 Jan 2025</span></div>
+              <h3 class="cp-title">Sole Prop / Partnership / LLP / Company</h3>
+              <div class="cp-stats">
+                <span class="cp-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>36 min | CPE</span>
+                <span class="cp-stat"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>1 Module</span>
+              </div>
+              <div class="cp-divider"></div>
+              <p class="cp-learn-label">What you will learn</p>
+              <ul class="cp-outcomes">
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Comparing tax rates across different business structures</li>
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Liability and compliance differences for each entity type</li>
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Choosing the right structure for your new business venture</li>
+              </ul>
+              <button class="btn-resume cp-cta" onclick="window.location.href='#'"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Play</button>
+            </div>
+          </div>
+        </div>
+        <div class="tc-card tc-card--event" id="card-s0-c3">
+          <div class="tc-thumb">
+            <img src="assets/images/course-images/7.png" alt="Small and Medium Enterprises (SMEs)">
+            <div class="tc-play-overlay"><div class="tc-play-center"><div class="tc-play"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><div class="tc-resume-label">Learn More</div></div></div>
+            <button class="tc-heart" onclick="toggleHeart(this)" aria-label="Add to wishlist"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+          </div>
+          <div class="tc-bar">
+            <span class="badge badge-sm badge-pill badge-bonus-outline tc-tag">Income Tax</span>
+            <div class="tc-bar-right">
+              <span class="tc-dur"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>42 min</span>
+            </div>
+          </div>
+          <div class="tc-dates"><div class="tc-date-row"><svg viewBox="0 0 24 24" class="tc-speaker-icon" title="Speaker"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="tc-speaker" title="Speaker: Tifannyz Yap, YYC Tax Expert">Tifannyz Yap, YYC Tax Expert</span></div></div>
+          <div class="course-popover" id="popover-s0-c3">
+            <div class="cp-video">
+              <video autoplay muted loop playsinline poster="assets/images/course-images/7.png"><source src="assets/videos/Business Training Expenses.mp4" type="video/mp4"></video>
+              <span class="tc-thumb-badge tc-thumb-badge--course"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Course</span>
+              <div class="cp-live-dot"><div class="cp-live-dot-icon"></div>Preview</div>
+              <div class="cp-video-bar"><div class="cp-video-bar-fill"></div></div>
+              <button class="cp-close" aria-label="Close" onclick="document.getElementById('popover-s0-c3').classList.remove('popover-open')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+            <div class="cp-body">
+              <div class="cp-meta"><span class="badge badge-sm badge-pill badge-bonus-outline">Income Tax</span><span class="cp-date">5 Feb 2025</span></div>
+              <h3 class="cp-title">Small and Medium Enterprises (SMEs)</h3>
+              <div class="cp-stats">
+                <span class="cp-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>42 min | CPE</span>
+                <span class="cp-stat"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>1 Module</span>
+              </div>
+              <div class="cp-divider"></div>
+              <p class="cp-learn-label">What you will learn</p>
+              <ul class="cp-outcomes">
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>SME tax incentives and reliefs available in Malaysia</li>
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Qualifying criteria for SME tax treatment and status</li>
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Key compliance requirements and filing deadlines for SMEs</li>
+              </ul>
+              <button class="btn-resume cp-cta" onclick="window.location.href='#'"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Play</button>
+            </div>
+          </div>
+        </div>
+        <div class="tc-card tc-card--event" id="card-s0-c4">
+          <div class="tc-thumb">
+            <img src="assets/images/course-images/10.png" alt="Cost of Developing Website">
+            <div class="tc-play-overlay"><div class="tc-play-center"><div class="tc-play"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><div class="tc-resume-label">Learn More</div></div></div>
+            <button class="tc-heart" onclick="toggleHeart(this)" aria-label="Add to wishlist"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+          </div>
+          <div class="tc-bar">
+            <span class="badge badge-sm badge-pill badge-bonus-outline tc-tag">Income, Income Tax</span>
+            <div class="tc-bar-right">
+              <span class="tc-dur"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>3 hr 18 min</span>
+            </div>
+          </div>
+          <div class="tc-dates"><div class="tc-date-row"><svg viewBox="0 0 24 24" class="tc-speaker-icon" title="Speaker"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="tc-speaker" title="Speaker: Fong Ying Chai, YYC Tax Expert">Fong Ying Chai, YYC Tax Expert</span></div></div>
+          <div class="course-popover" id="popover-s0-c4">
+            <div class="cp-video">
+              <video autoplay muted loop playsinline poster="assets/images/course-images/10.png"><source src="assets/videos/Business Training Expenses.mp4" type="video/mp4"></video>
+              <span class="tc-thumb-badge tc-thumb-badge--course"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Course</span>
+              <div class="cp-live-dot"><div class="cp-live-dot-icon"></div>Preview</div>
+              <div class="cp-video-bar"><div class="cp-video-bar-fill"></div></div>
+              <button class="cp-close" aria-label="Close" onclick="document.getElementById('popover-s0-c4').classList.remove('popover-open')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+            <div class="cp-body">
+              <div class="cp-meta"><span class="badge badge-sm badge-pill badge-bonus-outline">Income Tax</span><span class="cp-date">8 Apr 2025</span></div>
+              <h3 class="cp-title">Cost of Developing Website</h3>
+              <div class="cp-stats">
+                <span class="cp-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>3 hr 18 min | CPE</span>
+                <span class="cp-stat"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>1 Module</span>
+              </div>
+              <div class="cp-divider"></div>
+              <p class="cp-learn-label">What you will learn</p>
+              <ul class="cp-outcomes">
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Capital vs revenue treatment for website development costs</li>
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>How to correctly claim website development expenses</li>
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Tax implications for ongoing maintenance and hosting fees</li>
+              </ul>
+              <button class="btn-resume cp-cta" onclick="window.location.href='#'"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Play</button>
+            </div>
+          </div>
+        </div>
+        <div class="tc-card tc-card--event" id="card-s0-c5">
+          <div class="tc-thumb">
+            <img src="assets/images/course-images/22.png" alt="Estimate of Tax Payable and Tax Installment Payments">
+            <div class="tc-play-overlay"><div class="tc-play-center"><div class="tc-play"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><div class="tc-resume-label">Learn More</div></div></div>
+            <button class="tc-heart" onclick="toggleHeart(this)" aria-label="Add to wishlist"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+          </div>
+          <div class="tc-bar">
+            <span class="badge badge-sm badge-pill badge-bonus-outline tc-tag">Income, Income Tax</span>
+            <div class="tc-bar-right">
+              <span class="tc-dur"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>18 min</span>
+            </div>
+          </div>
+          <div class="tc-dates"><div class="tc-date-row"><svg viewBox="0 0 24 24" class="tc-speaker-icon" title="Speaker"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="tc-speaker" title="Speaker: Hen Yee Goh, YYC Johor Regional Director">Hen Yee Goh, YYC Johor Regional Director</span></div></div>
+          <div class="course-popover" id="popover-s0-c5">
+            <div class="cp-video">
+              <video autoplay muted loop playsinline poster="assets/images/course-images/22.png"><source src="assets/videos/Business Training Expenses.mp4" type="video/mp4"></video>
+              <span class="tc-thumb-badge tc-thumb-badge--course"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Course</span>
+              <div class="cp-live-dot"><div class="cp-live-dot-icon"></div>Preview</div>
+              <div class="cp-video-bar"><div class="cp-video-bar-fill"></div></div>
+              <button class="cp-close" aria-label="Close" onclick="document.getElementById('popover-s0-c5').classList.remove('popover-open')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+            <div class="cp-body">
+              <div class="cp-meta"><span class="badge badge-sm badge-pill badge-bonus-outline">Income Tax</span><span class="cp-date">22 May 2025</span></div>
+              <h3 class="cp-title">Estimate of Tax Payable and Tax Installment Payments</h3>
+              <div class="cp-stats">
+                <span class="cp-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>18 min | CPE</span>
+                <span class="cp-stat"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>1 Module</span>
+              </div>
+              <div class="cp-divider"></div>
+              <p class="cp-learn-label">What you will learn</p>
+              <ul class="cp-outcomes">
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>How to calculate your estimated tax payable accurately</li>
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Setting correct monthly CP204 installment amounts</li>
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Penalties for underestimating or late installment payments</li>
+              </ul>
+              <button class="btn-resume cp-cta" onclick="window.location.href='#'"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Play</button>
+            </div>
+          </div>
+        </div>
+        <div class="tc-card tc-card--event tc-card--watched" id="card-startup-expenses">
+          <div class="tc-thumb">
+            <img src="assets/images/course-images/23.png" alt="Startup Expenses: What's Tax Deductible and What's Not">
+            <div class="tc-play-overlay"><div class="tc-play-center"><div class="tc-play"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><span class="tc-resume-label">Resume Playing</span></div></div>
+            <button class="tc-heart" onclick="toggleHeart(this)" aria-label="Add to wishlist"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+            <div class="tc-seekbar"><div class="tc-seekbar-fill" style="width:45%"></div></div>
+          </div>
+          <div class="tc-bar">
+            <span class="badge badge-sm badge-pill badge-bonus-outline tc-tag">Income, Income Tax</span>
+            <div class="tc-bar-right">
+              <span class="tc-dur"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>12 min</span>
+            </div>
+          </div>
+
+          <div class="tc-dates"><div class="tc-date-row"><svg viewBox="0 0 24 24" class="tc-speaker-icon" title="Speaker"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="tc-speaker" title="Speaker: Ida Lim, YYC Penang Regional Director">Ida Lim, YYC Penang Regional Director</span></div></div>
+          <!-- Hover Popover -->
+          <div class="course-popover" id="popover-startup-expenses">
+            <div class="cp-video">
+              <video autoplay muted loop playsinline poster="assets/images/course-images/23.png">
+                <source src="assets/videos/Business Training Expenses.mp4" type="video/mp4">
+              </video>
+              <span class="tc-thumb-badge tc-thumb-badge--course"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Course</span>
+              <div class="cp-live-dot"><div class="cp-live-dot-icon"></div>Preview</div>
+              <div class="cp-progress-text">45% watched</div>
+              <div class="cp-video-bar"><div class="cp-video-bar-fill"></div></div>
+              <button class="cp-close" aria-label="Close" onclick="document.getElementById('popover-startup-expenses').classList.remove('popover-open')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </button>
+            </div>
+            <div class="cp-body">
+              <div class="cp-meta">
+                <span class="badge badge-sm badge-pill badge-bonus-outline">Income Tax</span>
+                <span class="cp-date">15 Jan 2026</span>
+              </div>
+              <h3 class="cp-title">Startup Expenses: What's Tax Deductible and What's Not</h3>
+              <div class="cp-stats">
+                <span class="cp-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>12 min | CPE</span>
+                <span class="cp-stat"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>1 Module</span>
+              </div>
+              <div class="cp-divider"></div>
+              <p class="cp-learn-label">What you will learn</p>
+              <ul class="cp-outcomes">
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>How startup expenses are treated before your business starts</li>
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Which expenses are deductible after your business begins</li>
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Tax impact of pre-operating vs. capital expenses</li>
+              </ul>
+              <div class="cp-progress-row">
+                <div class="cp-progress-track"><div class="cp-progress-fill"></div></div>
+                <span class="cp-progress-pct">45% done</span>
+              </div>
+              <button class="btn-resume cp-cta" onclick="window.location.href='#'"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Resume Playing</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Series 2: A Must Watch for HR/Payroll Team -->
+    <div class="series-panel" id="series-1">
+      <div class="series-detail">
+        <div class="series-detail-header">
+          <div>
+            <h3 class="series-detail-title">A Must Watch for HR/ Payroll Team</h3>
+            <div class="series-detail-meta">
+              <span class="series-detail-stat"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="15" y2="6"/><line x1="3" y1="12" x2="15" y2="12"/><line x1="3" y1="18" x2="15" y2="18"/><polygon points="17 10 23 14 17 18"/></svg>5 courses</span>
+              <span class="series-detail-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>5 hr</span>
+            </div>
+          </div>
+          <button class="btn-resume"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Resume Playing</button>
+        </div>
+        <p class="series-detail-desc">Essential tax knowledge every HR and Payroll professional needs. From employment income reporting to Form E &amp; EA filing, this series covers the key compliance areas for managing employee tax matters effectively.</p>
+      </div>
+      <div class="series-grid">
+        <div class="tc-card tc-card--event" id="card-s1-c1">
+          <div class="tc-thumb">
+            <img src="assets/images/course-images/7.png" alt="Employment Income and Tax Reporting">
+            <div class="tc-play-overlay"><div class="tc-play-center"><div class="tc-play"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><div class="tc-resume-label">Learn More</div></div></div>
+            <button class="tc-heart" onclick="toggleHeart(this)" aria-label="Add to wishlist"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+          </div>
+          <div class="tc-bar"><span class="badge badge-sm badge-pill badge-bonus-outline tc-tag">Income Tax</span><div class="tc-bar-right"><span class="tc-dur"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>1 hr</span></div></div>
+
+          <div class="tc-dates"><div class="tc-date-row"><svg viewBox="0 0 24 24" class="tc-speaker-icon" title="Speaker"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="tc-speaker" title="Speaker: Jasmine Hau Jia Min, Audit Partner of YYC & CO PLT">Jasmine Hau Jia Min, Audit Partner of YYC & CO PLT</span></div></div>
+          <div class="course-popover" id="popover-s1-c1">
+            <div class="cp-video">
+              <video autoplay muted loop playsinline poster="assets/images/course-images/7.png"><source src="assets/videos/Business Training Expenses.mp4" type="video/mp4"></video>
+              <span class="tc-thumb-badge tc-thumb-badge--course"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Course</span>
+              <div class="cp-live-dot"><div class="cp-live-dot-icon"></div>Preview</div>
+              <div class="cp-video-bar"><div class="cp-video-bar-fill"></div></div>
+              <button class="cp-close" aria-label="Close" onclick="document.getElementById('popover-s1-c1').classList.remove('popover-open')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+            <div class="cp-body">
+              <div class="cp-meta"><span class="badge badge-sm badge-pill badge-bonus-outline">Income Tax</span><span class="cp-date">3 Mar 2025</span></div>
+              <h3 class="cp-title">Employment Income and Tax Reporting</h3>
+              <div class="cp-stats">
+                <span class="cp-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>1 hr | CPE</span>
+                <span class="cp-stat"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>1 Module</span>
+              </div>
+              <div class="cp-divider"></div>
+              <p class="cp-learn-label">What you will learn</p>
+              <ul class="cp-outcomes">
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Types of taxable employment income to declare</li>
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Employer obligations for accurate tax reporting</li>
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Handling non-cash benefits and allowances correctly</li>
+              </ul>
+              <button class="btn-resume cp-cta" onclick="window.location.href='#'"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Play</button>
+            </div>
+          </div>
+        </div>
+        <div class="tc-card tc-card--event" id="card-s1-c2">
+          <div class="tc-thumb">
+            <img src="assets/images/course-images/8.png" alt="Form E &amp; EA Filing Guide">
+            <div class="tc-play-overlay"><div class="tc-play-center"><div class="tc-play"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><div class="tc-resume-label">Learn More</div></div></div>
+            <button class="tc-heart" onclick="toggleHeart(this)" aria-label="Add to wishlist"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+          </div>
+          <div class="tc-bar"><span class="badge badge-sm badge-pill badge-bonus-outline tc-tag">Forms</span><div class="tc-bar-right"><span class="tc-dur"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>1 hr 12 min</span></div></div>
+
+          <div class="tc-dates"><div class="tc-date-row"><svg viewBox="0 0 24 24" class="tc-speaker-icon" title="Speaker"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="tc-speaker" title="Speaker: Letitia Chew, YYC, ESME Director">Letitia Chew, YYC, ESME Director</span></div></div>
+          <div class="course-popover" id="popover-s1-c2">
+            <div class="cp-video">
+              <video autoplay muted loop playsinline poster="assets/images/course-images/8.png"><source src="assets/videos/Business Training Expenses.mp4" type="video/mp4"></video>
+              <span class="tc-thumb-badge tc-thumb-badge--course"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Course</span>
+              <div class="cp-live-dot"><div class="cp-live-dot-icon"></div>Preview</div>
+              <div class="cp-video-bar"><div class="cp-video-bar-fill"></div></div>
+              <button class="cp-close" aria-label="Close" onclick="document.getElementById('popover-s1-c2').classList.remove('popover-open')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+            <div class="cp-body">
+              <div class="cp-meta"><span class="badge badge-sm badge-pill badge-bonus-outline">Forms</span><span class="cp-date">15 Jan 2025</span></div>
+              <h3 class="cp-title">Form E &amp; EA Filing Guide</h3>
+              <div class="cp-stats">
+                <span class="cp-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>1 hr 12 min | CPE</span>
+                <span class="cp-stat"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>1 Module</span>
+              </div>
+              <div class="cp-divider"></div>
+              <p class="cp-learn-label">What you will learn</p>
+              <ul class="cp-outcomes">
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Step-by-step guide to completing Form E on time</li>
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Employer obligations for preparing Form EA correctly</li>
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Avoiding common filing errors and LHDN penalties</li>
+              </ul>
+              <button class="btn-resume cp-cta" onclick="window.location.href='#'"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Play</button>
+            </div>
+          </div>
+        </div>
+        <div class="tc-card tc-card--event" id="card-s1-c3">
+          <div class="tc-thumb">
+            <img src="assets/images/course-images/9.png" alt="PCB / Monthly Tax Deduction">
+            <div class="tc-play-overlay"><div class="tc-play-center"><div class="tc-play"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><div class="tc-resume-label">Learn More</div></div></div>
+            <button class="tc-heart" onclick="toggleHeart(this)" aria-label="Add to wishlist"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+          </div>
+          <div class="tc-bar"><span class="badge badge-sm badge-pill badge-bonus-outline tc-tag">Income Tax</span><div class="tc-bar-right"><span class="tc-dur"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>54 min</span></div></div>
+
+          <div class="tc-dates"><div class="tc-date-row"><svg viewBox="0 0 24 24" class="tc-speaker-icon" title="Speaker"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="tc-speaker" title="Speaker: Eve Tan, YYC Tax Director">Eve Tan, YYC Tax Director</span></div></div>
+          <div class="course-popover" id="popover-s1-c3">
+            <div class="cp-video">
+              <video autoplay muted loop playsinline poster="assets/images/course-images/9.png"><source src="assets/videos/Business Training Expenses.mp4" type="video/mp4"></video>
+              <span class="tc-thumb-badge tc-thumb-badge--course"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Course</span>
+              <div class="cp-live-dot"><div class="cp-live-dot-icon"></div>Preview</div>
+              <div class="cp-video-bar"><div class="cp-video-bar-fill"></div></div>
+              <button class="cp-close" aria-label="Close" onclick="document.getElementById('popover-s1-c3').classList.remove('popover-open')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+            <div class="cp-body">
+              <div class="cp-meta"><span class="badge badge-sm badge-pill badge-bonus-outline">Income Tax</span><span class="cp-date">10 Feb 2025</span></div>
+              <h3 class="cp-title">PCB / Monthly Tax Deduction</h3>
+              <div class="cp-stats">
+                <span class="cp-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>54 min | CPE</span>
+                <span class="cp-stat"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>1 Module</span>
+              </div>
+              <div class="cp-divider"></div>
+              <p class="cp-learn-label">What you will learn</p>
+              <ul class="cp-outcomes">
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>How to calculate PCB accurately for each employee</li>
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Monthly deduction schedule and remittance deadlines</li>
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Handling special cases like bonuses and termination pay</li>
+              </ul>
+              <button class="btn-resume cp-cta" onclick="window.location.href='#'"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Play</button>
+            </div>
+          </div>
+        </div>
+        <div class="tc-card tc-card--event" id="card-s1-c4">
+          <div class="tc-thumb">
+            <img src="assets/images/course-images/10.png" alt="Employee Benefits and Perquisites">
+            <div class="tc-play-overlay"><div class="tc-play-center"><div class="tc-play"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><div class="tc-resume-label">Learn More</div></div></div>
+            <button class="tc-heart" onclick="toggleHeart(this)" aria-label="Add to wishlist"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+          </div>
+          <div class="tc-bar"><span class="badge badge-sm badge-pill badge-bonus-outline tc-tag">Forms</span><div class="tc-bar-right"><span class="tc-dur"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>1 hr 30 min</span></div></div>
+
+          <div class="tc-dates"><div class="tc-date-row"><svg viewBox="0 0 24 24" class="tc-speaker-icon" title="Speaker"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="tc-speaker" title="Speaker: Angie Ng, Boss Boleh Chief Operating Officer">Angie Ng, Boss Boleh Chief Operating Officer</span></div></div>
+          <div class="course-popover" id="popover-s1-c4">
+            <div class="cp-video">
+              <video autoplay muted loop playsinline poster="assets/images/course-images/10.png"><source src="assets/videos/Business Training Expenses.mp4" type="video/mp4"></video>
+              <span class="tc-thumb-badge tc-thumb-badge--course"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Course</span>
+              <div class="cp-live-dot"><div class="cp-live-dot-icon"></div>Preview</div>
+              <div class="cp-video-bar"><div class="cp-video-bar-fill"></div></div>
+              <button class="cp-close" aria-label="Close" onclick="document.getElementById('popover-s1-c4').classList.remove('popover-open')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+            <div class="cp-body">
+              <div class="cp-meta"><span class="badge badge-sm badge-pill badge-bonus-outline">Forms</span><span class="cp-date">28 Feb 2025</span></div>
+              <h3 class="cp-title">Employee Benefits and Perquisites</h3>
+              <div class="cp-stats">
+                <span class="cp-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>1 hr 30 min | CPE</span>
+                <span class="cp-stat"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>1 Module</span>
+              </div>
+              <div class="cp-divider"></div>
+              <p class="cp-learn-label">What you will learn</p>
+              <ul class="cp-outcomes">
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Distinguishing taxable vs non-taxable employee benefits</li>
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Correctly valuing benefits in kind for reporting purposes</li>
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Reporting perquisites accurately in Form EA</li>
+              </ul>
+              <button class="btn-resume cp-cta" onclick="window.location.href='#'"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Play</button>
+            </div>
+          </div>
+        </div>
+        <div class="tc-card tc-card--event" id="card-s1-c5">
+          <div class="tc-thumb">
+            <img src="assets/images/course-images/11.png" alt="Statutory Compliance for HR Teams">
+            <div class="tc-play-overlay"><div class="tc-play-center"><div class="tc-play"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><div class="tc-resume-label">Learn More</div></div></div>
+            <button class="tc-heart" onclick="toggleHeart(this)" aria-label="Add to wishlist"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+          </div>
+          <div class="tc-bar"><span class="badge badge-sm badge-pill badge-bonus-outline tc-tag">Webinar</span><div class="tc-bar-right"><span class="tc-dur"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>24 min</span></div></div>
+
+          <div class="tc-dates"><div class="tc-date-row"><svg viewBox="0 0 24 24" class="tc-speaker-icon" title="Speaker"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="tc-speaker" title="Speaker: Eunice Kwong, Partner at Ricky Tan & Co">Eunice Kwong, Partner at Ricky Tan & Co</span></div></div>
+          <div class="course-popover" id="popover-s1-c5">
+            <div class="cp-video">
+              <video autoplay muted loop playsinline poster="assets/images/course-images/11.png"><source src="assets/videos/Business Training Expenses.mp4" type="video/mp4"></video>
+              <span class="tc-thumb-badge tc-thumb-badge--course"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Course</span>
+              <div class="cp-live-dot"><div class="cp-live-dot-icon"></div>Preview</div>
+              <div class="cp-video-bar"><div class="cp-video-bar-fill"></div></div>
+              <button class="cp-close" aria-label="Close" onclick="document.getElementById('popover-s1-c5').classList.remove('popover-open')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+            <div class="cp-body">
+              <div class="cp-meta"><span class="badge badge-sm badge-pill badge-bonus-outline">Webinar</span><span class="cp-date">18 Mar 2025</span></div>
+              <h3 class="cp-title">Statutory Compliance for HR Teams</h3>
+              <div class="cp-stats">
+                <span class="cp-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>24 min | CPE</span>
+                <span class="cp-stat"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>1 Module</span>
+              </div>
+              <div class="cp-divider"></div>
+              <p class="cp-learn-label">What you will learn</p>
+              <ul class="cp-outcomes">
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Key HR and payroll tax compliance deadlines</li>
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Consequences of late or incorrect submission to LHDN</li>
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Practical compliance checklist for payroll teams</li>
+              </ul>
+              <button class="btn-resume cp-cta" onclick="window.location.href='#'"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Play</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Series 3: SME & Freelancer Tax -->
+    <div class="series-panel" id="series-2">
+      <div class="series-detail">
+        <div class="series-detail-header">
+          <div>
+            <h3 class="series-detail-title">SME &amp; Freelancer Tax</h3>
+            <div class="series-detail-meta">
+              <span class="series-detail-stat"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="15" y2="6"/><line x1="3" y1="12" x2="15" y2="12"/><line x1="3" y1="18" x2="15" y2="18"/><polygon points="17 10 23 14 17 18"/></svg>7 courses</span>
+              <span class="series-detail-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>8 hr</span>
+            </div>
+          </div>
+          <button class="btn-resume"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Resume Playing</button>
+        </div>
+        <p class="series-detail-desc">A comprehensive guide to tax compliance for SMEs and freelancers. Covers everything from business registration to filing returns, understanding deductible expenses, and managing quarterly tax obligations.</p>
+      </div>
+      <div class="series-grid">
+        <div class="tc-card tc-card--event" id="card-s2-c1">
+          <div class="tc-thumb">
+            <img src="assets/images/course-images/12.png" alt="Business Registration &amp; Tax Setup">
+            <div class="tc-play-overlay"><div class="tc-play-center"><div class="tc-play"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><div class="tc-resume-label">Learn More</div></div></div>
+            <button class="tc-heart" onclick="toggleHeart(this)" aria-label="Add to wishlist"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+          </div>
+          <div class="tc-bar"><span class="badge badge-sm badge-pill badge-bonus-outline tc-tag">Income Tax</span><div class="tc-bar-right"><span class="tc-dur"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>1 hr 12 min</span></div></div>
+
+          <div class="tc-dates"><div class="tc-date-row"><svg viewBox="0 0 24 24" class="tc-speaker-icon" title="Speaker"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="tc-speaker" title="Speaker: Andrew Yoon, Partner at Low & Partners Law Firm">Andrew Yoon, Partner at Low & Partners Law Firm</span></div></div>
+          <div class="course-popover" id="popover-s2-c1">
+            <div class="cp-video">
+              <video autoplay muted loop playsinline poster="assets/images/course-images/12.png"><source src="assets/videos/Business Training Expenses.mp4" type="video/mp4"></video>
+              <span class="tc-thumb-badge tc-thumb-badge--course"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Course</span>
+              <div class="cp-live-dot"><div class="cp-live-dot-icon"></div>Preview</div>
+              <div class="cp-video-bar"><div class="cp-video-bar-fill"></div></div>
+              <button class="cp-close" aria-label="Close" onclick="document.getElementById('popover-s2-c1').classList.remove('popover-open')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+            <div class="cp-body">
+              <div class="cp-meta"><span class="badge badge-sm badge-pill badge-bonus-outline">Income Tax</span><span class="cp-date">7 Apr 2025</span></div>
+              <h3 class="cp-title">Business Registration &amp; Tax Setup</h3>
+              <div class="cp-stats">
+                <span class="cp-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>1 hr 12 min | CPE</span>
+                <span class="cp-stat"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>1 Module</span>
+              </div>
+              <div class="cp-divider"></div>
+              <p class="cp-learn-label">What you will learn</p>
+              <ul class="cp-outcomes">
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Steps to register your business for tax with LHDN</li>
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>First-year tax obligations for newly incorporated entities</li>
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Setting up proper bookkeeping systems from day one</li>
+              </ul>
+              <button class="btn-resume cp-cta" onclick="window.location.href='#'"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Play</button>
+            </div>
+          </div>
+        </div>
+        <div class="tc-card tc-card--event" id="card-s2-c2">
+          <div class="tc-thumb">
+            <img src="assets/images/course-images/13.png" alt="E-Invoicing for SMEs">
+            <div class="tc-play-overlay"><div class="tc-play-center"><div class="tc-play"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><div class="tc-resume-label">Learn More</div></div></div>
+            <button class="tc-heart" onclick="toggleHeart(this)" aria-label="Add to wishlist"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+          </div>
+          <div class="tc-bar"><span class="badge badge-sm badge-pill badge-bonus-outline tc-tag">E-Invoicing</span><div class="tc-bar-right"><span class="tc-dur"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>1 hr 6 min</span></div></div>
+
+          <div class="tc-dates"><div class="tc-date-row"><svg viewBox="0 0 24 24" class="tc-speaker-icon" title="Speaker"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="tc-speaker" title="Speaker: Zen Chow, YYC Executive Director & Country Tax Leader">Zen Chow, YYC Executive Director & Country Tax Leader</span></div></div>
+          <div class="course-popover" id="popover-s2-c2">
+            <div class="cp-video">
+              <video autoplay muted loop playsinline poster="assets/images/course-images/13.png"><source src="assets/videos/Business Training Expenses.mp4" type="video/mp4"></video>
+              <span class="tc-thumb-badge tc-thumb-badge--course"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Course</span>
+              <div class="cp-live-dot"><div class="cp-live-dot-icon"></div>Preview</div>
+              <div class="cp-video-bar"><div class="cp-video-bar-fill"></div></div>
+              <button class="cp-close" aria-label="Close" onclick="document.getElementById('popover-s2-c2').classList.remove('popover-open')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+            <div class="cp-body">
+              <div class="cp-meta"><span class="badge badge-sm badge-pill badge-bonus-outline">E-Invoicing</span><span class="cp-date">20 May 2025</span></div>
+              <h3 class="cp-title">E-Invoicing for SMEs</h3>
+              <div class="cp-stats">
+                <span class="cp-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>1 hr 6 min | CPE</span>
+                <span class="cp-stat"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>1 Module</span>
+              </div>
+              <div class="cp-divider"></div>
+              <p class="cp-learn-label">What you will learn</p>
+              <ul class="cp-outcomes">
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Understanding the e-Invoice mandate and timeline</li>
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>How to implement e-Invoicing in your SME operations</li>
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Compliance requirements and common implementation pitfalls</li>
+              </ul>
+              <button class="btn-resume cp-cta" onclick="window.location.href='#'"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Play</button>
+            </div>
+          </div>
+        </div>
+        <div class="tc-card tc-card--event" id="card-s2-c3">
+          <div class="tc-thumb">
+            <img src="assets/images/course-images/14.png" alt="Filing Tax Returns as a Freelancer">
+            <div class="tc-play-overlay"><div class="tc-play-center"><div class="tc-play"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><div class="tc-resume-label">Learn More</div></div></div>
+            <button class="tc-heart" onclick="toggleHeart(this)" aria-label="Add to wishlist"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+          </div>
+          <div class="tc-bar"><span class="badge badge-sm badge-pill badge-bonus-outline tc-tag">Forms</span><div class="tc-bar-right"><span class="tc-dur"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>1 hr</span></div></div>
+
+          <div class="tc-dates"><div class="tc-date-row"><svg viewBox="0 0 24 24" class="tc-speaker-icon" title="Speaker"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="tc-speaker" title="Speaker: Datin Shin Yap, YYC CEO & Finance Expert">Datin Shin Yap, YYC CEO & Finance Expert</span></div></div>
+          <div class="course-popover" id="popover-s2-c3">
+            <div class="cp-video">
+              <video autoplay muted loop playsinline poster="assets/images/course-images/14.png"><source src="assets/videos/Business Training Expenses.mp4" type="video/mp4"></video>
+              <span class="tc-thumb-badge tc-thumb-badge--course"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Course</span>
+              <div class="cp-live-dot"><div class="cp-live-dot-icon"></div>Preview</div>
+              <div class="cp-video-bar"><div class="cp-video-bar-fill"></div></div>
+              <button class="cp-close" aria-label="Close" onclick="document.getElementById('popover-s2-c3').classList.remove('popover-open')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+            <div class="cp-body">
+              <div class="cp-meta"><span class="badge badge-sm badge-pill badge-bonus-outline">Forms</span><span class="cp-date">12 Jun 2025</span></div>
+              <h3 class="cp-title">Filing Tax Returns as a Freelancer</h3>
+              <div class="cp-stats">
+                <span class="cp-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>1 hr | CPE</span>
+                <span class="cp-stat"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>1 Module</span>
+              </div>
+              <div class="cp-divider"></div>
+              <p class="cp-learn-label">What you will learn</p>
+              <ul class="cp-outcomes">
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Declaring all sources of freelance and self-employment income</li>
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Claiming allowable deductions and business expenses</li>
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Managing quarterly estimated tax payment obligations</li>
+              </ul>
+              <button class="btn-resume cp-cta" onclick="window.location.href='#'"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Play</button>
+            </div>
+          </div>
+        </div>
+        <div class="tc-card tc-card--event" id="card-s2-c4">
+          <div class="tc-thumb">
+            <img src="assets/images/course-images/15.png" alt="SST for Small Businesses">
+            <div class="tc-play-overlay"><div class="tc-play-center"><div class="tc-play"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><div class="tc-resume-label">Learn More</div></div></div>
+            <button class="tc-heart" onclick="toggleHeart(this)" aria-label="Add to wishlist"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+          </div>
+          <div class="tc-bar"><span class="badge badge-sm badge-pill badge-bonus-outline tc-tag">SST</span><div class="tc-bar-right"><span class="tc-dur"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>1 hr 30 min</span></div></div>
+
+          <div class="tc-dates"><div class="tc-date-row"><svg viewBox="0 0 24 24" class="tc-speaker-icon" title="Speaker"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="tc-speaker" title="Speaker: Tifannyz Yap, YYC Tax Expert">Tifannyz Yap, YYC Tax Expert</span></div></div>
+          <div class="course-popover" id="popover-s2-c4">
+            <div class="cp-video">
+              <video autoplay muted loop playsinline poster="assets/images/course-images/15.png"><source src="assets/videos/Business Training Expenses.mp4" type="video/mp4"></video>
+              <span class="tc-thumb-badge tc-thumb-badge--course"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Course</span>
+              <div class="cp-live-dot"><div class="cp-live-dot-icon"></div>Preview</div>
+              <div class="cp-video-bar"><div class="cp-video-bar-fill"></div></div>
+              <button class="cp-close" aria-label="Close" onclick="document.getElementById('popover-s2-c4').classList.remove('popover-open')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+            <div class="cp-body">
+              <div class="cp-meta"><span class="badge badge-sm badge-pill badge-bonus-outline">SST</span><span class="cp-date">1 Jul 2025</span></div>
+              <h3 class="cp-title">SST for Small Businesses</h3>
+              <div class="cp-stats">
+                <span class="cp-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>1 hr 30 min | CPE</span>
+                <span class="cp-stat"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>1 Module</span>
+              </div>
+              <div class="cp-divider"></div>
+              <p class="cp-learn-label">What you will learn</p>
+              <ul class="cp-outcomes">
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>SST registration thresholds and obligations for businesses</li>
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>How to charge and collect SST from customers correctly</li>
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Filing bi-monthly SST returns accurately and on time</li>
+              </ul>
+              <button class="btn-resume cp-cta" onclick="window.location.href='#'"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Play</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Series 4: Advanced Tax Planning & Optimization -->
+    <div class="series-panel" id="series-3">
+      <div class="series-detail">
+        <div class="series-detail-header">
+          <div>
+            <h3 class="series-detail-title">Advanced Tax Planning &amp; Optimization</h3>
+            <div class="series-detail-meta">
+              <span class="series-detail-stat"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="15" y2="6"/><line x1="3" y1="12" x2="15" y2="12"/><line x1="3" y1="18" x2="15" y2="18"/><polygon points="17 10 23 14 17 18"/></svg>8 courses</span>
+              <span class="series-detail-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>3 hr</span>
+            </div>
+          </div>
+          <button class="btn-resume"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Resume Playing</button>
+        </div>
+        <p class="series-detail-desc">Take your tax knowledge to the next level with advanced strategies for tax optimization. This series covers complex tax structures, transfer pricing, and sophisticated planning techniques for businesses.</p>
+      </div>
+      <div class="series-grid">
+        <div class="tc-card tc-card--event" id="card-s3-c1">
+          <div class="tc-thumb">
+            <img src="assets/images/course-images/16.png" alt="Transfer Pricing Fundamentals">
+            <div class="tc-play-overlay"><div class="tc-play-center"><div class="tc-play"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><div class="tc-resume-label">Learn More</div></div></div>
+            <button class="tc-heart" onclick="toggleHeart(this)" aria-label="Add to wishlist"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+          </div>
+          <div class="tc-bar"><span class="badge badge-sm badge-pill badge-bonus-outline tc-tag">Income Tax</span><div class="tc-bar-right"><span class="tc-dur"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>30 min</span></div></div>
+
+          <div class="tc-dates"><div class="tc-date-row"><svg viewBox="0 0 24 24" class="tc-speaker-icon" title="Speaker"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="tc-speaker" title="Speaker: Fong Ying Chai, YYC Tax Expert">Fong Ying Chai, YYC Tax Expert</span></div></div>
+          <div class="course-popover" id="popover-s3-c1">
+            <div class="cp-video">
+              <video autoplay muted loop playsinline poster="assets/images/course-images/16.png"><source src="assets/videos/Business Training Expenses.mp4" type="video/mp4"></video>
+              <span class="tc-thumb-badge tc-thumb-badge--course"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Course</span>
+              <div class="cp-live-dot"><div class="cp-live-dot-icon"></div>Preview</div>
+              <div class="cp-video-bar"><div class="cp-video-bar-fill"></div></div>
+              <button class="cp-close" aria-label="Close" onclick="document.getElementById('popover-s3-c1').classList.remove('popover-open')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+            <div class="cp-body">
+              <div class="cp-meta"><span class="badge badge-sm badge-pill badge-bonus-outline">Income Tax</span><span class="cp-date">9 Aug 2025</span></div>
+              <h3 class="cp-title">Transfer Pricing Fundamentals</h3>
+              <div class="cp-stats">
+                <span class="cp-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>30 min | CPE</span>
+                <span class="cp-stat"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>1 Module</span>
+              </div>
+              <div class="cp-divider"></div>
+              <p class="cp-learn-label">What you will learn</p>
+              <ul class="cp-outcomes">
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Understanding the arm's length principle in transfer pricing</li>
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Types of related party transactions subject to rules</li>
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Documentation requirements for transfer pricing compliance</li>
+              </ul>
+              <button class="btn-resume cp-cta" onclick="window.location.href='#'"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Play</button>
+            </div>
+          </div>
+        </div>
+        <div class="tc-card tc-card--event" id="card-s3-c2">
+          <div class="tc-thumb">
+            <img src="assets/images/course-images/17.png" alt="E-Invoicing for Large Enterprises">
+            <div class="tc-play-overlay"><div class="tc-play-center"><div class="tc-play"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><div class="tc-resume-label">Learn More</div></div></div>
+            <button class="tc-heart" onclick="toggleHeart(this)" aria-label="Add to wishlist"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+          </div>
+          <div class="tc-bar"><span class="badge badge-sm badge-pill badge-bonus-outline tc-tag">E-Invoicing</span><div class="tc-bar-right"><span class="tc-dur"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>24 min</span></div></div>
+
+          <div class="tc-dates"><div class="tc-date-row"><svg viewBox="0 0 24 24" class="tc-speaker-icon" title="Speaker"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="tc-speaker" title="Speaker: Hen Yee Goh, YYC Johor Regional Director">Hen Yee Goh, YYC Johor Regional Director</span></div></div>
+          <div class="course-popover" id="popover-s3-c2">
+            <div class="cp-video">
+              <video autoplay muted loop playsinline poster="assets/images/course-images/17.png"><source src="assets/videos/Business Training Expenses.mp4" type="video/mp4"></video>
+              <span class="tc-thumb-badge tc-thumb-badge--course"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Course</span>
+              <div class="cp-live-dot"><div class="cp-live-dot-icon"></div>Preview</div>
+              <div class="cp-video-bar"><div class="cp-video-bar-fill"></div></div>
+              <button class="cp-close" aria-label="Close" onclick="document.getElementById('popover-s3-c2').classList.remove('popover-open')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+            <div class="cp-body">
+              <div class="cp-meta"><span class="badge badge-sm badge-pill badge-bonus-outline">E-Invoicing</span><span class="cp-date">25 Sep 2025</span></div>
+              <h3 class="cp-title">E-Invoicing for Large Enterprises</h3>
+              <div class="cp-stats">
+                <span class="cp-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>24 min | CPE</span>
+                <span class="cp-stat"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>1 Module</span>
+              </div>
+              <div class="cp-divider"></div>
+              <p class="cp-learn-label">What you will learn</p>
+              <ul class="cp-outcomes">
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Phase-based e-Invoice implementation timeline for enterprises</li>
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Integration with ERP and accounting systems</li>
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>LHDN portal requirements and data format standards</li>
+              </ul>
+              <button class="btn-resume cp-cta" onclick="window.location.href='#'"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Play</button>
+            </div>
+          </div>
+        </div>
+        <div class="tc-card tc-card--event" id="card-s3-c3">
+          <div class="tc-thumb">
+            <img src="assets/images/course-images/1.png" alt="SST Planning and Optimization">
+            <div class="tc-play-overlay"><div class="tc-play-center"><div class="tc-play"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><div class="tc-resume-label">Learn More</div></div></div>
+            <button class="tc-heart" onclick="toggleHeart(this)" aria-label="Add to wishlist"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+          </div>
+          <div class="tc-bar"><span class="badge badge-sm badge-pill badge-bonus-outline tc-tag">SST</span><div class="tc-bar-right"><span class="tc-dur"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>48 min</span></div></div>
+
+          <div class="tc-dates"><div class="tc-date-row"><svg viewBox="0 0 24 24" class="tc-speaker-icon" title="Speaker"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="tc-speaker" title="Speaker: Ida Lim, YYC Penang Regional Director">Ida Lim, YYC Penang Regional Director</span></div></div>
+          <div class="course-popover" id="popover-s3-c3">
+            <div class="cp-video">
+              <video autoplay muted loop playsinline poster="assets/images/course-images/1.png"><source src="assets/videos/Business Training Expenses.mp4" type="video/mp4"></video>
+              <span class="tc-thumb-badge tc-thumb-badge--course"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Course</span>
+              <div class="cp-live-dot"><div class="cp-live-dot-icon"></div>Preview</div>
+              <div class="cp-video-bar"><div class="cp-video-bar-fill"></div></div>
+              <button class="cp-close" aria-label="Close" onclick="document.getElementById('popover-s3-c3').classList.remove('popover-open')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+            <div class="cp-body">
+              <div class="cp-meta"><span class="badge badge-sm badge-pill badge-bonus-outline">SST</span><span class="cp-date">14 Oct 2025</span></div>
+              <h3 class="cp-title">SST Planning and Optimization</h3>
+              <div class="cp-stats">
+                <span class="cp-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>48 min | CPE</span>
+                <span class="cp-stat"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>1 Module</span>
+              </div>
+              <div class="cp-divider"></div>
+              <p class="cp-learn-label">What you will learn</p>
+              <ul class="cp-outcomes">
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Identifying SST-exempt and zero-rated supplies</li>
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Optimizing input tax claims for your business</li>
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Structuring transactions for SST efficiency</li>
+              </ul>
+              <button class="btn-resume cp-cta" onclick="window.location.href='#'"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Play</button>
+            </div>
+          </div>
+        </div>
+        <div class="tc-card tc-card--event" id="card-s3-c4">
+          <div class="tc-thumb">
+            <img src="assets/images/course-images/2.png" alt="Budget 2025 Tax Changes">
+            <div class="tc-play-overlay"><div class="tc-play-center"><div class="tc-play"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><div class="tc-resume-label">Learn More</div></div></div>
+            <button class="tc-heart" onclick="toggleHeart(this)" aria-label="Add to wishlist"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+          </div>
+          <div class="tc-bar"><span class="badge badge-sm badge-pill badge-bonus-outline tc-tag">Budget</span><div class="tc-bar-right"><span class="tc-dur"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>1 hr 18 min</span></div></div>
+
+          <div class="tc-dates"><div class="tc-date-row"><svg viewBox="0 0 24 24" class="tc-speaker-icon" title="Speaker"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="tc-speaker" title="Speaker: Jasmine Hau Jia Min, Audit Partner of YYC & CO PLT">Jasmine Hau Jia Min, Audit Partner of YYC & CO PLT</span></div></div>
+          <div class="course-popover" id="popover-s3-c4">
+            <div class="cp-video">
+              <video autoplay muted loop playsinline poster="assets/images/course-images/2.png"><source src="assets/videos/Business Training Expenses.mp4" type="video/mp4"></video>
+              <span class="tc-thumb-badge tc-thumb-badge--course"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Course</span>
+              <div class="cp-live-dot"><div class="cp-live-dot-icon"></div>Preview</div>
+              <div class="cp-video-bar"><div class="cp-video-bar-fill"></div></div>
+              <button class="cp-close" aria-label="Close" onclick="document.getElementById('popover-s3-c4').classList.remove('popover-open')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+            <div class="cp-body">
+              <div class="cp-meta"><span class="badge badge-sm badge-pill badge-bonus-outline">Budget</span><span class="cp-date">18 Nov 2025</span></div>
+              <h3 class="cp-title">Budget 2025 Tax Changes</h3>
+              <div class="cp-stats">
+                <span class="cp-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>1 hr 18 min | CPE</span>
+                <span class="cp-stat"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>1 Module</span>
+              </div>
+              <div class="cp-divider"></div>
+              <p class="cp-learn-label">What you will learn</p>
+              <ul class="cp-outcomes">
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Key tax measures and changes announced in Budget 2025</li>
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>How changes impact businesses and individual taxpayers</li>
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Strategic planning for the new tax landscape</li>
+              </ul>
+              <button class="btn-resume cp-cta" onclick="window.location.href='#'"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Play</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Series 5: Career & Certification for Tax Professionals -->
+    <div class="series-panel" id="series-4">
+      <div class="series-detail">
+        <div class="series-detail-header">
+          <div>
+            <h3 class="series-detail-title">Career &amp; Certification for Tax Professionals</h3>
+            <div class="series-detail-meta">
+              <span class="series-detail-stat"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="15" y2="6"/><line x1="3" y1="12" x2="15" y2="12"/><line x1="3" y1="18" x2="15" y2="18"/><polygon points="17 10 23 14 17 18"/></svg>8 courses</span>
+              <span class="series-detail-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>2 hr 30 min</span>
+            </div>
+          </div>
+          <button class="btn-resume"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Resume Playing</button>
+        </div>
+        <p class="series-detail-desc">Build your career in taxation with professional certifications and expert guidance. Learn about CPE requirements, professional development paths, and industry best practices for tax practitioners.</p>
+      </div>
+      <div class="series-grid">
+        <div class="tc-card tc-card--event" id="card-s4-c1">
+          <div class="tc-thumb">
+            <img src="assets/images/course-images/3.png" alt="CPE Requirements for Tax Agents">
+            <div class="tc-play-overlay"><div class="tc-play-center"><div class="tc-play"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><div class="tc-resume-label">Learn More</div></div></div>
+            <button class="tc-heart" onclick="toggleHeart(this)" aria-label="Add to wishlist"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+          </div>
+          <div class="tc-bar"><span class="badge badge-sm badge-pill badge-bonus-outline tc-tag">3 CPE</span><div class="tc-bar-right"><span class="tc-dur"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>30 min</span></div></div>
+
+          <div class="tc-dates"><div class="tc-date-row"><svg viewBox="0 0 24 24" class="tc-speaker-icon" title="Speaker"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="tc-speaker" title="Speaker: Letitia Chew, YYC, ESME Director">Letitia Chew, YYC, ESME Director</span></div></div>
+          <div class="course-popover" id="popover-s4-c1">
+            <div class="cp-video">
+              <video autoplay muted loop playsinline poster="assets/images/course-images/3.png"><source src="assets/videos/Business Training Expenses.mp4" type="video/mp4"></video>
+              <span class="tc-thumb-badge tc-thumb-badge--course"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Course</span>
+              <div class="cp-live-dot"><div class="cp-live-dot-icon"></div>Preview</div>
+              <div class="cp-video-bar"><div class="cp-video-bar-fill"></div></div>
+              <button class="cp-close" aria-label="Close" onclick="document.getElementById('popover-s4-c1').classList.remove('popover-open')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+            <div class="cp-body">
+              <div class="cp-meta"><span class="badge badge-sm badge-pill badge-bonus-outline">3 CPE</span><span class="cp-date">2 Dec 2025</span></div>
+              <h3 class="cp-title">CPE Requirements for Tax Agents</h3>
+              <div class="cp-stats">
+                <span class="cp-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>30 min | CPE</span>
+                <span class="cp-stat"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>1 Module</span>
+              </div>
+              <div class="cp-divider"></div>
+              <p class="cp-learn-label">What you will learn</p>
+              <ul class="cp-outcomes">
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Minimum CPE hours and approved categories required</li>
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Approved CPE activities and recognised providers</li>
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Record keeping and annual reporting for CPE compliance</li>
+              </ul>
+              <button class="btn-resume cp-cta" onclick="window.location.href='#'"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Play</button>
+            </div>
+          </div>
+        </div>
+        <div class="tc-card tc-card--event" id="card-s4-c2">
+          <div class="tc-thumb">
+            <img src="assets/images/course-images/4.png" alt="Ethics in Tax Practice">
+            <div class="tc-play-overlay"><div class="tc-play-center"><div class="tc-play"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><div class="tc-resume-label">Learn More</div></div></div>
+            <button class="tc-heart" onclick="toggleHeart(this)" aria-label="Add to wishlist"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+          </div>
+          <div class="tc-bar"><span class="badge badge-sm badge-pill badge-bonus-outline tc-tag">2 CPE</span><div class="tc-bar-right"><span class="tc-dur"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>18 min</span></div></div>
+
+          <div class="tc-dates"><div class="tc-date-row"><svg viewBox="0 0 24 24" class="tc-speaker-icon" title="Speaker"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="tc-speaker" title="Speaker: Eve Tan, YYC Tax Director">Eve Tan, YYC Tax Director</span></div></div>
+          <div class="course-popover" id="popover-s4-c2">
+            <div class="cp-video">
+              <video autoplay muted loop playsinline poster="assets/images/course-images/4.png"><source src="assets/videos/Business Training Expenses.mp4" type="video/mp4"></video>
+              <span class="tc-thumb-badge tc-thumb-badge--course"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Course</span>
+              <div class="cp-live-dot"><div class="cp-live-dot-icon"></div>Preview</div>
+              <div class="cp-video-bar"><div class="cp-video-bar-fill"></div></div>
+              <button class="cp-close" aria-label="Close" onclick="document.getElementById('popover-s4-c2').classList.remove('popover-open')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+            <div class="cp-body">
+              <div class="cp-meta"><span class="badge badge-sm badge-pill badge-bonus-outline">2 CPE</span><span class="cp-date">10 Jan 2026</span></div>
+              <h3 class="cp-title">Ethics in Tax Practice</h3>
+              <div class="cp-stats">
+                <span class="cp-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>18 min | CPE</span>
+                <span class="cp-stat"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>1 Module</span>
+              </div>
+              <div class="cp-divider"></div>
+              <p class="cp-learn-label">What you will learn</p>
+              <ul class="cp-outcomes">
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Professional ethics standards for tax agents in Malaysia</li>
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Identifying and managing conflicts of interest professionally</li>
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Legal obligations and reporting duties under Malaysian law</li>
+              </ul>
+              <button class="btn-resume cp-cta" onclick="window.location.href='#'"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Play</button>
+            </div>
+          </div>
+        </div>
+        <div class="tc-card tc-card--event" id="card-s4-c3">
+          <div class="tc-thumb">
+            <img src="assets/images/course-images/5.png" alt="Building a Tax Practice">
+            <div class="tc-play-overlay"><div class="tc-play-center"><div class="tc-play"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><div class="tc-resume-label">Learn More</div></div></div>
+            <button class="tc-heart" onclick="toggleHeart(this)" aria-label="Add to wishlist"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+          </div>
+          <div class="tc-bar"><span class="badge badge-sm badge-pill badge-bonus-outline tc-tag">4 CPE</span><div class="tc-bar-right"><span class="tc-dur"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>48 min</span></div></div>
+
+          <div class="tc-dates"><div class="tc-date-row"><svg viewBox="0 0 24 24" class="tc-speaker-icon" title="Speaker"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="tc-speaker" title="Speaker: Angie Ng, Boss Boleh Chief Operating Officer">Angie Ng, Boss Boleh Chief Operating Officer</span></div></div>
+          <div class="course-popover" id="popover-s4-c3">
+            <div class="cp-video">
+              <video autoplay muted loop playsinline poster="assets/images/course-images/5.png"><source src="assets/videos/Business Training Expenses.mp4" type="video/mp4"></video>
+              <span class="tc-thumb-badge tc-thumb-badge--course"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Course</span>
+              <div class="cp-live-dot"><div class="cp-live-dot-icon"></div>Preview</div>
+              <div class="cp-video-bar"><div class="cp-video-bar-fill"></div></div>
+              <button class="cp-close" aria-label="Close" onclick="document.getElementById('popover-s4-c3').classList.remove('popover-open')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+            <div class="cp-body">
+              <div class="cp-meta"><span class="badge badge-sm badge-pill badge-bonus-outline">4 CPE</span><span class="cp-date">20 Jan 2026</span></div>
+              <h3 class="cp-title">Building a Tax Practice</h3>
+              <div class="cp-stats">
+                <span class="cp-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>48 min | CPE</span>
+                <span class="cp-stat"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>1 Module</span>
+              </div>
+              <div class="cp-divider"></div>
+              <p class="cp-learn-label">What you will learn</p>
+              <ul class="cp-outcomes">
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Setting up and structuring a tax consulting practice</li>
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Client acquisition and retention strategies that work</li>
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Pricing your tax services for sustainable growth</li>
+              </ul>
+              <button class="btn-resume cp-cta" onclick="window.location.href='#'"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Play</button>
+            </div>
+          </div>
+        </div>
+        <div class="tc-card tc-card--event" id="card-s4-c4">
+          <div class="tc-thumb">
+            <img src="assets/images/course-images/6.png" alt="Advanced Tax Research Skills">
+            <div class="tc-play-overlay"><div class="tc-play-center"><div class="tc-play"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><div class="tc-resume-label">Learn More</div></div></div>
+            <button class="tc-heart" onclick="toggleHeart(this)" aria-label="Add to wishlist"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+          </div>
+          <div class="tc-bar"><span class="badge badge-sm badge-pill badge-bonus-outline tc-tag">2 CPE</span><div class="tc-bar-right"><span class="tc-dur"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>54 min</span></div></div>
+
+          <div class="tc-dates"><div class="tc-date-row"><svg viewBox="0 0 24 24" class="tc-speaker-icon" title="Speaker"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="tc-speaker" title="Speaker: Eunice Kwong, Partner at Ricky Tan & Co">Eunice Kwong, Partner at Ricky Tan & Co</span></div></div>
+          <div class="course-popover" id="popover-s4-c4">
+            <div class="cp-video">
+              <video autoplay muted loop playsinline poster="assets/images/course-images/6.png"><source src="assets/videos/Business Training Expenses.mp4" type="video/mp4"></video>
+              <span class="tc-thumb-badge tc-thumb-badge--course"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Course</span>
+              <div class="cp-live-dot"><div class="cp-live-dot-icon"></div>Preview</div>
+              <div class="cp-video-bar"><div class="cp-video-bar-fill"></div></div>
+              <button class="cp-close" aria-label="Close" onclick="document.getElementById('popover-s4-c4').classList.remove('popover-open')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+            <div class="cp-body">
+              <div class="cp-meta"><span class="badge badge-sm badge-pill badge-bonus-outline">2 CPE</span><span class="cp-date">5 Feb 2026</span></div>
+              <h3 class="cp-title">Advanced Tax Research Skills</h3>
+              <div class="cp-stats">
+                <span class="cp-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>54 min | CPE</span>
+                <span class="cp-stat"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>1 Module</span>
+              </div>
+              <div class="cp-divider"></div>
+              <p class="cp-learn-label">What you will learn</p>
+              <ul class="cp-outcomes">
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Navigating LHDN rulings, guides, and public guidelines</li>
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Interpreting tax legislation and relevant case law</li>
+                <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Writing clear and professional tax opinions for clients</li>
+              </ul>
+              <button class="btn-resume cp-cta" onclick="window.location.href='#'"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Play</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- #include "templates/footer.html" -->
+
+</body>
+<script>
+// Restore theme
+(function(){
+  var t = localStorage.getItem('theme');
+  if (!t) t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  document.documentElement.setAttribute('data-theme', t);
+})();
+
+// Heart toggle
+function toggleHeart(btn) {
+  btn.classList.toggle('tc-heart--active');
+  btn.setAttribute('aria-label', btn.classList.contains('tc-heart--active') ? 'Remove from wishlist' : 'Add to wishlist');
+}
+
+// Series dropdown
+function toggleSeriesDropdown(e) {
+  e.stopPropagation();
+  var wrap = document.getElementById('series-tabs-dropdown');
+  var isOpen = wrap.classList.toggle('dd-open');
+  document.getElementById('series-dropdown-btn').setAttribute('aria-expanded', isOpen);
+}
+
+function showSeries(index, label) {
+  var panels = document.querySelectorAll('.series-panel');
+  var items = document.querySelectorAll('.series-dropdown-item');
+  panels.forEach(function(p, i) { p.classList.toggle('active', i === index); });
+  items.forEach(function(item, i) {
+    item.classList.toggle('dd-active', i === index);
+    item.setAttribute('aria-selected', i === index ? 'true' : 'false');
+  });
+  if (label) { document.getElementById('series-dropdown-label').textContent = label; }
+  var wrap = document.getElementById('series-tabs-dropdown');
+  wrap.classList.remove('dd-open');
+  document.getElementById('series-dropdown-btn').setAttribute('aria-expanded', 'false');
+  // Apply badge tooltips to the newly shown panel
+  wrapBadgeTooltips(document.querySelector('.series-panel.active'));
+}
+
+document.addEventListener('click', function(e) {
+  var wrap = document.getElementById('series-tabs-dropdown');
+  if (wrap && !wrap.contains(e.target)) {
+    wrap.classList.remove('dd-open');
+    document.getElementById('series-dropdown-btn').setAttribute('aria-expanded', 'false');
+  }
+});
+
+// Course popovers: shared backdrop, portal to body, hover on desktop / tap on mobile+tablet
+(function() {
+  var cpBackdrop = document.createElement('div');
+  cpBackdrop.className = 'cp-backdrop';
+  document.body.appendChild(cpBackdrop);
+
+  var activePopover = null;
+  var activeCard = null;
+
+  function isTouchSheet() {
+    if (window.innerWidth <= 768) return true;
+    if (window.innerWidth <= 1100 && window.matchMedia('(orientation: portrait)').matches) return true;
+    return false;
+  }
+
+  function hideActivePopover() {
+    if (!activePopover) return;
+    activePopover.classList.remove('popover-open');
+    cpBackdrop.classList.remove('active');
+    var vid = activePopover.querySelector('video');
+    if (vid) { vid.pause(); vid.currentTime = 0; }
+    if (!isTouchSheet()) {
+      activePopover.style.opacity = '0';
+      activePopover.style.pointerEvents = 'none';
+      activePopover.style.transform = 'translateX(-8px) scale(0.97)';
+    }
+    activePopover = null;
+    activeCard = null;
+  }
+
+  cpBackdrop.addEventListener('click', hideActivePopover);
+  document.addEventListener('keydown', function(e) { if (e.key === 'Escape') hideActivePopover(); });
+
+  function initPopover(cardId, popoverId) {
+    var card = document.getElementById(cardId);
+    var popover = document.getElementById(popoverId);
+    if (!card || !popover) return;
+    document.body.appendChild(popover);
+
+    var hideTimer = null;
+
+    function showPopover() {
+      clearTimeout(hideTimer);
+      if (activePopover && activePopover !== popover) hideActivePopover();
+      activePopover = popover;
+      activeCard = card;
+
+      if (isTouchSheet()) {
+        popover.style.cssText = '';
+        popover.classList.add('popover-open');
+        cpBackdrop.classList.add('active');
+        var vid = popover.querySelector('video');
+        if (vid) vid.play().catch(function(){});
+        return;
+      }
+
+      var rect = card.getBoundingClientRect();
+      var gap = 12, pw = 300, estimatedHeight = 520;
+      var top = rect.top;
+      var bottomOverflow = top + estimatedHeight - (window.innerHeight - 12);
+      if (bottomOverflow > 0) top = Math.max(12, top - bottomOverflow);
+      var rightSpace = window.innerWidth - rect.right;
+      if (rightSpace >= pw + gap + 16) {
+        popover.style.left = (rect.right + gap) + 'px';
+        popover.style.right = 'auto';
+        popover.style.transform = 'translateX(-8px) scale(0.97)';
+      } else {
+        popover.style.left = Math.max(8, rect.left - pw - gap) + 'px';
+        popover.style.right = 'auto';
+        popover.style.transform = 'translateX(8px) scale(0.97)';
+      }
+      popover.style.top = top + 'px';
+      popover.style.bottom = 'auto';
+      requestAnimationFrame(function() {
+        popover.style.opacity = '1';
+        popover.style.pointerEvents = 'auto';
+        popover.style.transform = 'translateX(0) scale(1)';
+        var vid = popover.querySelector('video');
+        if (vid) vid.play().catch(function(){});
+      });
+    }
+
+    function hidePopover() {
+      if (activePopover === popover) hideActivePopover();
+    }
+
+    card.addEventListener('mouseenter', function() { if (!isTouchSheet()) showPopover(); });
+    card.addEventListener('mouseleave', function() {
+      if (isTouchSheet()) return;
+      hideTimer = setTimeout(function() {
+        if (!popover.matches(':hover')) hidePopover();
+      }, 80);
+    });
+    popover.addEventListener('mouseenter', function() { clearTimeout(hideTimer); });
+    popover.addEventListener('mouseleave', function() {
+      if (!isTouchSheet() && !card.matches(':hover')) hidePopover();
+    });
+    card.addEventListener('click', function() { if (isTouchSheet()) showPopover(); });
+  }
+
+  // Series 0
+  initPopover('card-s0-c1', 'popover-s0-c1');
+  initPopover('card-s0-c2', 'popover-s0-c2');
+  initPopover('card-s0-c3', 'popover-s0-c3');
+  initPopover('card-s0-c4', 'popover-s0-c4');
+  initPopover('card-s0-c5', 'popover-s0-c5');
+  initPopover('card-startup-expenses', 'popover-startup-expenses');
+  // Series 1
+  initPopover('card-s1-c1', 'popover-s1-c1');
+  initPopover('card-s1-c2', 'popover-s1-c2');
+  initPopover('card-s1-c3', 'popover-s1-c3');
+  initPopover('card-s1-c4', 'popover-s1-c4');
+  initPopover('card-s1-c5', 'popover-s1-c5');
+  // Series 2
+  initPopover('card-s2-c1', 'popover-s2-c1');
+  initPopover('card-s2-c2', 'popover-s2-c2');
+  initPopover('card-s2-c3', 'popover-s2-c3');
+  initPopover('card-s2-c4', 'popover-s2-c4');
+  // Series 3
+  initPopover('card-s3-c1', 'popover-s3-c1');
+  initPopover('card-s3-c2', 'popover-s3-c2');
+  initPopover('card-s3-c3', 'popover-s3-c3');
+  initPopover('card-s3-c4', 'popover-s3-c4');
+  // Series 4
+  initPopover('card-s4-c1', 'popover-s4-c1');
+  initPopover('card-s4-c2', 'popover-s4-c2');
+  initPopover('card-s4-c3', 'popover-s4-c3');
+  initPopover('card-s4-c4', 'popover-s4-c4');
+}());
+
+// ── Badge tooltip: wrap multi-category .tc-tag badges with tooltip + forced truncation ──
+function wrapBadgeTooltips(panel) {
+  if (!panel) return;
+  panel.querySelectorAll('.tc-bar .tc-tag').forEach(function(tag) {
+    var text = tag.textContent.trim();
+    // Trigger on overflow OR multiple categories (comma-separated)
+    var needsWrap = (tag.scrollWidth > tag.offsetWidth || text.indexOf(',') !== -1)
+                    && !tag.parentElement.classList.contains('tc-bar-tags');
+    if (needsWrap) {
+      var wrap = document.createElement('div');
+      wrap.className = 'tc-bar-tags';
+      wrap.setAttribute('data-tooltip', text);
+      wrap.setAttribute('data-tooltip-pos', 'top');
+      tag.parentNode.insertBefore(wrap, tag);
+      wrap.appendChild(tag);
+      // tc-merged-badge forces display:inline-block so text-overflow:ellipsis works
+      tag.classList.add('tc-merged-badge');
+    }
+  });
+}
+document.addEventListener('DOMContentLoaded', function() {
+  wrapBadgeTooltips(document.querySelector('.series-panel.active'));
+});
+
+
+  // Auto-calculate total series duration from card hours
+  (function() {
+    function parseMins(txt) {
+      txt = txt.trim();
+      var m = 0;
+      var hrMatch = txt.match(/(\d+)\s*hr/);
+      var minMatch = txt.match(/(\d+)\s*min/);
+      if (hrMatch) m += parseInt(hrMatch[1]) * 60;
+      if (minMatch) m += parseInt(minMatch[1]);
+      return m;
+    }
+    var total = 0;
+    document.querySelectorAll('.tc-dur').forEach(function(d) {
+      total += parseMins(d.textContent);
+    });
+    var hrs = Math.floor(total / 60);
+    var mins = total % 60;
+    var label = hrs > 0 ? hrs + ' hr' : '';
+    if (mins > 0) label += (label ? ' ' : '') + mins + ' min';
+    var el = document.getElementById('series-total-dur');
+    if (el) el.textContent = label || '0 min';
+  })();
+
+</script>
+<!-- #include "templates/js-nav.html" -->
+</html>

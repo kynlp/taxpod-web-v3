@@ -1,0 +1,2038 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Webinars | YYC taxPOD</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="templates/css-variables.css">
+<link rel="stylesheet" href="templates/css-topbar.css">
+<link rel="stylesheet" href="templates/css-footer.css">
+<script>
+(function(){
+  var t=localStorage.getItem('theme')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');
+  document.documentElement.setAttribute('data-theme',t);
+})();
+</script>
+<style>
+
+/* ── Theme transition ── */
+html.theme-transition * {
+  transition: background-color 0.35s ease, color 0.35s ease, border-color 0.35s ease !important;
+}
+
+body { background: var(--web-bg-light-blue); }
+
+/*── Page body layout ── */
+.ei-page-body {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: var(--space-24);
+  display: flex;
+  gap: var(--space-24);
+  align-items: flex-start;
+
+  padding-top: 48px;
+  padding-bottom: 48px;
+}
+
+/* ── Sidebar ── */
+.ei-sidebar {
+  width: 260px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 124px;
+  background: var(--card-bg);
+  border: 1px solid var(--border-lighter);
+  border-radius: var(--radius-lg);
+  padding: var(--space-16);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+}
+.ei-filter-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 0 var(--space-8);
+}
+.ei-filter-title {
+  font-family: var(--font-primary);
+  font-size: var(--fs-16);
+  font-weight: 600;
+  color: var(--grey-800);
+  margin: 0;
+  white-space: nowrap;
+}
+.ei-filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+.ei-filter-group + .ei-filter-group {
+  border-top: 1px solid var(--border-lighter);
+  padding-top: var(--space-12);
+}
+.ei-cb-child {
+  padding-left: 24px;
+}
+.ei-cb {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  cursor: pointer;
+  line-height: 2;
+  font-family: var(--font-secondary);
+  font-size: var(--fs-14);
+  color: var(--grey-700);
+}
+.ei-cb input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  border: 1.5px solid var(--border-light);
+  background: var(--neutral-white);
+  cursor: pointer;
+  position: relative;
+  flex-shrink: 0;
+  margin: 0;
+  transition: background 0.15s, border-color 0.15s;
+}
+.ei-cb input[type="checkbox"]:checked {
+  background: #00AFED;
+  border-color: #00AFED;
+}
+.ei-cb input[type="checkbox"]:checked::after {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 2px;
+  width: 5px;
+  height: 10px;
+  border: solid #fff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+[data-theme="dark"] .ei-cb input[type="checkbox"]:not(:checked) {
+  background: #343638;
+  border-color: var(--grey-500);
+}
+[data-theme="dark"] .ei-cb input[type="checkbox"]:checked {
+  background: #52B7FF;
+  border-color: #52B7FF;
+}
+[data-theme="dark"] .ei-cb input[type="checkbox"]:checked::after {
+  border-color: #2F2F2F;
+}
+.ei-clear-btn {
+  font-family: var(--font-secondary);
+  font-size: 12px;
+  color: var(--primary-500);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  text-align: left;
+}
+.ei-clear-btn:hover { text-decoration: underline; }
+
+/* ── Main content area ── */
+.ei-main { flex: 1; min-width: 0; }
+.ei-header {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-12);
+  margin-bottom: var(--space-16);
+
+  padding-bottom: 24px;}
+.ei-title {
+  font-family: var(--font-primary);
+  font-size: var(--fs-24);
+  font-weight: 700;
+  color: var(--grey-800);
+  margin: 0;
+  flex: 0 0 100%;
+}
+.ei-result-count {
+  font-family: var(--font-secondary);
+  font-size: var(--fs-14);
+  color: var(--grey-700);
+  white-space: nowrap;
+}
+.ei-result-count::after {
+  content: "|";
+  margin-left: var(--space-12);
+  color: var(--grey-700);
+}
+.ei-search-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  flex: 1;
+}
+.ei-search {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-8) var(--space-12);
+  flex: 1;
+  transition: border-color 0.15s;
+}
+.ei-search:focus-within { border-color: var(--input-focus-border); }
+/* Desktop: cap search width */
+@media (min-width: 1025px) {
+  .ei-search { max-width: 350px; flex: 1; }
+  .ei-header-sep { display: none; }
+  .ei-pag-bar { flex-direction: row; justify-content: space-between; align-items: center; gap: var(--space-12); }
+  .pg-numbered { padding-top: 0; justify-content: flex-end; }
+/* ── Pagination: desktop row layout (must be after base ei-pag-bar rule) ── */
+@media (min-width: 1025px) {
+  .ei-pag-bar { flex-direction: row; justify-content: space-between; align-items: center; gap: var(--space-12); }
+  .pg-numbered { padding-top: 0; justify-content: flex-end; }
+}
+  .ei-result-count { order: 2; margin-left: auto; }
+  .ei-search-row { order: 1; flex: 0 0 auto; }
+  .ei-controls-row { order: 3; }
+}
+.ei-search svg { flex-shrink: 0; color: var(--grey-500); }
+.ei-search input {
+  border: none; background: transparent; outline: none;
+  font-family: var(--font-secondary); font-size: var(--fs-14);
+  color: var(--text-primary); width: 100%;
+}
+.ei-search input::placeholder { color: var(--grey-500); }
+.ei-controls-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+}
+.ei-controls-row .ei-sort { margin-left: auto; }
+.ei-sort {
+    display: flex;
+  align-items: center;
+  gap: var(--space-8);
+}
+.ei-sort label {
+  font-family: var(--font-secondary);
+  font-size: var(--fs-14);
+  color: var(--grey-600);
+}
+
+/* ── Sort dropdown (custom) ── */
+.ei-sort-dropdown { position: relative; display: inline-block; flex-shrink: 0; }
+.ei-sort-trigger {
+  font-family: var(--font-secondary);
+  font-size: var(--fs-14);
+  color: var(--input-text);
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-8) var(--space-12);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-8);
+  transition: border-color 0.15s;
+  min-width: 160px;
+}
+.ei-sort-trigger:hover { border-color: var(--primary-500); }
+.ei-sort-chevron {
+  width: 14px; height: 14px;
+  stroke: var(--grey-500); fill: none; stroke-width: 2;
+  stroke-linecap: round; stroke-linejoin: round;
+  margin-left: auto; flex-shrink: 0;
+  transition: transform 0.2s; pointer-events: none;
+}
+.ei-sort-dropdown.dd-open .ei-sort-chevron { transform: rotate(180deg); }
+.ei-sort-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0; min-width: 100%;
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  z-index: 200; display: none;
+  padding: var(--space-4) 0;
+}
+.ei-sort-dropdown.dd-open .ei-sort-menu { display: block; }
+#ei-perpage-dropdown .ei-sort-menu { top: auto; bottom: calc(100% + 4px); }
+.ei-sort-item {
+  display: block; width: 100%;
+  padding: var(--space-8) var(--space-12);
+  font-family: var(--font-secondary);
+  font-size: var(--fs-14);
+  color: var(--input-text);
+  cursor: pointer; background: none; border: none;
+  text-align: left; transition: background 0.1s;
+}
+.ei-sort-item:hover { background: var(--primary-50); color: var(--primary-500); }
+.ei-sort-item.dd-active { background: var(--primary-50); color: var(--primary-500); font-weight: 600; }
+[data-theme="dark"] .ei-sort-trigger:hover { border-color: var(--primary-500); }
+[data-theme="dark"] .ei-sort-item.dd-active { background: var(--primary-100); color: var(--primary-500); }
+[data-theme="dark"] .ei-sort-item:hover { background: var(--primary-100); color: var(--primary-500); }
+
+/* ── Mobile filter toggle ── */
+.ei-mob-filter-toggle {
+  display: none;
+  align-items: center;
+  gap: var(--space-6);
+  background: var(--card-bg);
+  border: 1px solid var(--border-lighter);
+  border-radius: var(--radius-md);
+  padding: var(--space-8) var(--space-12);
+  font-family: var(--font-secondary);
+  font-size: var(--fs-14);
+  color: var(--grey-700);
+  cursor: pointer;
+  margin-bottom: var(--space-12);
+}
+.ei-mob-filter-toggle svg {
+  width: 16px; height: 16px;
+  stroke: currentColor; fill: none; stroke-width: 2;
+}
+
+/* ── Card grid ── */
+.ei-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-16);
+}
+
+/* ── tc-card (matches index.html design system) ── */
+.tc-card {
+  border-radius: 14px;
+  overflow: hidden;
+  cursor: pointer;
+  position: relative;
+  background: var(--card-bg);
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.07);
+  border: 1px solid var(--border-lighter);
+}
+.tc-card:hover {
+  transform: translateY(-5px) scale(1.015);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.14);
+}
+/* Course/Live Webinar card — thumbnail + bar + tc-dates */
+.tc-card--course .tc-bar { background: var(--card-bg); padding: 12px 14px 0px 14px; min-height: auto; }
+
+
+
+/* Date rows (for tc-card--course) */
+.tc-dates {
+  background: var(--card-bg);
+  padding: 9px 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.tc-date-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-family: var(--font-primary);
+  font-size: 14px;
+  color: var(--grey-600);
+}
+.tc-date-row svg {
+  width: 14px; height: 14px;
+  stroke: var(--primary-500);
+  fill: none; stroke-width: 2;
+  stroke-linecap: round; stroke-linejoin: round;
+  flex-shrink: 0; margin-top: 2px;
+}
+.tc-speaker { flex: 1; white-space: normal; word-break: break-word; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.ei-grid .tc-card { width: 100%; }
+.ei-grid .tc-card--course { width: 100%; }
+.ei-grid .tc-thumb { height: auto; aspect-ratio: 290 / 170; background: transparent; }
+
+/* Thumbnail */
+.tc-thumb {
+  position: relative;
+  overflow: hidden;
+  border-radius: 14px 14px 0 0;
+  height: 170px;
+  background: transparent;
+}
+.tc-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 14px 14px 0 0;
+}
+
+/* Play overlay */
+.tc-play-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.22s ease, background 0.22s ease;
+  z-index: 4;
+  pointer-events: none;
+}
+.tc-card:hover .tc-play-overlay {
+  opacity: 1;
+  background: rgba(0,0,0,0.50);
+}
+.tc-play {
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  background: var(--primary-500);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.18s ease;
+}
+.tc-card:hover .tc-play { transform: scale(1.08); }
+.tc-play svg {
+  width: 20px; height: 20px;
+  fill: var(--card-bg);
+  stroke: none;
+  margin-left: 4px;
+}
+
+/* Heart / wishlist */
+.tc-heart {
+  position: absolute;
+  bottom: 12px; right: 12px;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.38);
+  border: none; padding: 0;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  z-index: 6;
+  transition: background 0.18s, transform 0.15s;
+}
+.tc-heart:hover { background: rgba(0,0,0,0.60); transform: scale(1.1); }
+.tc-heart svg { width: 18px; height: 18px; stroke: #fff; fill: none; stroke-width: 2; }
+.tc-heart.tc-heart--active { background: #e53e3e; }
+.tc-heart.tc-heart--active svg { fill: #fff; stroke: #fff; }
+
+/* Bottom bar */
+.tc-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 14px 0px 14px;
+  background: var(--card-bg);
+  min-height: 40px;
+}
+.tc-bar-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.tc-tag {
+  display: inline-block !important;
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex-shrink: 0;
+  border-radius: 4px !important;
+}
+.ei-grid .tc-tag { font-size: 12px; font-family: var(--font-secondary); color: var(--content-card-text); }
+.ei-grid .tc-dur { font-size: 12px; }
+.tc-dur {
+  font-family: var(--font-secondary);
+  font-size: 12px;
+  color: var(--content-card-text);
+  white-space: nowrap;
+  display: flex; align-items: center; gap: 5px;
+  flex-shrink: 0;
+}
+.tc-dur svg {
+  width: 12px; height: 12px;
+  stroke: var(--content-card-text);
+  fill: none; stroke-width: 2;
+}
+
+
+
+
+
+/* ── Pagination bar (per-page + pagination) ── */
+.ei-pag-bar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: var(--space-24);
+  padding: var(--space-12) 0 var(--space-16);
+  gap: var(--space-12);
+}
+.ei-per-page {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  font-size: 14px;
+  color: var(--grey-600);
+  font-family: var(--font-secondary);
+}
+
+
+/* ── Pagination (design system) ── */
+.pg-numbered {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 10px;
+  gap: 8px;
+  padding: 0;
+}
+.pg-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: 1.5px solid var(--grey-300);
+  background: var(--neutral-white);
+  color: var(--grey-600);
+  font-family: var(--font-secondary);
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  transition: border-color 0.15s, color 0.15s;
+  box-sizing: border-box;
+}
+.pg-item:hover {
+  border-color: var(--primary-600);
+  color: var(--primary-600);
+}
+.pg-item.pg-active {
+  background: var(--primary-600);
+  border-color: var(--primary-600);
+  color: var(--neutral-white);
+  font-weight: 600;
+}
+.pg-item.pg-active:hover {
+  background: var(--primary-700);
+  border-color: var(--primary-700);
+  color: var(--neutral-white);
+}
+.pg-ellipsis {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px; height: 36px;
+  color: var(--grey-500);
+  font-family: var(--font-secondary);
+  font-size: 16px;
+  font-weight: 500;
+}
+.pg-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: 1.5px solid var(--grey-300);
+  background: var(--neutral-white);
+  color: var(--grey-600);
+  cursor: pointer;
+  text-decoration: none;
+  transition: border-color 0.15s, color 0.15s;
+  box-sizing: border-box;
+}
+.pg-nav svg {
+  width: 16px; height: 16px;
+  stroke: currentColor; fill: none;
+  stroke-width: 2.5;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+.pg-nav:hover {
+  border-color: var(--primary-600);
+  color: var(--primary-600);
+}
+.pg-nav.pg-disabled { visibility: hidden; pointer-events: none; }
+/* ── Pagination: desktop row layout ── */
+@media (min-width: 1025px) {
+  .ei-pag-bar { flex-direction: row; justify-content: space-between; align-items: center; gap: var(--space-12); }
+  .pg-numbered { padding-top: 0; justify-content: flex-end; }
+}
+[data-theme="dark"] .pg-item,
+[data-theme="dark"] .pg-nav {
+  background: var(--neutral-white);
+  border-color: var(--grey-300);
+  color: var(--grey-600);
+}
+[data-theme="dark"] .pg-item:hover,
+[data-theme="dark"] .pg-nav:hover {
+  border-color: var(--primary-600);
+  color: var(--primary-600);
+}
+[data-theme="dark"] .pg-item.pg-active { background: var(--primary-600); border-color: var(--primary-600); color: var(--neutral-white); }
+
+/* ── Responsive ── */
+
+
+
+
+
+/* Indeterminate checkbox (partial select) */
+.ei-cb input[type="checkbox"]:indeterminate {
+  background: #00AFED;
+  border-color: #00AFED;
+}
+.ei-cb input[type="checkbox"]:indeterminate::after {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 8px;
+  width: 10px;
+  height: 2px;
+  background: #fff;
+  border-radius: 1px;
+}
+[data-theme="dark"] .ei-cb input[type="checkbox"]:indeterminate {
+  background: #52B7FF;
+  border-color: #52B7FF;
+}
+[data-theme="dark"] .ei-cb input[type="checkbox"]:indeterminate::after {
+  background: #2F2F2F;
+}
+
+
+/* ── Card states: Resume & Completed ── */
+.tc-play-center { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.tc-resume-label { font-family: var(--font-primary); font-size: 11px; font-weight: 600; color: #fff; text-transform: uppercase; letter-spacing: 1.5px; }
+.tc-completed-overlay {
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,0.55);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 4; opacity: 0; transition: opacity 0.22s ease;
+}
+.tc-card--completed:hover .tc-completed-overlay { opacity: 1; }
+.tc-completed-text { font-family: var(--font-primary); font-size: 11px; font-weight: 700; color: #fff; letter-spacing: 2px; text-transform: uppercase; }
+.tc-seekbar { position: absolute; bottom: 0; left: 0; right: 0; height: 4px; background: rgba(255,255,255,0.25); z-index: 5; }
+.tc-seekbar-fill { height: 100%; background: #00D084; border-radius: 0 2px 2px 0; }
+
+/* ── Course Hover Popover ── */
+.course-popover {
+  position: fixed;
+  width: 300px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.45), 0 4px 16px rgba(0,0,0,0.2);
+  z-index: 9999;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-8px) scale(0.97);
+  transition: opacity 0.22s ease, transform 0.22s ease;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  max-height: 80vh;
+}
+.course-popover.popover-open {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(0) scale(1);
+}
+.cp-video {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/9;
+  overflow: hidden;
+  background: transparent;
+  flex-shrink: 0;
+}
+.cp-video video,
+.cp-video img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.cp-close {
+  display: none;
+  position: absolute; top: 8px; right: 8px;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.55);
+  border: none; cursor: pointer;
+  align-items: center; justify-content: center;
+  color: #fff; padding: 0;
+  z-index: 10;
+}
+.cp-close svg { width: 14px; height: 14px; }
+.cp-body { padding: 14px 16px 16px; font-family: var(--font-secondary); font-size: 14px; color: var(--grey-700); overflow-y: auto; flex: 1; min-height: 0; -webkit-overflow-scrolling: touch; }
+.cp-body::-webkit-scrollbar { width: 4px; }
+.cp-body::-webkit-scrollbar-track { background: transparent; }
+.cp-body::-webkit-scrollbar-thumb { background: var(--grey-300); border-radius: 4px; }
+[data-theme="dark"] .cp-body::-webkit-scrollbar-thumb { background: var(--grey-600); }
+.cp-body { scrollbar-width: thin; scrollbar-color: var(--grey-300) transparent; }
+[data-theme="dark"] .cp-body { scrollbar-color: var(--grey-600) transparent; }
+.cp-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.cp-meta .badge { border-radius: var(--radius-sm); font-family: var(--font-secondary); }
+.cp-date { font-family: var(--font-secondary); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+.cp-title { font-family: var(--font-primary); font-size: 16px; font-weight: 700; color: var(--grey-800); line-height: 1.35; margin: 0 0 10px; }
+.cp-stats { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.cp-stat { display: flex; align-items: center; gap: 5px; font-family: var(--font-secondary); font-size: 14px; }
+.cp-stat svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 2; flex-shrink: 0; }
+.cp-divider { height: 1px; background: var(--card-border); margin: 12px 0; }
+.cp-learn-label { font-family: var(--font-secondary); font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 9px; }
+.cp-outcomes { list-style: none; padding: 0; margin: 0 0 14px; display: flex; flex-direction: column; gap: 7px; }
+.cp-outcomes li { display: flex; align-items: flex-start; gap: 8px; font-family: var(--font-secondary); font-size: 14px; line-height: 1.45; }
+.cp-outcomes li svg { width: 15px; height: 15px; flex-shrink: 0; margin-top: 1px; stroke: var(--primary-500); fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+.cp-cta { width: 100%; justify-content: center; display: none; }
+.cp-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9998; opacity: 0; pointer-events: none; transition: opacity 0.22s ease; }
+.cp-backdrop.active { opacity: 1; pointer-events: auto; }
+
+
+/* ── Responsive: Tablet landscape (769px – 1100px) ── */
+@media (min-width: 769px) and (max-width: 1100px) {
+  .ei-page-body { gap: var(--space-16); padding-top: 32px; padding-bottom: 32px; }
+  .ei-pag-bar { flex-direction: row; justify-content: space-between; align-items: center; gap: var(--space-12); }
+  .pg-numbered { padding-top: 0; justify-content: flex-end; }
+  .ei-sidebar { width: 200px; min-width: 200px; }
+  .ei-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  /* Header layout */
+  .ei-title { flex: 1; }
+  .ei-result-count { order: 2; }
+  .ei-header-sep { display: block !important; flex: 0 0 100%; height: 0; order: 3; }
+  .ei-search-row { flex: 1; order: 4; }
+  .ei-controls-row { order: 5; margin-left: 0; }
+  .ei-result-count::after { content: none; }
+  /* Clear Filters on second row */
+  .ei-filter-header { flex-wrap: wrap; }
+  .ei-filter-title { flex: 0 0 100%; }
+  .ei-clear-btn { margin-top: 4px; }
+}
+
+/* ── Responsive: Tablet portrait (481px – 768px) ── */
+@media (max-width: 768px) {
+  .ei-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .ei-sidebar { display: none; position: fixed; top: 0; left: 0; width: 280px; height: 100dvh; z-index: 900; overflow-y: auto; padding: 24px 20px; background: var(--card-bg); box-shadow: 4px 0 24px rgba(0,0,0,0.18); }
+  .ei-sidebar.is-open { display: flex; }
+  .ei-mob-filter-toggle { display: flex; }
+  .ei-sidebar.is-open .ei-sidebar-close-row { display: flex; }
+  .ei-page-body { flex-direction: column; padding-left: var(--space-16); padding-right: var(--space-16); padding-top: 4px; padding-bottom: 4px; }
+  .ei-header { flex-direction: row; flex-wrap: wrap; padding-top: 10px; padding-bottom: 0px; }
+  .ei-search-row { order: 1; flex: 1; }
+  .ei-result-count { order: 2; }
+  .ei-header-sep { display: none; }
+  .ei-controls-row { flex: 0 0 100%; order: 3; align-items: center; }
+  .ei-controls-row .ei-mob-filter-toggle { align-self: center; }
+  .ei-mob-filter-toggle { /* margin-bottom: var(--space-12); */ }
+  .ei-controls-row .ei-sort { align-self: center; }
+  .ei-search { flex: 1; max-width: 230px; }
+  .ei-result-count::after { content: none; }
+  .ei-pag-bar { gap: var(--space-32); }
+  .ei-mob-filter-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 899; }
+  .ei-mob-filter-backdrop.is-open { display: block; }
+}
+
+/* ── Responsive: Mobile (≤ 480px) ── */
+@media (max-width: 480px) {
+  .ei-grid { grid-template-columns: 1fr; }
+  /* padding kept at 16px from 768px block */
+  .ei-header { gap: var(--space-8); }
+  .ei-sort-trigger { min-width: 0; }
+}
+
+@media (max-width: 768px) {
+  .cp-cta { display: flex !important; position: sticky; bottom: 0; margin-top: 12px; z-index: 2; }
+  .course-popover {
+    left: 16px !important; right: 16px !important;
+    top: 50% !important; bottom: auto !important;
+    width: auto !important; max-width: none !important;
+    height: auto !important; max-height: 90dvh !important;
+    border-radius: 20px !important;
+    transform: translateY(calc(-50% + 20px)) !important; opacity: 0 !important;
+    overflow: hidden; display: flex; flex-direction: column;
+    transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.25s ease !important;
+  }
+  .course-popover.popover-open {
+    pointer-events: auto !important;
+    transform: translateY(-50%) !important;
+    opacity: 1 !important;
+  }
+  .cp-close { display: flex; }
+}
+@media (min-width: 768px) and (max-width: 1100px) and (orientation: portrait) {
+  .course-popover {
+    left: 50% !important; right: auto !important;
+    top: 50% !important; bottom: auto !important;
+    width: 80% !important; max-width: 500px !important;
+    height: auto !important; max-height: calc(100dvh - 60px) !important;
+    border-radius: 20px !important;
+    transform: translate(-50%, calc(-50% + 20px)) !important; opacity: 0 !important;
+    overflow: hidden; display: flex; flex-direction: column;
+    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.25s ease !important;
+  }
+  .course-popover.popover-open {
+    pointer-events: auto !important;
+    transform: translate(-50%, -50%) !important;
+    opacity: 1 !important;
+  }
+}
+@media (min-width: 1241px) {
+  .cp-cta { display: flex !important; }
+}
+
+
+/* ── Tooltip system ── */
+[data-tooltip] { position: relative; }
+[data-tooltip]::before,
+[data-tooltip]::after {
+  position: absolute; opacity: 0; visibility: hidden;
+  transition: opacity 0.15s ease; pointer-events: none; z-index: 9999;
+}
+[data-tooltip]::after {
+  content: attr(data-tooltip);
+  background: var(--tooltip-bg, #1e1e1e); color: var(--tooltip-text, #fff);
+  font-family: var(--font-secondary); font-size: 12px; font-weight: 500;
+  white-space: nowrap; padding: 5px 10px; border-radius: 6px;
+  line-height: 1.4; box-shadow: var(--shadow-md);
+}
+[data-tooltip]::before {
+  content: ''; border: 5px solid transparent;
+}
+[data-tooltip]:hover::before,
+[data-tooltip]:hover::after { opacity: 1; visibility: visible; }
+[data-tooltip]::after { bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); }
+[data-tooltip]::before { bottom: calc(100% + -2px); left: 50%; transform: translateX(-50%); border-top-color: var(--tooltip-bg, #1e1e1e); }
+
+/* ── Card-type thumb badges (top-left of image) ── */
+:root {
+  --badge-live-bg:     #05B8A3;
+  --badge-course-bg:   #3B6FE8;
+  --badge-past-bg:     #64748B;
+  --badge-podcast-bg:  #E8750A;
+}
+.tc-thumb-badge {
+  position: absolute;
+  top: 14px; left: 11px;
+  font-size: 9px; font-weight: 700;
+  letter-spacing: 1px; text-transform: uppercase;
+  padding: 4px 10px; border-radius: 6px; line-height: 1;
+  pointer-events: none; display: flex; align-items: center; gap: 5px; color: #fff; z-index: 3;
+}
+.tc-thumb-badge svg { width: 11px; height: 11px; flex-shrink: 0; vertical-align: middle; display: block; }
+.tc-thumb-badge--live,
+.tc-thumb-badge--live-now,
+.tc-thumb-badge--course,
+.tc-thumb-badge--past,
+.tc-thumb-badge--podcast { background: rgba(0,0,0,0.3); }
+.tc-thumb-badge--live-now .tc-badge-dot {
+  width: 6px; height: 6px; background: #FF3B30;
+  border-radius: 50%; flex-shrink: 0;
+  animation: tcBadgePulse 1.4s ease-in-out infinite;
+}
+@keyframes tcBadgePulse {
+  0%,100% { opacity:1; transform:scale(1); }
+  50%      { opacity:.3; transform:scale(.6); }
+}
+
+.btn-resume {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--space-6, 6px);
+  width: 100%; padding: var(--space-8, 8px) var(--space-18, 18px); border-radius: var(--radius-md);
+  background: var(--primary-500); color: var(--neutral-white);
+  font-family: var(--font-primary); font-size: 14px; font-weight: 700;
+  border: none; cursor: pointer; text-decoration: none;
+  transition: background 0.15s, color 0.15s; line-height: 1; white-space: nowrap;
+}
+.btn-resume:hover { background: var(--primary-600); }
+.btn-resume:active { background: var(--primary-700); }
+.btn-resume svg, .cp-cta svg { width: 14px; height: 14px; fill: currentColor; flex-shrink: 0; }
+@media (min-width: 769px) {
+  .course-popover .cp-cta,
+  .course-popover .cp-close { display: none !important; }
+}
+@media (min-width: 768px) and (max-width: 1100px) and (orientation: portrait) {
+  .course-popover .cp-cta { display: flex !important; position: sticky; bottom: 0; margin-top: 12px; z-index: 2; }
+  .course-popover .cp-close { display: flex !important; }
+}
+@media (min-width: 1024px) and (max-width: 1100px) and (orientation: landscape) {
+  .course-popover .cp-cta { display: flex !important; position: sticky; bottom: 0; margin-top: 12px; z-index: 2; }
+  .course-popover .cp-close { display: flex !important; }
+  .course-popover {
+    left: 50% !important; right: auto !important;
+    top: 50% !important; bottom: auto !important;
+    width: 80% !important; max-width: 500px !important;
+    height: auto !important; max-height: calc(100dvh - 60px) !important;
+    border-radius: 20px !important;
+    transform: translate(-50%, calc(-50% + 20px)) !important; opacity: 0 !important;
+    overflow: hidden; display: flex; flex-direction: column;
+    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.25s ease !important;
+  }
+  .course-popover.popover-open {
+    pointer-events: auto !important;
+    transform: translate(-50%, -50%) !important;
+    opacity: 1 !important;
+  }
+}
+.ei-sidebar-close-row { display: none; justify-content: flex-end; padding: 0 0 8px; }
+.ei-sidebar-close { width: 32px; height: 32px; border: none; background: transparent; cursor: pointer; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: var(--grey-500); padding: 0; }
+.ei-sidebar-close svg { width: 16px; height: 16px; }
+.ei-header-sep { display: none; }
+</style>
+</head>
+<body>
+
+<!-- Topbar -->
+<header class="topbar">
+<div class="topbar-inner">
+  <div class="topbar-logo">
+    <a href="index.html">
+      <img src="assets/images/logo-dark.png" alt="YYC taxPOD" class="logo-light">
+      <img src="assets/images/logo-white.png" alt="YYC taxPOD" class="logo-dark">
+    </a>
+  </div>
+  <div class="topbar-search">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="text" placeholder="Search...">
+  </div>
+  <!-- Mobile row break: forces row 2 to start after logo+search -->
+  <div class="topbar-row-break"></div>
+  <!-- Hamburger (mobile only) -->
+  <button class="mob-menu-btn" onclick="mobMenuOpen()" aria-label="Open menu">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+  <div class="topbar-actions">
+    <button class="topbar-lang">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      <span>EN</span>
+      <svg class="tb-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <button class="topbar-icon topbar-theme" onclick="(function(h){h.classList.add('theme-transition');var d=h.getAttribute('data-theme')==='dark'?'light':'dark';h.setAttribute('data-theme',d);localStorage.setItem('theme',d);setTimeout(function(){h.classList.remove('theme-transition')},350)})(document.documentElement)" aria-label="Toggle Dark Mode">
+      <svg class="tb-theme-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <svg class="tb-theme-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+    </button>
+    <button class="topbar-icon">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+    </button>
+    <button class="topbar-icon">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      <span class="topbar-badge">3</span>
+    </button>
+    <div class="topbar-avatar">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    </div>
+  </div>
+</div>
+</header>
+
+<!-- Mobile Menu Backdrop -->
+<div class="mob-menu-backdrop" id="mob-menu-backdrop" onclick="mobMenuClose()"></div>
+
+<!-- Mobile Menu Drawer -->
+<div class="mob-menu" id="mob-menu" role="dialog" aria-modal="true" aria-label="Navigation">
+  <div class="mob-menu-header">
+    <img src="assets/images/logo-dark.png" alt="YYC taxPOD" class="logo-light">
+    <img src="assets/images/logo-white.png" alt="YYC taxPOD" class="logo-dark" style="display:none">
+    <button class="mob-menu-close" onclick="mobMenuClose()" aria-label="Close menu">
+      <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <nav class="mob-nav">
+    <div class="mob-nav-item">
+      <div class="mob-nav-split">
+        <a href="webinars.html" class="mob-nav-split-link">Webinars</a>
+        <button class="mob-nav-split-toggle" onclick="mobNavToggle(this)" aria-label="Toggle Webinars menu"><svg class="mob-nav-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
+      </div>
+      <div class="mob-nav-sub">
+        <a href="#" class="mob-nav-sub-item">Live Webinars</a>
+        <a href="#" class="mob-nav-sub-item">Past Webinars</a>
+      </div>
+    </div>
+    <div class="mob-nav-item">
+      <button class="mob-nav-btn" onclick="mobNavToggle(this)">Update Classes <svg class="mob-nav-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="mob-nav-sub">
+        <a href="#" class="mob-nav-sub-item">2026</a>
+        <a href="#" class="mob-nav-sub-item">2025</a>
+        <a href="#" class="mob-nav-sub-item">2024</a>
+        <a href="#" class="mob-nav-sub-item">2023</a>
+      </div>
+    </div>
+    <div class="mob-nav-item">
+      <div class="mob-nav-split">
+        <a href="e-invoicing.html" class="mob-nav-split-link">E-Invoicing</a>
+        <button class="mob-nav-split-toggle" onclick="mobNavToggle(this)" aria-label="Toggle E-Invoicing menu"><svg class="mob-nav-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
+      </div>
+      <div class="mob-nav-sub">
+        <a href="#" class="mob-nav-sub-item">Mastery (5 Modules)</a>
+        <a href="#" class="mob-nav-sub-item">MyInvois</a>
+        <a href="#" class="mob-nav-sub-item">Industry Focus</a>
+        <a href="#" class="mob-nav-sub-item">e-Invoicing - Others</a>
+      </div>
+    </div>
+    <div class="mob-nav-item">
+      <button class="mob-nav-btn" onclick="mobNavToggle(this)">Income Tax <svg class="mob-nav-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="mob-nav-sub">
+        <a href="#" class="mob-nav-sub-item">Income</a>
+        <a href="#" class="mob-nav-sub-item">Others</a>
+        <a href="#" class="mob-nav-sub-item">Withholding Tax</a>
+        <a href="#" class="mob-nav-sub-item">Expenses</a>
+        <a href="#" class="mob-nav-sub-item">Stamp Duty</a>
+      </div>
+    </div>
+    <div class="mob-nav-item">
+      <button class="mob-nav-btn" onclick="mobNavToggle(this)">Forms <svg class="mob-nav-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="mob-nav-sub">
+        <a href="#" class="mob-nav-sub-item">Form BE</a>
+        <a href="#" class="mob-nav-sub-item">Form CP204 &amp; CP204A</a>
+        <a href="#" class="mob-nav-sub-item">Form B</a>
+        <a href="#" class="mob-nav-sub-item">Form C</a>
+        <a href="#" class="mob-nav-sub-item">MyTax - ezHasil Services</a>
+        <a href="#" class="mob-nav-sub-item">Form E &amp; EA</a>
+      </div>
+    </div>
+    <div class="mob-nav-item">
+      <button class="mob-nav-btn" onclick="mobNavToggle(this)">SST <svg class="mob-nav-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="mob-nav-sub">
+        <a href="#" class="mob-nav-sub-item">Service Tax</a>
+        <a href="#" class="mob-nav-sub-item">Sales Tax</a>
+      </div>
+    </div>
+    <div class="mob-nav-item">
+      <button class="mob-nav-btn" onclick="mobNavToggle(this)">Resources <svg class="mob-nav-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="mob-nav-sub">
+        <a href="#" class="mob-nav-sub-item">Accounting Training Hours/CPE</a>
+        <a href="#" class="mob-nav-sub-item">Articles</a>
+        <a href="#" class="mob-nav-sub-item">Our Speakers</a>
+        <a href="#" class="mob-nav-sub-item">Quick Guides</a>
+        <a href="#" class="mob-nav-sub-item">Tax A Minute</a>
+        <a href="#" class="mob-nav-sub-item">FAQ</a>
+      </div>
+    </div>
+    <div class="mob-nav-item mob-nav-item--expert">
+      <a href="#" class="mob-nav-btn">Ask An Expert</a>
+    </div>
+    <div class="mob-nav-item">
+      <a href="#" class="mob-nav-btn">Deals</a>
+    </div>
+  </nav>
+</div>
+
+<!-- Main Navigation -->
+<nav class="main-nav">
+  <div class="main-nav-inner">
+    <!-- Webinars -->
+    <div class="mn-item-wrap">
+      <a href="webinars.html" class="mn-item">Webinars <svg class="mn-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></a>
+      <div class="mn-dropdown">
+        <a href="#" class="mn-dropdown-item">Live Webinars</a>
+        <a href="#" class="mn-dropdown-item">Past Webinars</a>
+      </div>
+    </div>
+    <!-- Update Classes -->
+    <div class="mn-item-wrap">
+      <button class="mn-item">Update Classes <svg class="mn-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="mn-dropdown">
+        <a href="#" class="mn-dropdown-item">2026</a>
+        <a href="#" class="mn-dropdown-item">2025</a>
+        <a href="#" class="mn-dropdown-item">2024</a>
+        <a href="#" class="mn-dropdown-item">2023</a>
+      </div>
+    </div>
+    <!-- E-Invoicing -->
+    <div class="mn-item-wrap">
+      <a href="e-invoicing.html" class="mn-item">E-Invoicing <svg class="mn-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></a>
+      <div class="mn-dropdown">
+        <a href="#" class="mn-dropdown-item">Mastery (5 Modules)</a>
+        <a href="#" class="mn-dropdown-item">MyInvois</a>
+        <a href="#" class="mn-dropdown-item">Industry Focus</a>
+        <a href="#" class="mn-dropdown-item">e-Invoicing - Others</a>
+      </div>
+    </div>
+    <!-- Income Tax -->
+    <div class="mn-item-wrap">
+      <button class="mn-item">Income Tax <svg class="mn-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="mn-dropdown">
+        <a href="#" class="mn-dropdown-item">Income</a>
+        <a href="#" class="mn-dropdown-item">Others</a>
+        <a href="#" class="mn-dropdown-item">Withholding Tax</a>
+        <a href="#" class="mn-dropdown-item">Expenses</a>
+        <a href="#" class="mn-dropdown-item">Stamp Duty</a>
+      </div>
+    </div>
+    <!-- Forms -->
+    <div class="mn-item-wrap">
+      <button class="mn-item">Forms <svg class="mn-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="mn-dropdown">
+        <a href="#" class="mn-dropdown-item">Form BE</a>
+        <a href="#" class="mn-dropdown-item">Form CP204 &amp; CP204A</a>
+        <a href="#" class="mn-dropdown-item">Form B</a>
+        <a href="#" class="mn-dropdown-item">Form C</a>
+        <a href="#" class="mn-dropdown-item">MyTax - ezHasil Services</a>
+        <a href="#" class="mn-dropdown-item">Form E &amp; EA</a>
+      </div>
+    </div>
+    <!-- SST -->
+    <div class="mn-item-wrap">
+      <button class="mn-item">SST <svg class="mn-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="mn-dropdown">
+        <a href="#" class="mn-dropdown-item">Service Tax</a>
+        <a href="#" class="mn-dropdown-item">Sales Tax</a>
+      </div>
+    </div>
+    <!-- Resources -->
+    <div class="mn-item-wrap">
+      <button class="mn-item">Resources <svg class="mn-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="mn-dropdown">
+        <a href="#" class="mn-dropdown-item">Accounting Training Hours/CPE</a>
+        <a href="#" class="mn-dropdown-item">Articles</a>
+        <a href="#" class="mn-dropdown-item">Our Speakers</a>
+        <a href="#" class="mn-dropdown-item">Quick Guides</a>
+        <a href="#" class="mn-dropdown-item">Tax A Minute</a>
+        <a href="#" class="mn-dropdown-item">FAQ</a>
+      </div>
+    </div>
+    <!-- Ask An Expert -->
+    <a href="#" class="mn-item mn-item--expert">Ask An Expert</a>
+    <!-- Deals -->
+    <a href="#" class="mn-item">Deals</a>
+  </div>
+</nav>
+
+
+<!-- Page body -->
+<div class="ei-page-body">
+
+  <!-- Sidebar -->
+  <div class="ei-mob-filter-backdrop" id="ei-filter-backdrop"></div>
+  <aside class="ei-sidebar" id="ei-sidebar">
+    <div class="ei-sidebar-close-row">
+      <button class="ei-sidebar-close" aria-label="Close filters" onclick="document.getElementById('ei-sidebar').classList.remove('is-open');document.getElementById('ei-filter-backdrop').classList.remove('is-open');"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="ei-filter-group">
+      <div class="ei-filter-header"><h4 class="ei-filter-title">Content Type</h4><button class="ei-clear-btn">Clear Filters</button></div>
+      <label class="ei-cb"><input type="checkbox" data-filter-type="course"> Course</label>
+      <label class="ei-cb ei-cb-parent"><input type="checkbox" checked> Webinars</label>
+      <label class="ei-cb ei-cb-child"><input type="checkbox" checked data-filter-type="live"> Live Webinars</label>
+      <label class="ei-cb ei-cb-child"><input type="checkbox" checked data-filter-type="past"> Past Webinars</label>
+    </div>
+    <div class="ei-filter-group">
+      <h4 class="ei-filter-title">Topic</h4>
+      <label class="ei-cb"><input type="checkbox"> Update Classes</label>
+      <label class="ei-cb ei-cb-parent" id="topic-einvoicing-parent"><input type="checkbox"> E-Invoicing</label>
+      <label class="ei-cb ei-cb-child"><input type="checkbox" data-filter-badge="Mastery (5 Modules)"> Mastery (5 Modules)</label>
+      <label class="ei-cb ei-cb-child"><input type="checkbox" data-filter-badge="MyInvois"> MyInvois</label>
+      <label class="ei-cb ei-cb-child"><input type="checkbox" data-filter-badge="Industry Focus"> Industry Focus</label>
+      <label class="ei-cb ei-cb-child"><input type="checkbox" data-filter-badge="e-Invoicing - Others"> e-Invoicing - Others</label>
+      <label class="ei-cb"><input type="checkbox"> Income Tax</label>
+      <label class="ei-cb"><input type="checkbox"> Forms</label>
+      <label class="ei-cb"><input type="checkbox"> SST</label>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <div class="ei-main">
+
+    <!-- Header bar -->
+    <div class="ei-header">
+      <h2 class="ei-title">Webinars</h2>
+      <span class="ei-result-count">27 results</span>
+      <div class="ei-header-sep"></div>
+      <div class="ei-search-row">
+        <div class="ei-search">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" placeholder="Search...">
+        </div>
+      </div>
+      <div class="ei-controls-row">
+        <button class="ei-mob-filter-toggle" aria-label="Toggle filters"><svg viewBox="0 0 24 24"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="16" y2="12"/><line x1="4" y1="18" x2="12" y2="18"/></svg>Filters</button>
+        <div class="ei-sort">
+        <label>Sort by</label>
+        <div class="ei-sort-dropdown" id="ei-sort-dropdown">
+          <button class="ei-sort-trigger" onclick="toggleEiSort(event)" aria-haspopup="listbox" aria-expanded="false">
+            <span id="ei-sort-label">Newest first</span>
+            <svg class="ei-sort-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="ei-sort-menu" role="listbox">
+            <button class="ei-sort-item dd-active" onclick="selectEiSort(this,&apos;Newest first&apos;)" role="option">Newest first</button>
+            <button class="ei-sort-item" onclick="selectEiSort(this,&apos;Oldest first&apos;)" role="option">Oldest first</button>
+            <button class="ei-sort-item" onclick="selectEiSort(this,&apos;Most popular&apos;)" role="option">Most popular</button>
+          </div>
+        </div>
+      </div>
+      </div>
+    </div>
+
+    <!-- Card grid -->
+    <div class="ei-grid">
+
+      <!-- Card 1: orange / Webinar / 60 min -->
+      <div class="tc-card" id="ei-card-1">
+        <div class="tc-thumb">
+          <img src="assets/images/course-images/1.png" alt="Course">
+          <div class="tc-play-overlay"><div class="tc-play-center"><div class="tc-play"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><div class="tc-resume-label">Learn More</div></div></div>
+          <button class="tc-heart" onclick="toggleHeart(this)" aria-label="Add to wishlist"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+        </div>
+        <div class="tc-bar">
+          <span class="badge badge-sm badge-pill badge-bonus-outline tc-tag" title="Mastery (5 Modules)">Mastery (5 Modules)</span>
+          <div class="tc-bar-right">
+            <span class="tc-dur"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>1 hr</span>
+          </div>
+      <div class="course-popover" id="ei-popover-1" data-side="right">
+        <div class="cp-video">
+          <img src="assets/images/course-images/1.png" alt="">
+          <button class="cp-close" aria-label="Close" onclick="eiHidePopover()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+        </div>
+        <div class="cp-body">
+          <div class="cp-meta"><span class="badge badge-sm badge-pill badge-bonus-outline">Mastery (5 Modules)</span><span class="cp-date">15 Jan 2025</span></div>
+          <h3 class="cp-title">e-Invoicing Mastery Module 1: Foundation & Framework</h3>
+          <div class="cp-stats">
+            <span class="cp-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>1 hr</span>
+          </div>
+          <div class="cp-divider"></div>
+          <p class="cp-learn-label">What you will learn</p>
+          <ul class="cp-outcomes">
+            <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Understanding the fundamentals of e-Invoicing in Malaysia</li>
+            <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Key compliance requirements and timelines</li>
+            <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Setting up your e-Invoicing infrastructure</li>
+          </ul>
+          <button class="btn-resume cp-cta" onclick="window.location.href='#'"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Play</button>
+        </div>
+      </div>
+      </div>
+</div>
+
+      <!-- Card 2: indigo / Update Class / 45 min -->
+      <div class="tc-card tc-card--watched" id="ei-card-2">
+        <div class="tc-thumb"><img src="assets/images/course-images/2.png" alt="Course"><div class="tc-play-overlay"><div class="tc-play-center"><div class="tc-play"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><div class="tc-resume-label">Resume Playing</div></div></div><button class="tc-heart" onclick="toggleHeart(this)" aria-label="Add to wishlist"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button><div class="tc-seekbar"><div class="tc-seekbar-fill" style="width:55%"></div></div>
+        </div>
+        <div class="tc-bar">
+          <span class="badge badge-sm badge-pill badge-bonus-outline tc-tag" title="MyInvois">MyInvois</span>
+          <div class="tc-bar-right">
+            <span class="tc-dur"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>45 min</span>
+          </div>
+      <div class="course-popover" id="ei-popover-2">
+        <div class="cp-video">
+          <img src="assets/images/course-images/2.png" alt="">
+          <button class="cp-close" aria-label="Close" onclick="eiHidePopover()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+        </div>
+        <div class="cp-body">
+          <div class="cp-meta"><span class="badge badge-sm badge-pill badge-bonus-outline">MyInvois</span><span class="cp-date">20 Jan 2025</span></div>
+          <h3 class="cp-title">Navigating the MyInvois Portal</h3>
+          <div class="cp-stats">
+            <span class="cp-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>45 min</span>
+          </div>
+          <div class="cp-divider"></div>
+          <p class="cp-learn-label">What you will learn</p>
+          <ul class="cp-outcomes">
+            <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Step-by-step guide to MyInvois registration</li>
+            <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Managing your e-Invoice submissions</li>
+            <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Common errors and how to resolve them</li>
+          </ul>
+          <button class="btn-resume cp-cta" onclick="window.location.href='#'"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Play</button>
+        </div>
+      </div>
+      </div>
+</div>
+
+      <!-- Card 3: teal / Series / 90 min -->
+      <div class="tc-card tc-card--completed" id="ei-card-3">
+        <div class="tc-thumb"><img src="assets/images/course-images/3.png" alt="Course"><div class="tc-completed-overlay"><div class="tc-play-center"><div class="tc-play"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><div class="tc-completed-text">Course Completed</div></div></div><button class="tc-heart" onclick="toggleHeart(this)" aria-label="Add to wishlist"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button><div class="tc-seekbar"><div class="tc-seekbar-fill" style="width:100%"></div></div>
+        </div>
+        <div class="tc-bar">
+          <span class="badge badge-sm badge-pill badge-bonus-outline tc-tag" title="Industry Focus">Industry Focus</span>
+          <div class="tc-bar-right">
+            <span class="tc-dur"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>1 hr 30 min</span>
+          </div>
+      <div class="course-popover" id="ei-popover-3" data-side="left">
+        <div class="cp-video">
+          <img src="assets/images/course-images/3.png" alt="">
+          <button class="cp-close" aria-label="Close" onclick="eiHidePopover()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+        </div>
+        <div class="cp-body">
+          <div class="cp-meta"><span class="badge badge-sm badge-pill badge-bonus-outline">Industry Focus</span><span class="cp-date">25 Jan 2025</span></div>
+          <h3 class="cp-title">e-Invoicing for Construction Industry</h3>
+          <div class="cp-stats">
+            <span class="cp-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>1 hr 30 min</span>
+          </div>
+          <div class="cp-divider"></div>
+          <p class="cp-learn-label">What you will learn</p>
+          <ul class="cp-outcomes">
+            <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Industry-specific e-Invoicing requirements</li>
+            <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Handling progress billing and retention</li>
+            <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Managing subcontractor invoices electronically</li>
+          </ul>
+          <button class="btn-resume cp-cta" onclick="window.location.href='#'"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Play</button>
+        </div>
+      </div>
+      </div>
+</div>
+
+      <!-- Card 4: green / Webinar / 40 min -->
+      <div class="tc-card" id="ei-card-4">
+        <div class="tc-thumb">
+          <img src="assets/images/course-images/4.png" alt="Course">
+          <div class="tc-play-overlay"><div class="tc-play-center"><div class="tc-play"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><div class="tc-resume-label">Learn More</div></div></div>
+          <button class="tc-heart" onclick="toggleHeart(this)" aria-label="Add to wishlist"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+        </div>
+        <div class="tc-bar">
+          <span class="badge badge-sm badge-pill badge-bonus-outline tc-tag" title="Mastery (5 Modules)">Mastery (5 Modules)</span>
+          <div class="tc-bar-right">
+            <span class="tc-dur"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>40 min</span>
+          </div>
+      <div class="course-popover" id="ei-popover-4" data-side="right">
+        <div class="cp-video">
+          <img src="assets/images/course-images/4.png" alt="">
+          <button class="cp-close" aria-label="Close" onclick="eiHidePopover()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+        </div>
+        <div class="cp-body">
+          <div class="cp-meta"><span class="badge badge-sm badge-pill badge-bonus-outline">Mastery (5 Modules)</span><span class="cp-date">1 Feb 2025</span></div>
+          <h3 class="cp-title">e-Invoicing Mastery Module 2: Document Types</h3>
+          <div class="cp-stats">
+            <span class="cp-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>40 min</span>
+          </div>
+          <div class="cp-divider"></div>
+          <p class="cp-learn-label">What you will learn</p>
+          <ul class="cp-outcomes">
+            <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Different types of e-Invoice documents</li>
+            <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Credit notes and debit notes in e-Invoicing</li>
+            <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Self-billed invoice requirements</li>
+          </ul>
+          <button class="btn-resume cp-cta" onclick="window.location.href='#'"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Play</button>
+        </div>
+      </div>
+      </div>
+</div>
+
+      <!-- Card 5: rose / Webinar / 55 min -->
+      <div class="tc-card tc-card--watched" id="ei-card-5">
+        <div class="tc-thumb"><img src="assets/images/course-images/5.png" alt="Course"><div class="tc-play-overlay"><div class="tc-play-center"><div class="tc-play"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><div class="tc-resume-label">Resume Playing</div></div></div><button class="tc-heart" onclick="toggleHeart(this)" aria-label="Add to wishlist"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button><div class="tc-seekbar"><div class="tc-seekbar-fill" style="width:30%"></div></div>
+        </div>
+        <div class="tc-bar">
+          <span class="badge badge-sm badge-pill badge-bonus-outline tc-tag" title="e-Invoicing - Others">e-Invoicing - Others</span>
+          <div class="tc-bar-right">
+            <span class="tc-dur"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>55 min</span>
+          </div>
+      <div class="course-popover" id="ei-popover-5">
+        <div class="cp-video">
+          <img src="assets/images/course-images/5.png" alt="">
+          <button class="cp-close" aria-label="Close" onclick="eiHidePopover()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+        </div>
+        <div class="cp-body">
+          <div class="cp-meta"><span class="badge badge-sm badge-pill badge-bonus-outline">e-Invoicing - Others</span><span class="cp-date">10 Feb 2025</span></div>
+          <h3 class="cp-title">e-Invoicing Integration with Accounting Software</h3>
+          <div class="cp-stats">
+            <span class="cp-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>55 min</span>
+          </div>
+          <div class="cp-divider"></div>
+          <p class="cp-learn-label">What you will learn</p>
+          <ul class="cp-outcomes">
+            <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>API integration best practices</li>
+            <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Connecting your ERP system to MyInvois</li>
+            <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Automating invoice generation and submission</li>
+          </ul>
+          <button class="btn-resume cp-cta" onclick="window.location.href='#'"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Play</button>
+        </div>
+      </div>
+      </div>
+</div>
+
+      <!-- Card 6: amber / Update Class / 35 min -->
+      <div class="tc-card" id="ei-card-6">
+        <div class="tc-thumb">
+          <img src="assets/images/course-images/6.png" alt="Course">
+          <div class="tc-play-overlay"><div class="tc-play-center"><div class="tc-play"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><div class="tc-resume-label">Learn More</div></div></div>
+          <button class="tc-heart" onclick="toggleHeart(this)" aria-label="Add to wishlist"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+        </div>
+        <div class="tc-bar">
+          <span class="badge badge-sm badge-pill badge-bonus-outline tc-tag" title="MyInvois">MyInvois</span>
+          <div class="tc-bar-right">
+            <span class="tc-dur"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>35 min</span>
+          </div>
+      <div class="course-popover" id="ei-popover-6" data-side="left">
+        <div class="cp-video">
+          <img src="assets/images/course-images/6.png" alt="">
+          <button class="cp-close" aria-label="Close" onclick="eiHidePopover()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+        </div>
+        <div class="cp-body">
+          <div class="cp-meta"><span class="badge badge-sm badge-pill badge-bonus-outline">MyInvois</span><span class="cp-date">15 Feb 2025</span></div>
+          <h3 class="cp-title">MyInvois Troubleshooting & Error Handling</h3>
+          <div class="cp-stats">
+            <span class="cp-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>35 min</span>
+          </div>
+          <div class="cp-divider"></div>
+          <p class="cp-learn-label">What you will learn</p>
+          <ul class="cp-outcomes">
+            <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Common submission errors and fixes</li>
+            <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Rejection handling and resubmission</li>
+            <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Status tracking and validation tips</li>
+          </ul>
+          <button class="btn-resume cp-cta" onclick="window.location.href='#'"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Play</button>
+        </div>
+      </div>
+      </div>
+</div>
+
+      <!-- Card 7: orange / Webinar / 50 min -->
+      <div class="tc-card" id="ei-card-7">
+        <div class="tc-thumb">
+          <img src="assets/images/course-images/7.png" alt="Course">
+          <div class="tc-play-overlay"><div class="tc-play-center"><div class="tc-play"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><div class="tc-resume-label">Learn More</div></div></div>
+          <button class="tc-heart" onclick="toggleHeart(this)" aria-label="Add to wishlist"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+        </div>
+        <div class="tc-bar">
+          <span class="badge badge-sm badge-pill badge-bonus-outline tc-tag" title="Industry Focus">Industry Focus</span>
+          <div class="tc-bar-right">
+            <span class="tc-dur"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>50 min</span>
+          </div>
+      <div class="course-popover" id="ei-popover-7" data-side="right">
+        <div class="cp-video">
+          <img src="assets/images/course-images/7.png" alt="">
+          <button class="cp-close" aria-label="Close" onclick="eiHidePopover()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+        </div>
+        <div class="cp-body">
+          <div class="cp-meta"><span class="badge badge-sm badge-pill badge-bonus-outline">Industry Focus</span><span class="cp-date">20 Feb 2025</span></div>
+          <h3 class="cp-title">e-Invoicing for Retail & F&B Sector</h3>
+          <div class="cp-stats">
+            <span class="cp-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>50 min</span>
+          </div>
+          <div class="cp-divider"></div>
+          <p class="cp-learn-label">What you will learn</p>
+          <ul class="cp-outcomes">
+            <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Handling high-volume transactions</li>
+            <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>POS integration with e-Invoicing</li>
+            <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Managing consolidated invoices</li>
+          </ul>
+          <button class="btn-resume cp-cta" onclick="window.location.href='#'"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Play</button>
+        </div>
+      </div>
+      </div>
+</div>
+
+      <!-- Card 8: indigo / Update Class / 30 min -->
+      <div class="tc-card tc-card--completed" id="ei-card-8">
+        <div class="tc-thumb"><img src="assets/images/course-images/8.png" alt="Course"><div class="tc-completed-overlay"><div class="tc-play-center"><div class="tc-play"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><div class="tc-completed-text">Course Completed</div></div></div><button class="tc-heart" onclick="toggleHeart(this)" aria-label="Add to wishlist"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button><div class="tc-seekbar"><div class="tc-seekbar-fill" style="width:100%"></div></div>
+        </div>
+        <div class="tc-bar">
+          <span class="badge badge-sm badge-pill badge-bonus-outline tc-tag" title="e-Invoicing - Others">e-Invoicing - Others</span>
+          <div class="tc-bar-right">
+            <span class="tc-dur"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>30 min</span>
+          </div>
+      <div class="course-popover" id="ei-popover-8">
+        <div class="cp-video">
+          <img src="assets/images/course-images/8.png" alt="">
+          <button class="cp-close" aria-label="Close" onclick="eiHidePopover()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+        </div>
+        <div class="cp-body">
+          <div class="cp-meta"><span class="badge badge-sm badge-pill badge-bonus-outline">e-Invoicing - Others</span><span class="cp-date">25 Feb 2025</span></div>
+          <h3 class="cp-title">Cross-Border e-Invoicing Considerations</h3>
+          <div class="cp-stats">
+            <span class="cp-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>30 min</span>
+          </div>
+          <div class="cp-divider"></div>
+          <p class="cp-learn-label">What you will learn</p>
+          <ul class="cp-outcomes">
+            <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>International transaction requirements</li>
+            <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Currency and exchange rate handling</li>
+            <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Foreign buyer invoice specifications</li>
+          </ul>
+          <button class="btn-resume cp-cta" onclick="window.location.href='#'"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Play</button>
+        </div>
+      </div>
+      </div>
+</div>
+
+      <!-- Card 9: teal / Series / 75 min -->
+      <div class="tc-card" id="ei-card-9">
+        <div class="tc-thumb">
+          <img src="assets/images/course-images/9.png" alt="Course">
+          <div class="tc-play-overlay"><div class="tc-play-center"><div class="tc-play"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><div class="tc-resume-label">Learn More</div></div></div>
+          <button class="tc-heart" onclick="toggleHeart(this)" aria-label="Add to wishlist"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+        </div>
+        <div class="tc-bar">
+          <span class="badge badge-sm badge-pill badge-bonus-outline tc-tag" title="Mastery (5 Modules)">Mastery (5 Modules)</span>
+          <div class="tc-bar-right">
+            <span class="tc-dur"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>1 hr 15 min</span>
+          </div>
+      <div class="course-popover" id="ei-popover-9" data-side="left">
+        <div class="cp-video">
+          <img src="assets/images/course-images/9.png" alt="">
+          <button class="cp-close" aria-label="Close" onclick="eiHidePopover()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+        </div>
+        <div class="cp-body">
+          <div class="cp-meta"><span class="badge badge-sm badge-pill badge-bonus-outline">Mastery (5 Modules)</span><span class="cp-date">1 Mar 2025</span></div>
+          <h3 class="cp-title">e-Invoicing Mastery Module 3: Advanced Scenarios</h3>
+          <div class="cp-stats">
+            <span class="cp-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>1 hr 15 min</span>
+          </div>
+          <div class="cp-divider"></div>
+          <p class="cp-learn-label">What you will learn</p>
+          <ul class="cp-outcomes">
+            <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Complex transaction scenarios</li>
+            <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Multi-entity e-Invoicing setup</li>
+            <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Audit trail and record keeping</li>
+          </ul>
+          <button class="btn-resume cp-cta" onclick="window.location.href='#'"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Play</button>
+        </div>
+      </div>
+      </div>
+</div>
+
+    </div><!-- /.ei-grid -->
+
+    <!-- Pagination bar -->
+    <div class="ei-pag-bar">
+      <div class="ei-per-page">
+        <span>Show</span>
+        <div class="ei-sort-dropdown" id="ei-perpage-dropdown">
+          <button class="ei-sort-trigger" onclick="togglePerPageDD(event)" aria-haspopup="listbox" aria-expanded="false" style="min-width:120px">
+            <span id="ei-perpage-label">9 per page</span>
+            <svg class="ei-sort-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="ei-sort-menu" role="listbox">
+            <button class="ei-sort-item dd-active" onclick="selectPerPage(this,9)" role="option">9 per page</button>
+            <button class="ei-sort-item" onclick="selectPerPage(this,18)" role="option">18 per page</button>
+            <button class="ei-sort-item" onclick="selectPerPage(this,27)" role="option">27 (all)</button>
+          </div>
+        </div>
+      </div>
+      <nav class="pg-numbered" aria-label="Page navigation" id="ei-pagination">
+        <a class="pg-nav pg-disabled" id="pg-prev" aria-label="Previous page" onclick="changePage(-1)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </a>
+        <a class="pg-item pg-active" aria-current="page" onclick="goToPage(1, true)">1</a>
+        <a class="pg-item" onclick="goToPage(2, true)">2</a>
+        <a class="pg-item" onclick="goToPage(3, true)">3</a>
+        <a class="pg-nav" id="pg-next" aria-label="Next page" onclick="changePage(1)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+      </nav>
+    </div>
+
+  </div><!-- /.ei-main -->
+
+</div><!-- /.ei-page-body -->
+
+<footer class="site-footer">
+  <div class="site-footer-body">
+    <div class="site-footer-left">
+      <img src="assets/images/logo-white.png" alt="YYC taxPOD" class="site-footer-logo">
+      <div>
+        <h5 class="site-footer-contact-title">Contact Us</h5>
+        <p class="site-footer-contact-desc">Have questions? We're here to help you with your tax learning journey.</p>
+      </div>
+      <div class="site-footer-contacts">
+        <a href="mailto:support@taxpod.my" class="site-footer-contact-item">
+          <img src="assets/images/icon-email.png" alt="Email" class="site-footer-contact-icon">
+          support@taxpod.my
+        </a>
+        <div class="site-footer-phones">
+          <a href="#" class="site-footer-contact-item">
+            <img src="assets/images/icon-whatsapp.png" alt="WhatsApp" class="site-footer-contact-icon">
+            016-507 7309
+          </a>
+          <span class="site-footer-divider"></span>
+          <a href="#" class="site-footer-contact-item">
+            <img src="assets/images/icon-whatsapp.png" alt="WhatsApp" class="site-footer-contact-icon">
+            016-624 7309
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="site-footer-right">
+      <h5 class="site-footer-app-title">Get the App</h5>
+      <div class="site-footer-apps">
+        <a href="#"><img src="assets/images/footer-applestore.png" alt="App Store" class="site-footer-app-badge"></a>
+        <a href="#"><img src="assets/images/footer-googleplay.png" alt="Google Play" class="site-footer-app-badge"></a>
+        <a href="#"><img src="assets/images/footer-huawei.png" alt="Huawei AppGallery" class="site-footer-app-badge"></a>
+      </div>
+    </div>
+  </div>
+  <div class="site-footer-bar">
+    <span class="site-footer-copy">&copy; 2026 YYC taxPOD. All rights reserved.</span>
+    <div class="site-footer-links">
+      <a href="#" class="site-footer-link">Privacy Policy</a>
+      <span class="site-footer-link-sep">|</span>
+      <a href="#" class="site-footer-link">Terms of Use</a>
+      <span class="site-footer-link-sep">|</span>
+      <a href="#" class="site-footer-link">Refund Policy</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ── Mobile Menu ──
+function mobMenuOpen() {
+  document.getElementById('mob-menu').classList.add('is-open');
+  document.getElementById('mob-menu-backdrop').classList.add('is-open');
+  document.body.style.overflow = 'hidden';
+  // Sync logo theme
+  var dark = document.documentElement.getAttribute('data-theme') === 'dark';
+  var menu = document.getElementById('mob-menu');
+  menu.querySelector('.logo-light').style.display = dark ? 'none' : 'block';
+  menu.querySelector('.logo-dark').style.display = dark ? 'block' : 'none';
+}
+function mobMenuClose() {
+  document.getElementById('mob-menu').classList.remove('is-open');
+  document.getElementById('mob-menu-backdrop').classList.remove('is-open');
+  document.body.style.overflow = '';
+}
+function mobNavToggle(btn) {
+  btn.closest('.mob-nav-item').classList.toggle('is-open');
+}
+// Close on Escape key
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') mobMenuClose();
+});
+</script>
+
+
+<!-- Theme toggle (bottom right) -->
+<button onclick="(function(h){h.classList.add('theme-transition');var d=h.getAttribute('data-theme')==='dark'?'light':'dark';h.setAttribute('data-theme',d);localStorage.setItem('theme',d);setTimeout(function(){h.classList.remove('theme-transition')},350)})(document.documentElement)" aria-label="Toggle Dark Mode" style="position:fixed;bottom:20px;right:20px;z-index:9999;width:44px;height:44px;border-radius:50%;background:var(--card-bg);border:1px solid var(--border-light);box-shadow:var(--shadow-md);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--grey-800);">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+</button>
+
+<script>
+(function(){
+  var toggle  = document.querySelector('.ei-mob-filter-toggle');
+  var sidebar = document.querySelector('.ei-sidebar');
+  if (toggle && sidebar) {
+    toggle.addEventListener('click', function(){ sidebar.classList.toggle('is-open'); });
+  }
+})();
+function toggleEiSort(e) {
+  e.stopPropagation();
+  var wrap = document.getElementById('ei-sort-dropdown');
+  var isOpen = wrap.classList.toggle('dd-open');
+  e.currentTarget.setAttribute('aria-expanded', isOpen);
+}
+function selectEiSort(btn, label) {
+  document.getElementById('ei-sort-label').textContent = label;
+  document.querySelectorAll('.ei-sort-item').forEach(function(i){ i.classList.remove('dd-active'); });
+  btn.classList.add('dd-active');
+  var wrap = document.getElementById('ei-sort-dropdown');
+  wrap.classList.remove('dd-open');
+  wrap.querySelector('.ei-sort-trigger').setAttribute('aria-expanded', false);
+  applyFilters();
+}
+document.addEventListener('click', function(){
+  var wrap = document.getElementById('ei-sort-dropdown');
+  if (wrap) { wrap.classList.remove('dd-open'); }
+});
+function toggleHeart(btn) {
+  btn.classList.toggle('tc-heart--active');
+  btn.setAttribute('aria-label', btn.classList.contains('tc-heart--active') ? 'Remove from wishlist' : 'Add to wishlist');
+}
+
+
+// ── Course Popover ──
+(function() {
+  var cpBackdrop = document.createElement('div');
+  cpBackdrop.className = 'cp-backdrop';
+  document.body.appendChild(cpBackdrop);
+
+  var activePopover = null;
+  var activeCard = null;
+
+  function isTouchSheet() {
+    if (window.innerWidth <= 768) return true;
+    if (window.innerWidth >= 1024 && window.innerWidth <= 1100) return true;
+    if (window.innerWidth <= 1100 && window.matchMedia('(orientation: portrait)').matches) return true;
+    return false;
+  }
+
+  function hideActivePopover() {
+    if (!activePopover) return;
+    activePopover.classList.remove('popover-open');
+    cpBackdrop.classList.remove('active');
+    if (!isTouchSheet()) {
+      activePopover.style.opacity = '0';
+      activePopover.style.pointerEvents = 'none';
+      activePopover.style.transform = 'translateX(-8px) scale(0.97)';
+    }
+    activePopover = null;
+    activeCard = null;
+  }
+
+  window.eiHidePopover = hideActivePopover;
+  cpBackdrop.addEventListener('click', hideActivePopover);
+  document.addEventListener('keydown', function(e) { if (e.key === 'Escape') hideActivePopover(); });
+
+  window.eiInitPopover = function initPopover(cardId, popoverId) {
+    var card = document.getElementById(cardId);
+    var popover = document.getElementById(popoverId);
+    if (!card || !popover) return;
+    document.body.appendChild(popover);
+
+    var hideTimer = null;
+
+    function showPopover() {
+      clearTimeout(hideTimer);
+      if (activePopover && activePopover !== popover) hideActivePopover();
+      activePopover = popover;
+      activeCard = card;
+
+      if (isTouchSheet()) {
+        popover.style.cssText = '';
+        popover.classList.add('popover-open');
+        cpBackdrop.classList.add('active');
+        return;
+      }
+
+      var rect = card.getBoundingClientRect();
+      var gap = 12, pw = 300, estimatedHeight = 520;
+      var vw = document.documentElement.clientWidth;
+      var top = rect.top;
+      var bottomOverflow = top + estimatedHeight - (window.innerHeight - 12);
+      if (bottomOverflow > 0) top = Math.max(12, top - bottomOverflow);
+      var rightSpace = vw - rect.right;
+      var leftSpace = rect.left;
+      var forceSide = popover.getAttribute('data-side');
+      var goRight = forceSide === 'right' ? true : forceSide === 'left' ? false : (rightSpace >= pw + gap + 20 && leftSpace < pw + gap);
+      if (goRight) {
+        popover.style.left = (rect.right + gap) + 'px';
+        popover.style.right = 'auto';
+        popover.style.transform = 'translateX(-8px) scale(0.97)';
+      } else {
+        popover.style.left = Math.max(8, rect.left - pw - gap) + 'px';
+        popover.style.right = 'auto';
+        popover.style.transform = 'translateX(8px) scale(0.97)';
+      }
+      popover.style.top = top + 'px';
+      popover.style.bottom = 'auto';
+      requestAnimationFrame(function() {
+        popover.style.opacity = '1';
+        popover.style.pointerEvents = 'auto';
+        popover.style.transform = 'translateX(0) scale(1)';
+      });
+    }
+
+    function hidePopover() {
+      if (activePopover === popover) hideActivePopover();
+    }
+
+    card.addEventListener('mouseenter', function() { if (!isTouchSheet()) showPopover(); });
+    card.addEventListener('mouseleave', function() {
+      if (isTouchSheet()) return;
+      hideTimer = setTimeout(function() {
+        if (!popover.matches(':hover')) hidePopover();
+      }, 80);
+    });
+    popover.addEventListener('mouseenter', function() { clearTimeout(hideTimer); });
+    popover.addEventListener('mouseleave', function() {
+      if (!isTouchSheet() && !card.matches(':hover')) hidePopover();
+    });
+    card.addEventListener('click', function() { if (isTouchSheet()) showPopover(); });
+  };
+
+  window.eiInitPopover('ei-card-1', 'ei-popover-1');
+  window.eiInitPopover('ei-card-2', 'ei-popover-2');
+  window.eiInitPopover('ei-card-3', 'ei-popover-3');
+  window.eiInitPopover('ei-card-4', 'ei-popover-4');
+  window.eiInitPopover('ei-card-5', 'ei-popover-5');
+  window.eiInitPopover('ei-card-6', 'ei-popover-6');
+  window.eiInitPopover('ei-card-7', 'ei-popover-7');
+  window.eiInitPopover('ei-card-8', 'ei-popover-8');
+  window.eiInitPopover('ei-card-9', 'ei-popover-9');
+}());
+
+
+
+// ── Filter system ──
+function applyFilters() {
+  // Content types
+  var types = [];
+  document.querySelectorAll('[data-filter-type]:checked').forEach(function(cb) { types.push(cb.dataset.filterType); });
+  // Topic badges
+  var badges = [];
+  document.querySelectorAll('[data-filter-badge]:checked').forEach(function(cb) { badges.push(cb.dataset.filterBadge); });
+
+  DISPLAY_CARDS = ALL_CARDS.filter(function(c) {
+    var effectiveType = c.type === 'liveNow' ? 'live' : c.type;
+    var typeOk = types.length === 0 || types.indexOf(effectiveType) !== -1;
+    var badgeOk = badges.length === 0 || badges.indexOf(c.badge) !== -1;
+    return typeOk && badgeOk;
+  });
+
+  // Re-apply current sort
+  var sortLabel = document.getElementById('ei-sort-label');
+  var currentSort = sortLabel ? sortLabel.textContent.trim() : 'Newest first';
+  if (currentSort === 'Oldest first') {
+    DISPLAY_CARDS = DISPLAY_CARDS.slice().reverse();
+  } else if (currentSort === 'Newest first') {
+    var liveNowCards = DISPLAY_CARDS.filter(function(c) { return c.type === 'liveNow'; });
+    var otherCards = DISPLAY_CARDS.filter(function(c) { return c.type !== 'liveNow'; });
+    DISPLAY_CARDS = liveNowCards.concat(otherCards);
+  }
+
+  TOTAL_PAGES = Math.max(1, Math.ceil(DISPLAY_CARDS.length / CARDS_PER_PAGE));
+  var rc = document.querySelector('.ei-result-count');
+  if (rc) rc.textContent = DISPLAY_CARDS.length + ' result' + (DISPLAY_CARDS.length !== 1 ? 's' : '');
+  goToPage(1);
+}
+
+(function() {
+  function makeParentChild(parent, children) {
+    if (!parent || !children.length) return;
+    function syncParent() {
+      var n = 0;
+      children.forEach(function(cb) { if (cb.checked) n++; });
+      if (n === 0) { parent.checked = false; parent.indeterminate = false; }
+      else if (n === children.length) { parent.checked = true; parent.indeterminate = false; }
+      else { parent.checked = false; parent.indeterminate = true; }
+    }
+    parent.addEventListener('change', function() {
+      var s = parent.checked; parent.indeterminate = false;
+      children.forEach(function(cb) { cb.checked = s; });
+      applyFilters();
+    });
+    children.forEach(function(cb) {
+      cb.addEventListener('change', function() { syncParent(); applyFilters(); });
+    });
+    syncParent();
+  }
+
+  // Content Type: Webinars parent/children
+  var ctGroup = document.querySelector('.ei-filter-group');
+  makeParentChild(
+    ctGroup ? ctGroup.querySelector('.ei-cb-parent input') : null,
+    ctGroup ? ctGroup.querySelectorAll('.ei-cb-child input') : []
+  );
+
+  // Topic: E-Invoicing parent/children
+  var eiParentLabel = document.getElementById('topic-einvoicing-parent');
+  var eiParent = eiParentLabel ? eiParentLabel.querySelector('input') : null;
+  var eiChildren = eiParentLabel ? (function() {
+    var kids = [], el = eiParentLabel.nextElementSibling;
+    while (el && el.classList.contains('ei-cb-child')) { kids.push(el.querySelector('input')); el = el.nextElementSibling; }
+    return kids;
+  })() : [];
+  makeParentChild(eiParent, eiChildren);
+
+  // Standalone checkboxes (no data-filter attr handled above) — attach filter listener
+  document.querySelectorAll('.ei-sidebar input[type="checkbox"]:not([data-filter-type]):not([data-filter-badge])').forEach(function(cb) {
+    if (!cb.closest('.ei-cb-parent') && !cb.closest('.ei-cb-child')) return;
+    cb.addEventListener('change', applyFilters);
+  });
+}());
+
+
+
+// ── Pagination with content ──
+var ALL_CARDS = [
+  { type:'liveNow', img:'1.png', badge:'e-Invoicing', dur:'1 hr', title:'e-Invoicing Phase 2 Extension: What Businesses Need to Know', date:'11 Mar 2026', time:'10:00 AM – 11:00 AM', outcomes:['Revised Phase 2 mandate timelines','How to request for extension','Compliance steps to take now'] },
+  { type:'past', img:'2.png', badge:'Personal Tax', dur:'1 hr 30 min', title:'YA 2024 Personal Tax Return Filing Tips', date:'25 May 2025', speaker:'Zen Chow, YYC Executive Director & Country Tax Leader', outcomes:['Maximising personal tax reliefs','Declaring rental and freelance income','Common Form BE mistakes to avoid'] },
+  { type:'live', img:'3.png', badge:'Corporate Tax', dur:'2 hr', title:'Budget 2025: Corporate Tax Changes Explained', date:'20 May 2025', time:'2:00 PM – 4:00 PM', outcomes:['New corporate tax rate adjustments','Capital allowance changes','Impact on SMEs and large corporations'] },
+  { type:'past', img:'4.png', badge:'SST', dur:'1 hr 15 min', title:'SST 2.0: Service Tax Rate Changes Deep Dive', date:'15 May 2025', speaker:'Datin Shin Yap, YYC CEO & Finance Expert', outcomes:['Latest service tax rate updates','Industries most impacted','Transitional compliance requirements'] },
+  { type:'past', img:'5.png', badge:'Monthly Update', dur:'45 min', title:'Monthly Tax Update: May 2025 Highlights', date:'10 May 2025', speaker:'Tifannyz Yap, YYC Tax Expert', outcomes:['LHDN announcements in May 2025','Key deadlines this month','Recent tax case summaries'] },
+  { type:'live', img:'6.png', badge:'e-Invoicing', dur:'1 hr 30 min', title:'e-Invoicing for SMEs: Live Q&A Session', date:'5 May 2025', time:'10:00 AM – 11:30 AM', outcomes:['Addressing top SME pain points','Step-by-step MyInvois demo','Handling rejections and errors live'] },
+  { type:'past', img:'7.png', badge:'Budget 2025', dur:'2 hr', title:'Budget 2025: Tax Relief & Incentives for Individuals', date:'1 May 2025', speaker:'Fong Ying Chai, YYC Tax Expert', outcomes:['New and expanded personal reliefs','Investment incentives for YA 2025','SSPN and EPF deduction updates'] },
+  { type:'past', img:'8.png', badge:'Corporate Tax', dur:'1 hr', title:'Withholding Tax on Digital Services: What You Must Know', date:'25 Apr 2025', speaker:'Hen Yee Goh, YYC Johor Regional Director', outcomes:['Scope of digital services WHT','Payment and filing obligations','Common non-compliance traps'] },
+  { type:'past', img:'9.png', badge:'Personal Tax', dur:'1 hr 15 min', title:'Form BE & Form B Filing: Common Mistakes to Avoid', date:'20 Apr 2025', speaker:'Ida Lim, YYC Penang Regional Director', outcomes:['Frequent errors in salary declarations','Handling multiple income sources','Amendment procedures explained'] },
+  { type:'live', img:'10.png', badge:'SST', dur:'1 hr 30 min', title:'SST Registration & Deregistration: Step-by-Step Guide', date:'15 Apr 2025', time:'2:00 PM – 3:30 PM', outcomes:['When registration is mandatory','How to register via MySST portal','Deregistration triggers and process'] },
+  { type:'past', img:'11.png', badge:'Monthly Update', dur:'45 min', title:'Monthly Tax Update: April 2025 Highlights', date:'10 Apr 2025', speaker:'Jasmine Hau Jia Min, Audit Partner of YYC & CO PLT', outcomes:['April 2025 LHDN updates','Upcoming tax deadlines','Recent gazette orders and practice notes'] },
+  { type:'past', img:'12.png', badge:'e-Invoicing', dur:'1 hr', title:'e-Invoicing Voluntary Participation: Is It Worth It?', date:'5 Apr 2025', speaker:'Letitia Chew, YYC, ESME Director', outcomes:['Benefits of early adoption','Voluntary participation criteria','Tax incentives for early adopters'] },
+  { type:'past', img:'13.png', badge:'Corporate Tax', dur:'1 hr 30 min', title:'Transfer Pricing Documentation: Are You Compliant?', date:'1 Apr 2025', speaker:'Eve Tan, YYC Tax Director', outcomes:['TP documentation thresholds','Common TP audit triggers','Best practices for related party transactions'] },
+  { type:'live', img:'14.png', badge:'Budget 2025', dur:'2 hr', title:'Budget 2025 Post-Tabling Analysis: Full Breakdown', date:'25 Mar 2025', time:'9:00 AM – 11:00 AM', outcomes:['All key Budget 2025 measures','Winners and losers by sector','Implementation timeline and key dates'] },
+  { type:'past', img:'15.png', badge:'Personal Tax', dur:'1 hr', title:'Rental Income Tax Treatment: What Landlords Must Know', date:'20 Mar 2025', speaker:'Angie Ng, Boss Boleh Chief Operating Officer', outcomes:['Determining gross rental income','Deductible expenses for landlords','Declaring rental income correctly'] },
+  { type:'past', img:'16.png', badge:'SST', dur:'1 hr 15 min', title:'Imported Low Value Goods (ILVG): SST Compliance Guide', date:'15 Mar 2025', speaker:'Eunice Kwong, Partner at Ricky Tan & Co', outcomes:['What is ILVG and who is affected','Platform seller obligations','Filing and payment requirements'] },
+  { type:'live', img:'17.png', badge:'e-Invoicing', dur:'1 hr 30 min', title:'e-Invoicing for the Retail Sector: Live Session', date:'10 Mar 2025', time:'10:00 AM – 11:30 AM', outcomes:['POS system integration strategies','Consolidated invoice for B2C transactions','Retail-specific compliance tips'] },
+  { type:'past', img:'18.png', badge:'Monthly Update', dur:'45 min', title:'Monthly Tax Update: March 2025 Highlights', date:'5 Mar 2025', speaker:'Andrew Yoon, Partner at Low & Partners Law Firm', outcomes:['March 2025 gazette updates','Penalty amnesty programme details','LHDN hotline updates and new FAQs'] },
+  { type:'past', img:'19.png', badge:'Corporate Tax', dur:'1 hr', title:'Capital Allowance Claims: Maximise Your Tax Deduction', date:'1 Mar 2025', speaker:'Zen Chow, YYC Executive Director & Country Tax Leader', outcomes:['Types of qualifying plant and machinery','Accelerated capital allowance rules','Common errors in CA claims'] },
+  { type:'past', img:'20.png', badge:'Personal Tax', dur:'1 hr 30 min', title:'Tax Planning for Employees: Salary Structuring Strategies', date:'25 Feb 2025', speaker:'Datin Shin Yap, YYC CEO & Finance Expert', outcomes:['Tax-efficient benefit-in-kind structuring','ESOS and share option tax treatment','Maximising deductions on employment income'] },
+  { type:'live', img:'21.png', badge:'Budget 2025', dur:'2 hr', title:'Budget 2025 Preview: What to Expect', date:'20 Feb 2025', time:'2:00 PM – 4:00 PM', outcomes:['Analyst predictions and wishlist','Sectors expected to benefit','Historical Budget trends analysis'] },
+  { type:'past', img:'22.png', badge:'e-Invoicing', dur:'1 hr', title:'e-Invoicing Errors: Troubleshooting & Resolution', date:'15 Feb 2025', speaker:'Tifannyz Yap, YYC Tax Expert', outcomes:['Top 10 MyInvois submission errors','How to cancel and resubmit','Escalation process with LHDN'] },
+  { type:'past', img:'23.png', badge:'SST', dur:'1 hr 15 min', title:'Service Tax on Professional Services: Recent Changes', date:'10 Feb 2025', speaker:'Fong Ying Chai, YYC Tax Expert', outcomes:['Updated list of taxable services','Input tax credit for SST registrants','Group relief provisions'] },
+  { type:'past', img:'1.png', badge:'Monthly Update', dur:'45 min', title:'Monthly Tax Update: February 2025 Highlights', date:'5 Feb 2025', speaker:'Hen Yee Goh, YYC Johor Regional Director', outcomes:['February 2025 key updates','PCB and MTD changes','New LHDN practice notes'] },
+  { type:'past', img:'2.png', badge:'Corporate Tax', dur:'1 hr 30 min', title:'Thin Capitalisation Rules: Impact on Financing Structures', date:'1 Feb 2025', speaker:'Ida Lim, YYC Penang Regional Director', outcomes:['Debt-to-equity threshold explained','Safe harbour rules','Restructuring considerations'] },
+  { type:'live', img:'3.png', badge:'Personal Tax', dur:'1 hr', title:'Tax Reliefs for Working Parents: Childcare & Education', date:'25 Jan 2025', time:'10:00 AM – 11:00 AM', outcomes:['Child and childcare relief claims','Education fee relief for self and spouse','SSPN savings plan benefits'] },
+  { type:'past', img:'4.png', badge:'e-Invoicing', dur:'1 hr 15 min', title:'e-Invoicing Kickstart Workshop: Getting Your Business Ready', date:'15 Jan 2025', speaker:'Jasmine Hau Jia Min, Audit Partner of YYC & CO PLT', outcomes:['e-Invoicing readiness assessment','Choosing the right solution provider','Action plan for compliance by deadline'] }
+];
+var CARDS_PER_PAGE = 9;
+var TOTAL_PAGES = 3;
+var currentPage = 1;
+
+
+// ── Card-type badge helper ──
+var THUMB_BADGE_HTML = {
+  live: '<span class="tc-thumb-badge tc-thumb-badge--live"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>Live Webinar</span>',
+  liveNow: '<span class="tc-thumb-badge tc-thumb-badge--live-now"><span class="tc-badge-dot"></span>Live Now</span>',
+  course: '<span class="tc-thumb-badge tc-thumb-badge--course"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Course</span>',
+  past: '<span class="tc-thumb-badge tc-thumb-badge--past"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="5 3 19 12 5 21 5 3"/></svg>Past Webinar</span>',
+  podcast: '<span class="tc-thumb-badge tc-thumb-badge--podcast"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 10a7 7 0 0 0 14 0"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg>Podcast</span>'
+};
+function getThumbBadge(type) { return THUMB_BADGE_HTML[type] || THUMB_BADGE_HTML.course; }
+
+var DISPLAY_CARDS = ALL_CARDS.slice();
+function renderCards(page) {
+  var grid = document.querySelector('.ei-grid');
+  if (!grid) return;
+  var start = (page - 1) * CARDS_PER_PAGE;
+  var pageCards = DISPLAY_CARDS.slice(start, start + CARDS_PER_PAGE);
+
+  // Remove previously generated dynamic popovers
+  document.querySelectorAll('.ei-dyn-popover').forEach(function(el) { el.remove(); });
+
+  var playSVG = '<svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>';
+  var heartSVG = '<svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>';
+  var checkSVG = '<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>';
+  var clockSVG = '<svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>';
+
+  grid.innerHTML = pageCards.map(function(c, i) {
+    var cardId = 'ei-card-p' + page + '-' + (i + 1);
+    var stateClass = c.completed ? ' tc-card--completed' : (c.resume ? ' tc-card--watched' : '');
+    if (c.type === 'live' || c.type === 'liveNow') stateClass += ' tc-card--course';
+    var seekbar = (c.resume || c.completed) ? '<div class="tc-seekbar"><div class="tc-seekbar-fill" style="width:' + (c.completed ? 100 : (c.progress || 50)) + '%"></div></div>' : '';
+    var overlay = c.completed
+      ? ''
+      : c.resume
+        ? '<div class="tc-play-overlay"><div class="tc-play-center"><div class="tc-play">' + playSVG + '</div><div class="tc-resume-label">Resume Playing</div></div></div>'
+        : '<div class="tc-play-overlay"><div class="tc-play-center"><div class="tc-play">' + playSVG + '</div><div class="tc-resume-label">Learn More</div></div></div>';
+    var completedOv = c.completed ? '<div class="tc-completed-overlay"><div class="tc-play-center"><div class="tc-play">' + playSVG + '</div><div class="tc-completed-text">Course Completed</div></div></div>' : '';
+    return '<div class="tc-card' + stateClass + '" id="' + cardId + '">' +
+      '<div class="tc-thumb">' +
+        '<img src="assets/images/course-images/' + c.img + '" alt="Course">' +
+        getThumbBadge(c.type) +
+        overlay + completedOv +
+        '<button class="tc-heart" onclick="toggleHeart(this)" aria-label="Add to wishlist">' + heartSVG + '</button>' +
+        seekbar +
+      '</div>' +
+      '<div class="tc-bar">' +
+        '<div data-tooltip="' + c.badge + '" data-tooltip-pos="top" style="min-width:0;display:inline-block;position:relative"><span class="badge badge-sm badge-pill badge-bonus-outline tc-tag">' + c.badge + '</span></div>' +
+        '<div class="tc-bar-right">' +
+          '<span class="tc-dur">' + clockSVG + c.dur + ((c.type === 'live' || c.type === 'liveNow') ? ' | CPE' : '') + '</span>' +
+        '</div>' +
+      '</div>' +
+      ((c.type === 'live' || c.type === 'liveNow') ? '<div class="tc-dates"><div class="tc-date-row"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>' + (c.date || '') + '</div><div class="tc-date-row"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>' + (c.time || '') + '</div></div>' : (c.type === 'past' || c.type === 'course') ? '<div class="tc-dates"><div class="tc-date-row"><svg viewBox="0 0 24 24" class="tc-speaker-icon" title="Speaker"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="tc-speaker" title="Speaker: ' + (c.speaker || '') + '">' + (c.speaker || '') + '</span></div></div>' : '') +
+    '</div>';
+  }).join('');
+
+  // Generate and append dynamic popovers
+  pageCards.forEach(function(c, i) {
+    var cardId = 'ei-card-p' + page + '-' + (i + 1);
+    var popId = 'ei-dyn-pop-' + page + '-' + (i + 1);
+    var ctaLabel = c.resume ? 'Resume Playing' : 'Play';
+    var outcomes = (c.outcomes || ['Learn key concepts','Apply practical skills','Gain compliance knowledge']).map(function(o) {
+      return '<li>' + checkSVG + o + '</li>';
+    }).join('');
+    var pop = document.createElement('div');
+    pop.className = 'course-popover ei-dyn-popover';
+    var colPos = i % 3;
+    if (colPos === 0) pop.setAttribute('data-side', 'right');
+    else if (colPos === 2) pop.setAttribute('data-side', 'left');
+    pop.id = popId;
+    pop.innerHTML =
+      '<div class="cp-video">' +
+        '<img src="assets/images/course-images/' + c.img + '" alt="' + (c.title || '') + '">' +
+        getThumbBadge(c.type) +
+        '<button class="cp-close" aria-label="Close" onclick="eiHidePopover()">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>' +
+        '</button>' +
+      '</div>' +
+      '<div class="cp-body">' +
+        '<div class="cp-meta"><span class="badge badge-sm badge-pill badge-bonus-outline">' + c.badge + '</span><span class="cp-date">' + (c.date || '') + '</span></div>' +
+        '<h3 class="cp-title">' + (c.title || c.badge + ' Course') + '</h3>' +
+        '<div class="cp-stats"><span class="cp-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>' + c.dur + ((c.type === 'live' || c.type === 'liveNow') ? ' | CPE' : '') + '</span></div>' +
+        '<div class="cp-divider"></div>' +
+        '<p class="cp-learn-label">What you will learn</p>' +
+        '<ul class="cp-outcomes">' + outcomes + '</ul>' +
+        '<button class="btn-resume cp-cta" onclick="window.location.href=\'#\'">' + playSVG + ctaLabel + '</button>' +
+      '</div>';
+    document.body.appendChild(pop);
+    if (window.eiInitPopover) window.eiInitPopover(cardId, popId);
+  });
+}
+
+function goToPage(n, doScroll) {
+  if (n < 1 || n > TOTAL_PAGES) return;
+  currentPage = n;
+  renderCards(n);
+  updatePagination();
+  if (doScroll) {
+    var grid = document.querySelector('.ei-grid');
+    if (grid) window.scrollTo({ top: grid.getBoundingClientRect().top + window.scrollY - 100, behavior: 'smooth' });
+  }
+}
+
+function changePage(delta) {
+  goToPage(currentPage + delta, true);
+}
+
+function updatePagination() {
+  var pag = document.getElementById('ei-pagination');
+  if (!pag) return;
+  var prev = document.getElementById('pg-prev');
+  var next = document.getElementById('pg-next');
+  if (prev) prev.classList.toggle('pg-disabled', currentPage === 1);
+  if (next) next.classList.toggle('pg-disabled', currentPage === TOTAL_PAGES);
+
+  var items = pag.querySelectorAll('.pg-item, .pg-ellipsis');
+  items.forEach(function(el) { el.parentNode.removeChild(el); });
+
+  var pages = getPageRange(currentPage, TOTAL_PAGES);
+  var insertBefore = next;
+  pages.forEach(function(p) {
+    if (p === '...') {
+      var el = document.createElement('span');
+      el.className = 'pg-ellipsis';
+      el.textContent = '…';
+      pag.insertBefore(el, insertBefore);
+    } else {
+      var el = document.createElement('a');
+      el.className = 'pg-item' + (p === currentPage ? ' pg-active' : '');
+      if (p === currentPage) el.setAttribute('aria-current', 'page');
+      el.textContent = p;
+      el.onclick = (function(page) { return function() { goToPage(page, true); }; })(p);
+      pag.insertBefore(el, insertBefore);
+    }
+  });
+}
+
+
+
+function togglePerPageDD(e) {
+  var dd = document.getElementById('ei-perpage-dropdown');
+  if (!dd) return;
+  dd.classList.toggle('dd-open');
+  e.currentTarget.setAttribute('aria-expanded', dd.classList.contains('dd-open'));
+  e.stopPropagation();
+}
+function selectPerPage(btn, val) {
+  document.getElementById('ei-perpage-label').textContent = btn.textContent;
+  var dd = document.getElementById('ei-perpage-dropdown');
+  dd.querySelectorAll('.ei-sort-item').forEach(function(b) { b.classList.remove('dd-active'); });
+  btn.classList.add('dd-active');
+  dd.classList.remove('dd-open');
+  changePerPage(val);
+}
+function changePerPage(val) {
+  CARDS_PER_PAGE = parseInt(val, 10);
+  TOTAL_PAGES = Math.ceil(DISPLAY_CARDS.length / CARDS_PER_PAGE);
+  goToPage(1);
+}
+function getPageRange(current, total) {
+  var pages = [];
+  if (total <= 7) {
+    for (var i = 1; i <= total; i++) pages.push(i);
+    return pages;
+  }
+  pages.push(1);
+  if (current > 3) pages.push('...');
+  var start = Math.max(2, current - 1);
+  var end = Math.min(total - 1, current + 1);
+  for (var i = start; i <= end; i++) pages.push(i);
+  if (current < total - 2) pages.push('...');
+  pages.push(total);
+  return pages;
+}
+
+applyFilters();
+</script>
+
+</body>
+</html>

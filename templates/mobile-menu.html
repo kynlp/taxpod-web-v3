@@ -1,0 +1,91 @@
+<!-- Mobile Menu Backdrop -->
+<div class="mob-menu-backdrop" id="mob-menu-backdrop" onclick="mobMenuClose()"></div>
+
+<!-- Mobile Menu Drawer -->
+<div class="mob-menu" id="mob-menu" role="dialog" aria-modal="true" aria-label="Navigation">
+  <div class="mob-menu-header">
+    <img src="assets/images/logo-dark.png" alt="YYC taxPOD" class="logo-light">
+    <img src="assets/images/logo-white.png" alt="YYC taxPOD" class="logo-dark" style="display:none">
+    <button class="mob-menu-close" onclick="mobMenuClose()" aria-label="Close menu">
+      <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <nav class="mob-nav">
+    <div class="mob-nav-item">
+      <div class="mob-nav-split">
+        <a href="webinars.html" class="mob-nav-split-link">Webinars</a>
+        <button class="mob-nav-split-toggle" onclick="mobNavToggle(this)" aria-label="Toggle Webinars menu"><svg class="mob-nav-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
+      </div>
+      <div class="mob-nav-sub">
+        <a href="#" class="mob-nav-sub-item">Live Webinars</a>
+        <a href="#" class="mob-nav-sub-item">Past Webinars</a>
+      </div>
+    </div>
+    <div class="mob-nav-item">
+      <button class="mob-nav-btn" onclick="mobNavToggle(this)">Update Classes <svg class="mob-nav-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="mob-nav-sub">
+        <a href="#" class="mob-nav-sub-item">2026</a>
+        <a href="#" class="mob-nav-sub-item">2025</a>
+        <a href="#" class="mob-nav-sub-item">2024</a>
+        <a href="#" class="mob-nav-sub-item">2023</a>
+      </div>
+    </div>
+    <div class="mob-nav-item">
+      <div class="mob-nav-split">
+        <a href="e-invoicing.html" class="mob-nav-split-link">E-Invoicing</a>
+        <button class="mob-nav-split-toggle" onclick="mobNavToggle(this)" aria-label="Toggle E-Invoicing menu"><svg class="mob-nav-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
+      </div>
+      <div class="mob-nav-sub">
+        <a href="#" class="mob-nav-sub-item">Mastery (5 Modules)</a>
+        <a href="#" class="mob-nav-sub-item">MyInvois</a>
+        <a href="#" class="mob-nav-sub-item">Industry Focus</a>
+        <a href="#" class="mob-nav-sub-item">e-Invoicing - Others</a>
+      </div>
+    </div>
+    <div class="mob-nav-item">
+      <button class="mob-nav-btn" onclick="mobNavToggle(this)">Income Tax <svg class="mob-nav-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="mob-nav-sub">
+        <a href="#" class="mob-nav-sub-item">Income</a>
+        <a href="#" class="mob-nav-sub-item">Others</a>
+        <a href="#" class="mob-nav-sub-item">Withholding Tax</a>
+        <a href="#" class="mob-nav-sub-item">Expenses</a>
+        <a href="#" class="mob-nav-sub-item">Stamp Duty</a>
+      </div>
+    </div>
+    <div class="mob-nav-item">
+      <button class="mob-nav-btn" onclick="mobNavToggle(this)">Forms <svg class="mob-nav-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="mob-nav-sub">
+        <a href="#" class="mob-nav-sub-item">Form BE</a>
+        <a href="#" class="mob-nav-sub-item">Form CP204 &amp; CP204A</a>
+        <a href="#" class="mob-nav-sub-item">Form B</a>
+        <a href="#" class="mob-nav-sub-item">Form C</a>
+        <a href="#" class="mob-nav-sub-item">MyTax - ezHasil Services</a>
+        <a href="#" class="mob-nav-sub-item">Form E &amp; EA</a>
+      </div>
+    </div>
+    <div class="mob-nav-item">
+      <button class="mob-nav-btn" onclick="mobNavToggle(this)">SST <svg class="mob-nav-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="mob-nav-sub">
+        <a href="#" class="mob-nav-sub-item">Service Tax</a>
+        <a href="#" class="mob-nav-sub-item">Sales Tax</a>
+      </div>
+    </div>
+    <div class="mob-nav-item">
+      <button class="mob-nav-btn" onclick="mobNavToggle(this)">Resources <svg class="mob-nav-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="mob-nav-sub">
+        <a href="#" class="mob-nav-sub-item">Accounting Training Hours/CPE</a>
+        <a href="#" class="mob-nav-sub-item">Articles</a>
+        <a href="#" class="mob-nav-sub-item">Our Speakers</a>
+        <a href="#" class="mob-nav-sub-item">Quick Guides</a>
+        <a href="#" class="mob-nav-sub-item">Tax A Minute</a>
+        <a href="#" class="mob-nav-sub-item">FAQ</a>
+      </div>
+    </div>
+    <div class="mob-nav-item mob-nav-item--expert">
+      <a href="#" class="mob-nav-btn">Ask An Expert</a>
+    </div>
+    <div class="mob-nav-item">
+      <a href="#" class="mob-nav-btn">Deals</a>
+    </div>
+  </nav>
+</div>

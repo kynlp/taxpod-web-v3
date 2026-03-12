@@ -1,0 +1,1429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>e-Invoicing - Industry Focus: Healthcare | YYC taxPOD</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="templates/css-variables.css">
+<link rel="stylesheet" href="templates/css-topbar.css">
+<link rel="stylesheet" href="templates/css-footer.css">
+<script>
+(function(){
+  var t=localStorage.getItem('theme')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');
+  document.documentElement.setAttribute('data-theme',t);
+})();
+</script>
+<style>
+
+/* ── Theme transition ── */
+html.theme-transition * {
+  transition: background-color 0.35s ease, color 0.35s ease, border-color 0.35s ease !important;
+}
+
+body {
+  background: var(--web-bg-light-white);
+  font-family: 'Lato', sans-serif;
+  color: var(--grey-800);
+  margin: 0;
+}
+h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif; }
+[data-theme="dark"] body { background: var(--web-bg-light-blue); }
+
+/* ── Page wrapper ── */
+.wd-page {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 24px 24px 64px;
+}
+
+/* ── Breadcrumb ── */
+.wd-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--grey-500);
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+.wd-breadcrumb a {
+  color: var(--grey-500);
+  text-decoration: none;
+}
+.wd-breadcrumb a:hover { color: var(--primary-500); }
+.wd-breadcrumb svg { width: 14px; height: 14px; stroke: var(--grey-500); fill: none; flex-shrink: 0; }
+.wd-breadcrumb span:last-child { color: var(--grey-700); font-weight: 500; }
+
+/* ── Two-column layout ── */
+.wd-layout {
+  display: flex;
+  gap: 32px;
+  align-items: flex-start;
+}
+.wd-main { flex: 1 1 0; min-width: 0; }
+.wd-sidebar { width: 320px; flex-shrink: 0; }
+
+/* ── Hero thumbnail ── */
+.wd-hero {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  cursor: pointer;
+}
+.wd-hero img, .wd-hero video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: opacity 0.2s;
+}
+.wd-hero:hover img, .wd-hero:hover video { opacity: 0.85; }
+.wd-play-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 68px;
+  height: 68px;
+  background: rgba(0,0,0,0.65);
+  border-radius: 50%;
+  border: 3px solid rgba(255,255,255,0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+  pointer-events: none;
+}
+.wd-hero:hover .wd-play-btn {
+  background: rgba(0,175,237,0.85);
+  transform: translate(-50%, -50%) scale(1.08);
+}
+.wd-play-btn svg {
+  width: 28px;
+  height: 28px;
+  fill: #fff;
+  margin-left: 4px;
+}
+.wd-hero-badge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0,0,0,0.55);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 100px;
+  backdrop-filter: blur(4px);
+}
+.wd-hero-badge svg { width: 13px; height: 13px; fill: currentColor; stroke: none; }
+.wd-video-msg {
+  display: none;
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 12px;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+}
+.wd-video-msg svg { width: 40px; height: 40px; stroke: #fff; fill: none; }
+
+/* ── Meta row ── */
+.wd-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 16px 0 12px;
+  flex-wrap: wrap;
+}
+/* ── Design-system Subtle badges ── */
+.badge { display: inline-flex; align-items: center; gap: 5px; font-weight: 600; white-space: nowrap; border-radius: 4px; }
+.badge-md { font-size: 12px; padding: 4px 12px 5px; }
+.badge-neutral-subtle { background: var(--grey-200); color: var(--grey-600); }
+.badge-warning-subtle { background: var(--error-tertiary-50); color: var(--tertiary-800); }
+.badge-neutral-outline { background: transparent; color: #688AAA; border: 1px solid #688AAA; }
+[data-theme="dark"] .badge-neutral-subtle { background: #303539; color: #CFD3D9; }
+[data-theme="dark"] .badge-warning-subtle { background: #453C0F; color: #E5C937; }
+[data-theme="dark"] .badge-neutral-outline { background: transparent; color: var(--content-tag-text); border-color: var(--content-tag-border); }
+.badge svg { width: 13px; height: 13px; stroke: currentColor; fill: none; }
+.wd-badge-time { border: none; }
+
+/* ── Hero play overlay (Watch Now) ── */
+.wd-play-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 5;
+  transition: background 0.2s;
+}
+.wd-play-overlay:hover { background: rgba(0,0,0,0.48); }
+.wd-play-overlay .tc-play-center { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.wd-play-overlay .tc-play {
+  width: 68px; height: 68px;
+  border-radius: 50%;
+  background: var(--primary-500);
+  display: flex; align-items: center; justify-content: center;
+  transition: transform 0.18s, background 0.18s;
+}
+.wd-play-overlay:hover .tc-play { transform: scale(1.1); background: var(--primary-600); }
+.wd-play-overlay .tc-play svg { width: 26px; height: 26px; fill: #fff; stroke: none; margin-left: 4px; }
+.wd-play-overlay .tc-resume-label { font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 700; color: #fff; text-transform: uppercase; letter-spacing: 1.5px; }
+.wd-fav-btn {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--grey-600);
+  background: none;
+  border: 1.5px solid var(--border-light);
+  border-radius: 100px;
+  padding: 5px 14px;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+  font-family: var(--font-primary);
+}
+.wd-fav-btn:hover { border-color: var(--primary-500); color: var(--primary-500); }
+.wd-fav-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; }
+.wd-fav-btn.active svg { fill: #E73A3A; stroke: #E73A3A; }
+.wd-fav-btn.active { color: #E73A3A; border-color: #E73A3A; }
+
+/* ── Title ── */
+.wd-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--grey-800);
+  line-height: 1.35;
+  margin: 0 0 10px;
+}
+
+/* ── Short description ── */
+.wd-tagline {
+  font-size: 15px;
+  color: var(--grey-700);
+  margin: 0 0 20px;
+  line-height: 1.6;
+}
+
+/* ── Divider ── */
+.wd-divider {
+  border: none;
+  border-top: 1px solid var(--border-light);
+  margin: 20px 0;
+}
+
+/* ── Speaker ── */
+.wd-speaker {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.wd-speaker-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--primary-200);
+  color: var(--primary-700);
+  font-size: 15px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 2px solid var(--primary-300);
+  overflow: hidden;
+}
+.wd-speaker-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 20%;
+  display: block;
+}
+.wd-speaker-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--primary-500);
+}
+.wd-speaker-role {
+  font-size: 13px;
+  color: var(--grey-600);
+  margin-top: 2px;
+}
+
+/* ── AI Summary ── */
+.wd-ai-summary {
+  background: transparent;
+  border: 3px solid transparent;
+  border-image: linear-gradient(180deg, #41C8F7, #6774F8) 1;
+  border-radius: 0;
+  overflow: hidden;
+  margin-top: 20px;
+  position: relative;
+}
+/* Rounded border with gradient using pseudo-element */
+.wd-ai-summary {
+  border: none;
+  border-radius: 12px;
+  padding: 0;
+  position: relative;
+}
+.wd-ai-summary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  padding: 1.5px;
+  background: linear-gradient(180deg, #41C8F7, #6774F8);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 1;
+}
+.wd-ai-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  cursor: pointer;
+  user-select: none;
+}
+.wd-ai-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-primary);
+  font-size: 14px;
+  font-weight: 700;
+  background: linear-gradient(90deg, #41C8F7, #6774F8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.wd-ai-label svg { flex-shrink: 0; }
+.wd-ai-chevron {
+  width: 16px; height: 16px;
+  stroke: #6774F8; fill: none;
+  transition: transform 0.2s;
+  flex-shrink: 0;
+}
+.wd-ai-summary.collapsed .wd-ai-chevron { transform: rotate(180deg); }
+.wd-ai-body {
+  padding: 0 18px 18px;
+  border-top: 1px solid rgba(120,130,200,0.15);
+}
+.wd-ai-body.hidden { display: none; }
+.wd-ai-preview {
+  padding: 0 18px 14px;
+  font-size: 13px;
+  color: var(--grey-600);
+  line-height: 1.65;
+  display: none;
+  overflow: hidden;
+}
+[data-theme="dark"] .wd-ai-preview { color: #a1a8b3; }
+.wd-ai-summary.collapsed .wd-ai-preview {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.wd-ai-summary:not(.collapsed) .wd-ai-preview { display: none; }
+.wd-ai-course-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: #fff;
+  margin: 16px 0 14px;
+  line-height: 1.4;
+}
+[data-theme="light"] .wd-ai-course-title { color: #1a1d2e; }
+.wd-ai-section { margin-bottom: 18px; }
+.wd-ai-section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+.wd-ai-section-head h3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+}
+[data-theme="light"] .wd-ai-section-head h3 { color: #1a1d2e; }
+.wd-ai-time {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--primary-500);
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+.wd-ai-time svg { width: 12px; height: 12px; stroke: currentColor; fill: none; flex-shrink: 0; }
+.wd-ai-text {
+  font-size: 13px;
+  color: #a1a8b3;
+  line-height: 1.65;
+  margin: 0;
+}
+[data-theme="light"] .wd-ai-text { color: var(--grey-600); }
+.wd-ai-concept { margin-bottom: 14px; }
+.wd-ai-concept-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+.wd-ai-concept-head strong {
+  font-size: 13px;
+  font-weight: 700;
+  color: #d4d8e2;
+}
+[data-theme="light"] .wd-ai-concept-head strong { color: var(--grey-800); }
+.wd-ai-divider { border: none; border-top: 1px solid rgba(120,130,200,0.12); margin: 16px 0; }
+[data-theme="light"] .wd-ai-divider { border-color: rgba(100,110,220,0.12); }
+.wd-ai-disclaimer {
+  font-size: 11px;
+  font-style: italic;
+  color: #666a75;
+  line-height: 1.6;
+  margin: 14px 0 0;
+  display: flex;
+  gap: 6px;
+  align-items: flex-start;
+}
+[data-theme="light"] .wd-ai-disclaimer { color: var(--grey-500); }
+.wd-ai-disclaimer svg { width: 13px; height: 13px; stroke: currentColor; fill: none; flex-shrink: 0; margin-top: 1px; }
+
+/* ── Subtle shadows for sidebar panels ── */
+[data-theme="dark"] .wd-progress-card,
+[data-theme="dark"] .wd-chapter-card { box-shadow: none; }
+.wd-progress-card,
+.wd-chapter-card { box-shadow: var(--shadow-xs); }
+
+/* ── Tabs ── */
+.wd-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--border-lighter);
+  margin: 28px 0 0;
+}
+.wd-tab {
+  font-family: var(--font-primary);
+  font-size: 18px;
+  font-weight: 400;
+  letter-spacing: normal;
+  color: var(--tab-underline-unselected-text, var(--grey-500));
+  padding: 8px 16px 0;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: none;
+  border: none;
+  transition: color 0.15s;
+}
+.wd-tab:first-child { padding-left: 0; }
+.wd-tab:hover { color: var(--primary-600); }
+.wd-tab.active { color: var(--tab-underline-selected-text, var(--primary-500)); font-weight: 600; }
+.wd-tab-indicator { width: 100%; height: 3px; border-radius: 2px; background: transparent; }
+.wd-tab.active .wd-tab-indicator { background: var(--tab-underline-selected-text, var(--primary-500)); }
+
+/* ── Tab pane ── */
+.wd-tab-pane { padding: 24px 0 0; display: none; }
+.wd-tab-pane.active { display: block; }
+
+.wd-section-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--grey-800);
+  margin: 0 0 12px;
+}
+.wd-desc-text {
+  font-size: 16px;
+  color: var(--grey-600);
+  line-height: 1.75;
+  margin: 0 0 16px;
+}
+.wd-learn-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.wd-learn-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 16px;
+  color: var(--grey-700);
+  line-height: 1.5;
+}
+.wd-learn-list li svg {
+  width: 16px;
+  height: 16px;
+  stroke: var(--primary-500);
+  fill: none;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* Materials */
+.wd-material-list { display: flex; flex-direction: column; gap: 12px; }
+.wd-material-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--card-bg);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: 14px 16px;
+  transition: border-color 0.15s;
+}
+.wd-material-item:hover { border-color: var(--primary-500); }
+.wd-material-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: var(--primary-100);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+[data-theme="dark"] .wd-material-icon { background: var(--primary-200); }
+.wd-material-icon svg { width: 20px; height: 20px; stroke: var(--primary-500); fill: none; }
+.wd-material-info { flex: 1; min-width: 0; }
+.wd-material-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--grey-800);
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.wd-material-meta { font-size: 12px; color: var(--grey-500); margin-top: 2px; }
+.wd-dl-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--primary-500);
+  background: transparent;
+  box-shadow: inset 0 0 0 1.5px var(--primary-500);
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 6px 14px;
+  cursor: pointer;
+  font-family: var(--font-primary);
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s, box-shadow 0.15s;
+  text-decoration: none;
+}
+.wd-dl-btn:hover { background: var(--primary-50); color: var(--primary-600); box-shadow: inset 0 0 0 1.5px var(--primary-600); }
+.wd-dl-btn:active { background: var(--primary-100); color: var(--primary-700); box-shadow: inset 0 0 0 1.5px var(--primary-700); }
+.wd-dl-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; }
+
+/* ── Sidebar ── */
+.wd-info-card {
+  position: sticky;
+  top: 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Progress card */
+.wd-progress-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  padding: 16px 18px;
+  box-shadow: var(--shadow-sm);
+}
+.wd-progress-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--grey-800);
+  margin: 0 0 10px;
+}
+.wd-progress-bar-wrap {
+  width: 100%;
+  height: 16px;
+  background: var(--grey-200);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+.wd-progress-bar-fill {
+  height: 100%;
+  border-radius: var(--radius-full);
+  background: var(--progress-bar-color);
+  width: 3%;
+  transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.wd-progress-pct {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--progress-bar-color);
+  margin-bottom: 6px;
+}
+[data-theme="dark"] .wd-progress-pct {
+  display: inline-flex;
+  align-items: center;
+  background: var(--progress-bar-color);
+  color: #fff;
+  padding: 2px 10px;
+  border-radius: var(--radius-full);
+  margin-bottom: 8px;
+}
+[data-theme="dark"] .wd-progress-bar-wrap { background: var(--grey-300); }
+.wd-progress-note {
+  font-size: 11px;
+  color: var(--grey-500);
+  line-height: 1.5;
+  margin: 0;
+}
+
+[data-theme="dark"] .wd-progress-card,
+[data-theme="dark"] .wd-chapter-card { border-color: var(--border-lighter); }
+
+/* Chapter accordion */
+.wd-chapter-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+.wd-chapter-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 13px 16px;
+  background: var(--grey-100);
+  cursor: pointer;
+  user-select: none;
+}
+[data-theme="dark"] .wd-chapter-header { background: var(--card-header-bg); }
+.wd-chapter-chevron {
+  width: 16px;
+  height: 16px;
+  stroke: var(--grey-500);
+  fill: none;
+  flex-shrink: 0;
+  transition: transform 0.2s;
+}
+.wd-chapter-card.open .wd-chapter-chevron { transform: rotate(180deg); }
+.wd-chapter-label {
+  flex: 1;
+  min-width: 0;
+}
+.wd-chapter-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--grey-800);
+}
+.wd-chapter-meta {
+  font-size: 11px;
+  color: var(--grey-500);
+  margin-top: 1px;
+}
+[data-theme="dark"] .wd-chapter-meta { color: #A1A8B3; }
+.wd-chapter-count {
+  font-size: 11px;
+  color: var(--grey-500);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.wd-chapter-lessons {
+  display: none;
+}
+.wd-chapter-card.open .wd-chapter-lessons {
+  display: block;
+}
+.wd-lesson-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 16px;
+  border-top: 1px solid var(--border-lighter);
+  cursor: pointer;
+  transition: background 0.12s;
+}
+.wd-lesson-item:hover { background: var(--grey-50); }
+[data-theme="dark"] .wd-lesson-item:hover { background: var(--grey-100); }
+.wd-lesson-check {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1.5px solid var(--grey-300);
+  flex-shrink: 0;
+  margin-top: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.wd-lesson-check svg { width: 10px; height: 10px; stroke: var(--grey-300); fill: none; }
+.wd-lesson-check.done { background: var(--success-300); border-color: var(--success-300); }
+.wd-lesson-check.done svg { stroke: #fff; }
+.wd-lesson-info { flex: 1; min-width: 0; }
+.wd-lesson-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--grey-800);
+  line-height: 1.45;
+}
+.wd-lesson-item.playing .wd-lesson-title { color: var(--primary-500); font-weight: 600; }
+.wd-lesson-dur {
+  font-size: 11px;
+  color: var(--grey-500);
+  margin-top: 3px;
+}
+.wd-lesson-play {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1.5px solid var(--grey-300);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+  transition: border-color 0.15s;
+}
+.wd-lesson-item:hover .wd-lesson-play { border-color: var(--primary-500); }
+.wd-lesson-item.playing .wd-lesson-play { border-color: var(--primary-500); }
+.wd-lesson-play svg { width: 11px; height: 11px; fill: var(--grey-500); stroke: none; }
+.wd-lesson-item:hover .wd-lesson-play svg,
+.wd-lesson-item.playing .wd-lesson-play svg { fill: var(--primary-500); }
+.wd-lesson-action {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+}
+.wd-lesson-timer {
+  font-size: 11px;
+  color: var(--grey-500);
+  white-space: nowrap;
+  margin-top: 4px;
+}
+[data-theme="dark"] .wd-lesson-timer { color: #A1A8B3; }
+[data-theme="dark"] .wd-chapter-chevron { stroke: var(--primary-500); }
+[data-theme="dark"] .wd-chapter-count { color: #A1A8B3; }
+[data-theme="dark"] .wd-lesson-check { border-color: #A1A8B3; }
+[data-theme="dark"] .wd-lesson-check svg { stroke: #A1A8B3; }
+[data-theme="dark"] .wd-lesson-dur { color: #A1A8B3; }
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .wd-layout { flex-direction: column-reverse; }
+  .wd-sidebar { width: 100%; }
+  .wd-info-card { position: static; }
+}
+
+@media (max-width: 600px) {
+  .wd-page { padding: 16px 16px 48px; }
+  .wd-title { font-size: 20px; }
+  .wd-fav-btn { display: none; }
+  .wd-tab { padding: 10px 12px; font-size: 13px; }
+  .wd-breadcrumb { font-size: 12px; }
+}
+
+</style>
+</head>
+<body>
+
+
+<!-- Topbar -->
+<header class="topbar">
+<div class="topbar-inner">
+  <div class="topbar-logo">
+    <a href="index.html">
+      <img src="assets/images/logo-dark.png" alt="YYC taxPOD" class="logo-light">
+      <img src="assets/images/logo-white.png" alt="YYC taxPOD" class="logo-dark">
+    </a>
+  </div>
+  <div class="topbar-search">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="text" placeholder="Search...">
+  </div>
+  <!-- Mobile row break: forces row 2 to start after logo+search -->
+  <div class="topbar-row-break"></div>
+  <!-- Hamburger (mobile only) -->
+  <button class="mob-menu-btn" onclick="mobMenuOpen()" aria-label="Open menu">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+  <div class="topbar-actions">
+    <button class="topbar-lang">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      <span>EN</span>
+      <svg class="tb-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <button class="topbar-icon topbar-theme" onclick="(function(h){h.classList.add('theme-transition');var d=h.getAttribute('data-theme')==='dark'?'light':'dark';h.setAttribute('data-theme',d);localStorage.setItem('theme',d);setTimeout(function(){h.classList.remove('theme-transition')},350)})(document.documentElement)" aria-label="Toggle Dark Mode">
+      <svg class="tb-theme-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <svg class="tb-theme-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+    </button>
+    <button class="topbar-icon">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+    </button>
+    <button class="topbar-icon">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      <span class="topbar-badge">3</span>
+    </button>
+    <div class="topbar-avatar">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    </div>
+  </div>
+</div>
+</header>
+
+<!-- Mobile Menu Backdrop -->
+<div class="mob-menu-backdrop" id="mob-menu-backdrop" onclick="mobMenuClose()"></div>
+
+<!-- Mobile Menu Drawer -->
+<div class="mob-menu" id="mob-menu" role="dialog" aria-modal="true" aria-label="Navigation">
+  <div class="mob-menu-header">
+    <img src="assets/images/logo-dark.png" alt="YYC taxPOD" class="logo-light">
+    <img src="assets/images/logo-white.png" alt="YYC taxPOD" class="logo-dark" style="display:none">
+    <button class="mob-menu-close" onclick="mobMenuClose()" aria-label="Close menu">
+      <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <nav class="mob-nav">
+    <div class="mob-nav-item">
+      <div class="mob-nav-split">
+        <a href="webinars.html" class="mob-nav-split-link">Webinars</a>
+        <button class="mob-nav-split-toggle" onclick="mobNavToggle(this)" aria-label="Toggle Webinars menu"><svg class="mob-nav-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
+      </div>
+      <div class="mob-nav-sub">
+        <a href="#" class="mob-nav-sub-item">Live Webinars</a>
+        <a href="#" class="mob-nav-sub-item">Past Webinars</a>
+      </div>
+    </div>
+    <div class="mob-nav-item">
+      <button class="mob-nav-btn" onclick="mobNavToggle(this)">Update Classes <svg class="mob-nav-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="mob-nav-sub">
+        <a href="#" class="mob-nav-sub-item">2026</a>
+        <a href="#" class="mob-nav-sub-item">2025</a>
+        <a href="#" class="mob-nav-sub-item">2024</a>
+        <a href="#" class="mob-nav-sub-item">2023</a>
+      </div>
+    </div>
+    <div class="mob-nav-item">
+      <div class="mob-nav-split">
+        <a href="e-invoicing.html" class="mob-nav-split-link">E-Invoicing</a>
+        <button class="mob-nav-split-toggle" onclick="mobNavToggle(this)" aria-label="Toggle E-Invoicing menu"><svg class="mob-nav-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
+      </div>
+      <div class="mob-nav-sub">
+        <a href="#" class="mob-nav-sub-item">Mastery (5 Modules)</a>
+        <a href="#" class="mob-nav-sub-item">MyInvois</a>
+        <a href="#" class="mob-nav-sub-item">Industry Focus</a>
+        <a href="#" class="mob-nav-sub-item">e-Invoicing - Others</a>
+      </div>
+    </div>
+    <div class="mob-nav-item">
+      <button class="mob-nav-btn" onclick="mobNavToggle(this)">Income Tax <svg class="mob-nav-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="mob-nav-sub">
+        <a href="#" class="mob-nav-sub-item">Income</a>
+        <a href="#" class="mob-nav-sub-item">Others</a>
+        <a href="#" class="mob-nav-sub-item">Withholding Tax</a>
+        <a href="#" class="mob-nav-sub-item">Expenses</a>
+        <a href="#" class="mob-nav-sub-item">Stamp Duty</a>
+      </div>
+    </div>
+    <div class="mob-nav-item">
+      <button class="mob-nav-btn" onclick="mobNavToggle(this)">Forms <svg class="mob-nav-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="mob-nav-sub">
+        <a href="#" class="mob-nav-sub-item">Form BE</a>
+        <a href="#" class="mob-nav-sub-item">Form CP204 &amp; CP204A</a>
+        <a href="#" class="mob-nav-sub-item">Form B</a>
+        <a href="#" class="mob-nav-sub-item">Form C</a>
+        <a href="#" class="mob-nav-sub-item">MyTax - ezHasil Services</a>
+        <a href="#" class="mob-nav-sub-item">Form E &amp; EA</a>
+      </div>
+    </div>
+    <div class="mob-nav-item">
+      <button class="mob-nav-btn" onclick="mobNavToggle(this)">SST <svg class="mob-nav-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="mob-nav-sub">
+        <a href="#" class="mob-nav-sub-item">Service Tax</a>
+        <a href="#" class="mob-nav-sub-item">Sales Tax</a>
+      </div>
+    </div>
+    <div class="mob-nav-item">
+      <button class="mob-nav-btn" onclick="mobNavToggle(this)">Resources <svg class="mob-nav-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="mob-nav-sub">
+        <a href="#" class="mob-nav-sub-item">Accounting Training Hours/CPE</a>
+        <a href="#" class="mob-nav-sub-item">Articles</a>
+        <a href="#" class="mob-nav-sub-item">Our Speakers</a>
+        <a href="#" class="mob-nav-sub-item">Quick Guides</a>
+        <a href="#" class="mob-nav-sub-item">Tax A Minute</a>
+        <a href="#" class="mob-nav-sub-item">FAQ</a>
+      </div>
+    </div>
+    <div class="mob-nav-item mob-nav-item--expert">
+      <a href="#" class="mob-nav-btn">Ask An Expert</a>
+    </div>
+    <div class="mob-nav-item">
+      <a href="#" class="mob-nav-btn">Deals</a>
+    </div>
+  </nav>
+</div>
+
+<!-- Main Navigation -->
+<nav class="main-nav">
+  <div class="main-nav-inner">
+    <!-- Webinars -->
+    <div class="mn-item-wrap">
+      <a href="webinars.html" class="mn-item">Webinars <svg class="mn-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></a>
+      <div class="mn-dropdown">
+        <a href="#" class="mn-dropdown-item">Live Webinars</a>
+        <a href="#" class="mn-dropdown-item">Past Webinars</a>
+      </div>
+    </div>
+    <!-- Update Classes -->
+    <div class="mn-item-wrap">
+      <button class="mn-item">Update Classes <svg class="mn-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="mn-dropdown">
+        <a href="#" class="mn-dropdown-item">2026</a>
+        <a href="#" class="mn-dropdown-item">2025</a>
+        <a href="#" class="mn-dropdown-item">2024</a>
+        <a href="#" class="mn-dropdown-item">2023</a>
+      </div>
+    </div>
+    <!-- E-Invoicing -->
+    <div class="mn-item-wrap">
+      <a href="e-invoicing.html" class="mn-item">E-Invoicing <svg class="mn-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></a>
+      <div class="mn-dropdown">
+        <a href="#" class="mn-dropdown-item">Mastery (5 Modules)</a>
+        <a href="#" class="mn-dropdown-item">MyInvois</a>
+        <a href="#" class="mn-dropdown-item">Industry Focus</a>
+        <a href="#" class="mn-dropdown-item">e-Invoicing - Others</a>
+      </div>
+    </div>
+    <!-- Income Tax -->
+    <div class="mn-item-wrap">
+      <button class="mn-item">Income Tax <svg class="mn-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="mn-dropdown">
+        <a href="#" class="mn-dropdown-item">Income</a>
+        <a href="#" class="mn-dropdown-item">Others</a>
+        <a href="#" class="mn-dropdown-item">Withholding Tax</a>
+        <a href="#" class="mn-dropdown-item">Expenses</a>
+        <a href="#" class="mn-dropdown-item">Stamp Duty</a>
+      </div>
+    </div>
+    <!-- Forms -->
+    <div class="mn-item-wrap">
+      <button class="mn-item">Forms <svg class="mn-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="mn-dropdown">
+        <a href="#" class="mn-dropdown-item">Form BE</a>
+        <a href="#" class="mn-dropdown-item">Form CP204 &amp; CP204A</a>
+        <a href="#" class="mn-dropdown-item">Form B</a>
+        <a href="#" class="mn-dropdown-item">Form C</a>
+        <a href="#" class="mn-dropdown-item">MyTax - ezHasil Services</a>
+        <a href="#" class="mn-dropdown-item">Form E &amp; EA</a>
+      </div>
+    </div>
+    <!-- SST -->
+    <div class="mn-item-wrap">
+      <button class="mn-item">SST <svg class="mn-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="mn-dropdown">
+        <a href="#" class="mn-dropdown-item">Service Tax</a>
+        <a href="#" class="mn-dropdown-item">Sales Tax</a>
+      </div>
+    </div>
+    <!-- Resources -->
+    <div class="mn-item-wrap">
+      <button class="mn-item">Resources <svg class="mn-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="mn-dropdown">
+        <a href="#" class="mn-dropdown-item">Accounting Training Hours/CPE</a>
+        <a href="#" class="mn-dropdown-item">Articles</a>
+        <a href="#" class="mn-dropdown-item">Our Speakers</a>
+        <a href="#" class="mn-dropdown-item">Quick Guides</a>
+        <a href="#" class="mn-dropdown-item">Tax A Minute</a>
+        <a href="#" class="mn-dropdown-item">FAQ</a>
+      </div>
+    </div>
+    <!-- Ask An Expert -->
+    <a href="#" class="mn-item mn-item--expert">Ask An Expert</a>
+    <!-- Deals -->
+    <a href="#" class="mn-item">Deals</a>
+  </div>
+</nav>
+
+
+<div class="wd-page">
+
+  <!-- Breadcrumb -->
+  <nav class="wd-breadcrumb" aria-label="Breadcrumb">
+    <a href="e-invoicing.html">E-Invoicing</a>
+    <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+    <a href="e-invoicing.html">Industry Focus</a>
+    <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+    <span>e-Invoicing - Industry Focus: Healthcare</span>
+  </nav>
+
+  <div class="wd-layout">
+
+    <!-- MAIN CONTENT -->
+    <div class="wd-main">
+
+      <!-- Hero -->
+      <div class="wd-hero" id="wd-hero-area">
+        <video id="wd-video" muted playsinline poster="assets/images/course-images/industryfocus-healthcare.jpg">
+          <source src="assets/videos/Business Training Expenses.mp4" type="video/mp4">
+        </video>
+        <div class="wd-play-overlay" id="wd-play-overlay" onclick="playVideo()">
+          <div class="tc-play-center">
+            <div class="tc-play"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+            <div class="tc-resume-label">Watch Now</div>
+          </div>
+        </div>
+        <span class="wd-hero-badge">
+          <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Course
+        </span>
+      </div>
+
+      <!-- Meta -->
+      <div class="wd-meta">
+        <span class="badge badge-md badge-neutral-outline">E-Invoicing · Industry Focus</span>
+        <span class="badge badge-md badge-neutral-outline wd-badge-time"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> 19 mins</span>
+        <button class="wd-fav-btn" id="wd-fav" onclick="this.classList.toggle('active')" aria-label="Add to favourites">
+          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          Favourite
+        </button>
+      </div>
+
+      <!-- Title + tagline -->
+      <h1 class="wd-title">e-Invoicing - Industry Focus: Healthcare</h1>
+      <p class="wd-tagline">Understand how e-Invoicing affects the healthcare industry</p>
+
+      <!-- Speaker -->
+      <div class="wd-speaker">
+        <div class="wd-speaker-avatar" aria-hidden="true"><img src="assets/images/speakers/zen.png" alt="Zen Chow"></div>
+        <div>
+          <div class="wd-speaker-name">Zen Chow</div>
+          <div class="wd-speaker-role">YYC Executive Director &amp; Country Tax Leader</div>
+        </div>
+      </div>
+
+      <!-- AI Summary -->
+      <div class="wd-ai-summary collapsed" id="wd-ai-summary">
+        <div class="wd-ai-header" onclick="toggleAiSummary()">
+          <span class="wd-ai-label">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9.5 2L10.7 6.3L15 7.5L10.7 8.7L9.5 13L8.3 8.7L4 7.5L8.3 6.3L9.5 2Z" fill="url(#ai-grad)"/><path d="M18 10L18.8 13.2L22 14L18.8 14.8L18 18L17.2 14.8L14 14L17.2 13.2L18 10Z" fill="url(#ai-grad)"/><path d="M10 15L10.5 17.5L13 18L10.5 18.5L10 21L9.5 18.5L7 18L9.5 17.5L10 15Z" fill="url(#ai-grad)"/><defs><linearGradient id="ai-grad" x1="4" y1="2" x2="22" y2="21" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#41C8F7"/><stop offset="100%" stop-color="#6774F8"/></linearGradient></defs></svg>
+            AI Summary
+          </span>
+          <svg class="wd-ai-chevron" viewBox="0 0 24 24" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+        </div>
+        <div class="wd-ai-preview">This course examines how Malaysia's e-Invoicing mandate applies to the healthcare sector. It addresses the unique billing complexities involving hospitals, insurance companies, patients, and third-party consultants, and how each transaction type must be handled to achieve full compliance.</div>
+        <div class="wd-ai-body hidden" id="wd-ai-body">
+          <p class="wd-ai-course-title">e-Invoicing — Industry Focus: Healthcare</p>
+
+          <!-- Overview -->
+          <div class="wd-ai-section">
+            <div class="wd-ai-section-head">
+              <h3>Overview</h3>
+              <span class="wd-ai-time"><svg viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>00:00 – 04:00</span>
+            </div>
+            <p class="wd-ai-text">This course examines how Malaysia's e-Invoicing mandate applies to the healthcare sector. It addresses the unique billing complexities involving hospitals, insurance companies, patients, and third-party consultants, and how each transaction type must be handled to achieve full compliance.</p>
+          </div>
+
+          <hr class="wd-ai-divider">
+
+          <!-- Key Concepts -->
+          <div class="wd-ai-section">
+            <div class="wd-ai-section-head"><h3>Key Concepts</h3></div>
+
+            <div class="wd-ai-concept">
+              <div class="wd-ai-concept-head">
+                <strong>Healthcare Provider &amp; Insurance Transactions</strong>
+                <span class="wd-ai-time"><svg viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>04:00 – 07:00</span>
+              </div>
+              <p class="wd-ai-text">When payment flows from insurer to provider, the e-Invoice must reflect the actual payer rather than the patient. Correctly identifying the "buyer" in each billing scenario is fundamental to compliance when dual billing is involved.</p>
+            </div>
+
+            <div class="wd-ai-concept">
+              <div class="wd-ai-concept-head">
+                <strong>Refundable &amp; Non-Refundable Deposits</strong>
+                <span class="wd-ai-time"><svg viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>07:00 – 10:00</span>
+              </div>
+              <p class="wd-ai-text">Refundable deposits are not subject to e-Invoicing at collection — only upon forfeiture or conversion. Non-refundable deposits require an e-Invoice at the point of collection. Correct classification prevents compliance gaps.</p>
+            </div>
+
+            <div class="wd-ai-concept">
+              <div class="wd-ai-concept-head">
+                <strong>Third-Party Consultants &amp; Space Rentals</strong>
+                <span class="wd-ai-time"><svg viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>10:00 – 16:00</span>
+              </div>
+              <p class="wd-ai-text">Hospitals engaging external specialists must issue separate e-Invoices for consultant services. Space rental arrangements within hospital premises and staff medical expense reimbursements each carry distinct e-Invoicing obligations that must be documented accurately.</p>
+            </div>
+          </div>
+
+          <hr class="wd-ai-divider">
+
+          <!-- Conclusion -->
+          <div class="wd-ai-section">
+            <div class="wd-ai-section-head">
+              <h3>Conclusion</h3>
+              <span class="wd-ai-time"><svg viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>16:00 – 19:00</span>
+            </div>
+            <p class="wd-ai-text">Proper e-Invoicing implementation in healthcare requires understanding each transaction type and its corresponding obligations. Consistent classification and documentation are essential for meeting LHDN requirements while preserving operational efficiency across all billing scenarios.</p>
+          </div>
+
+          <p class="wd-ai-disclaimer">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            This summary is generated automatically and may not be fully accurate. For the most accurate information, please refer to the official training material.
+          </p>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="wd-tabs" role="tablist">
+        <button class="wd-tab active" role="tab" aria-selected="true" aria-controls="tab-about" onclick="switchTab('about')"><span>About This Course</span><span class="wd-tab-indicator"></span></button>
+        <button class="wd-tab" role="tab" aria-selected="false" aria-controls="tab-materials" onclick="switchTab('materials')"><span>Download Materials</span><span class="wd-tab-indicator"></span></button>
+      </div>
+
+      <!-- Tab: About -->
+      <div class="wd-tab-pane active" id="tab-about" role="tabpanel">
+        <h2 class="wd-section-title">Description</h2>
+        <p class="wd-desc-text">
+          This course provides an in-depth understanding of the implementation of e-invoicing in Malaysia's healthcare industry. It covers key billing scenarios such as dual billing for insurance companies and patients, handling of proforma bills for insurance claims, invoicing for consultant services, and managing service contracts between hospitals and doctors.
+        </p>
+        <p class="wd-desc-text">
+          The course also explores the requirements for issuing e-invoices for non-refundable admission deposits, staff medical expenses, and space rentals within hospital premises. By the end of this course, you will understand how e-invoicing impacts billing processes in healthcare.
+        </p>
+
+        <hr class="wd-divider">
+
+        <h2 class="wd-section-title">Topics Covered</h2>
+        <ul class="wd-learn-list">
+          <li>
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Overview of Healthcare Industry
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            e-Invoicing for Transactions between Healthcare Providers and Insurance Companies
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            e-Invoicing Treatment for Refundable &amp; Non-Refundable Deposit
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            e-Invoicing Treatment for Healthcare Services and Third-Party Consultants
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Other e-Invoicing Treatments in Healthcare Industry
+          </li>
+        </ul>
+      </div>
+
+      <!-- Tab: Materials -->
+      <div class="wd-tab-pane" id="tab-materials" role="tabpanel">
+        <p style="font-size:13px;color:var(--grey-600);margin:0 0 16px;">Chapter 1 &nbsp;·&nbsp; <strong style="color:var(--grey-700);">e-Invoicing - Industry Focus: Healthcare</strong></p>
+        <div class="wd-material-list">
+          <div class="wd-material-item">
+            <div class="wd-material-icon">
+              <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            </div>
+            <div class="wd-material-info">
+              <span class="wd-material-name">Overview of Healthcare Industry</span>
+            </div>
+            <a href="#" class="wd-dl-btn">
+              <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Download
+            </a>
+          </div>
+          <div class="wd-material-item">
+            <div class="wd-material-icon">
+              <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            </div>
+            <div class="wd-material-info">
+              <span class="wd-material-name">e-Invoicing for Transactions between Healthcare Providers and Insurance Companies</span>
+            </div>
+            <a href="#" class="wd-dl-btn">
+              <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Download
+            </a>
+          </div>
+          <div class="wd-material-item">
+            <div class="wd-material-icon">
+              <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            </div>
+            <div class="wd-material-info">
+              <span class="wd-material-name">e-Invoicing Treatment for Refundable &amp; Non-Refundable Deposit</span>
+            </div>
+            <a href="#" class="wd-dl-btn">
+              <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Download
+            </a>
+          </div>
+          <div class="wd-material-item">
+            <div class="wd-material-icon">
+              <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            </div>
+            <div class="wd-material-info">
+              <span class="wd-material-name">e-Invoicing Treatment for Healthcare Services and Third-Party Consultants</span>
+            </div>
+            <a href="#" class="wd-dl-btn">
+              <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Download
+            </a>
+          </div>
+          <div class="wd-material-item">
+            <div class="wd-material-icon">
+              <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            </div>
+            <div class="wd-material-info">
+              <span class="wd-material-name">Other e-Invoicing Treatments in Healthcare Industry</span>
+            </div>
+            <a href="#" class="wd-dl-btn">
+              <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Download
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /.wd-main -->
+
+    <!-- SIDEBAR -->
+    <div class="wd-sidebar">
+      <div class="wd-info-card">
+
+        <!-- Progress -->
+        <div class="wd-progress-card">
+          <p class="wd-progress-title">Your Progress</p>
+          <div class="wd-progress-bar-wrap">
+            <div class="wd-progress-bar-fill" style="width:3%"></div>
+          </div>
+          <div class="wd-progress-pct">3%</div>
+          <p class="wd-progress-note">The system may take up to 2 minutes to update your video and course progress after finished viewing.</p>
+        </div>
+
+        <!-- Chapter accordion -->
+        <div class="wd-chapter-card open" id="wd-chapter-1">
+          <div class="wd-chapter-header" onclick="toggleChapter('wd-chapter-1')">
+            <svg class="wd-chapter-chevron" viewBox="0 0 24 24" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+            <div class="wd-chapter-label">
+              <div class="wd-chapter-meta">Chapter 1 · 19 mins</div>
+              <div class="wd-chapter-name">e-Invoicing - Industry Focus: Healthcare</div>
+            </div>
+            <span class="wd-chapter-count">0/5</span>
+          </div>
+          <div class="wd-chapter-lessons">
+            <div class="wd-lesson-item playing">
+              <div class="wd-lesson-check"><svg viewBox="0 0 24 24" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+              <div class="wd-lesson-info">
+                <div class="wd-lesson-title">Overview of Healthcare Industry</div>
+                <div class="wd-lesson-dur">4 mins</div>
+              </div>
+              <div class="wd-lesson-action">
+                <div class="wd-lesson-play">
+                  <svg viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+                </div>
+                <span class="wd-lesson-timer">3:18</span>
+              </div>
+            </div>
+            <div class="wd-lesson-item">
+              <div class="wd-lesson-check"><svg viewBox="0 0 24 24" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+              <div class="wd-lesson-info">
+                <div class="wd-lesson-title">e-Invoicing for Transactions between Healthcare Providers and Insurance Companies</div>
+                <div class="wd-lesson-dur">3 mins</div>
+              </div>
+              <div class="wd-lesson-play">
+                <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              </div>
+            </div>
+            <div class="wd-lesson-item">
+              <div class="wd-lesson-check"><svg viewBox="0 0 24 24" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+              <div class="wd-lesson-info">
+                <div class="wd-lesson-title">e-Invoicing Treatment for Refundable &amp; Non-Refundable Deposit</div>
+                <div class="wd-lesson-dur">3 mins</div>
+              </div>
+              <div class="wd-lesson-play">
+                <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              </div>
+            </div>
+            <div class="wd-lesson-item">
+              <div class="wd-lesson-check"><svg viewBox="0 0 24 24" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+              <div class="wd-lesson-info">
+                <div class="wd-lesson-title">e-Invoicing Treatment for Healthcare Services and Third-Party Consultants</div>
+                <div class="wd-lesson-dur">6 mins</div>
+              </div>
+              <div class="wd-lesson-play">
+                <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              </div>
+            </div>
+            <div class="wd-lesson-item">
+              <div class="wd-lesson-check"><svg viewBox="0 0 24 24" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+              <div class="wd-lesson-info">
+                <div class="wd-lesson-title">Other e-Invoicing Treatments in Healthcare Industry</div>
+                <div class="wd-lesson-dur">3 mins</div>
+              </div>
+              <div class="wd-lesson-play">
+                <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div><!-- /.wd-sidebar -->
+
+  </div><!-- /.wd-layout -->
+</div><!-- /.wd-page -->
+
+<footer class="site-footer">
+  <div class="site-footer-body">
+    <div class="site-footer-left">
+      <img src="assets/images/logo-white.png" alt="YYC taxPOD" class="site-footer-logo">
+      <div>
+        <h5 class="site-footer-contact-title">Contact Us</h5>
+        <p class="site-footer-contact-desc">Have questions? We're here to help you with your tax learning journey.</p>
+      </div>
+      <div class="site-footer-contacts">
+        <a href="mailto:support@taxpod.my" class="site-footer-contact-item">
+          <img src="assets/images/icon-email.png" alt="Email" class="site-footer-contact-icon">
+          support@taxpod.my
+        </a>
+        <div class="site-footer-phones">
+          <a href="#" class="site-footer-contact-item">
+            <img src="assets/images/icon-whatsapp.png" alt="WhatsApp" class="site-footer-contact-icon">
+            016-507 7309
+          </a>
+          <span class="site-footer-divider"></span>
+          <a href="#" class="site-footer-contact-item">
+            <img src="assets/images/icon-whatsapp.png" alt="WhatsApp" class="site-footer-contact-icon">
+            016-624 7309
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="site-footer-right">
+      <h5 class="site-footer-app-title">Get the App</h5>
+      <div class="site-footer-apps">
+        <a href="#"><img src="assets/images/footer-applestore.png" alt="App Store" class="site-footer-app-badge"></a>
+        <a href="#"><img src="assets/images/footer-googleplay.png" alt="Google Play" class="site-footer-app-badge"></a>
+        <a href="#"><img src="assets/images/footer-huawei.png" alt="Huawei AppGallery" class="site-footer-app-badge"></a>
+      </div>
+    </div>
+  </div>
+  <div class="site-footer-bar">
+    <span class="site-footer-copy">&copy; 2026 YYC taxPOD. All rights reserved.</span>
+    <div class="site-footer-links">
+      <a href="#" class="site-footer-link">Privacy Policy</a>
+      <span class="site-footer-link-sep">|</span>
+      <a href="#" class="site-footer-link">Terms of Use</a>
+      <span class="site-footer-link-sep">|</span>
+      <a href="#" class="site-footer-link">Refund Policy</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ── Mobile Menu ──
+function mobMenuOpen() {
+  document.getElementById('mob-menu').classList.add('is-open');
+  document.getElementById('mob-menu-backdrop').classList.add('is-open');
+  document.body.style.overflow = 'hidden';
+  // Sync logo theme
+  var dark = document.documentElement.getAttribute('data-theme') === 'dark';
+  var menu = document.getElementById('mob-menu');
+  menu.querySelector('.logo-light').style.display = dark ? 'none' : 'block';
+  menu.querySelector('.logo-dark').style.display = dark ? 'block' : 'none';
+}
+function mobMenuClose() {
+  document.getElementById('mob-menu').classList.remove('is-open');
+  document.getElementById('mob-menu-backdrop').classList.remove('is-open');
+  document.body.style.overflow = '';
+}
+function mobNavToggle(btn) {
+  btn.closest('.mob-nav-item').classList.toggle('is-open');
+}
+// Close on Escape key
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') mobMenuClose();
+});
+</script>
+
+
+<script>
+function switchTab(tabId) {
+  document.querySelectorAll('.wd-tab').forEach(function(btn) {
+    btn.classList.remove('active');
+    btn.setAttribute('aria-selected', 'false');
+  });
+  document.querySelectorAll('.wd-tab-pane').forEach(function(pane) {
+    pane.classList.remove('active');
+  });
+  document.querySelector('[aria-controls="tab-' + tabId + '"]').classList.add('active');
+  document.querySelector('[aria-controls="tab-' + tabId + '"]').setAttribute('aria-selected', 'true');
+  document.getElementById('tab-' + tabId).classList.add('active');
+}
+
+function toggleChapter(id) {
+  document.getElementById(id).classList.toggle('open');
+}
+
+function toggleAiSummary() {
+  var panel = document.getElementById('wd-ai-summary');
+  var body  = document.getElementById('wd-ai-body');
+  panel.classList.toggle('collapsed');
+  body.classList.toggle('hidden');
+}
+
+function playVideo() {
+  var v = document.getElementById('wd-video');
+  var o = document.getElementById('wd-play-overlay');
+  if (v) { v.play(); }
+  if (o) { o.style.display = 'none'; }
+}
+
+(function() {
+  var v = document.getElementById('wd-video');
+  if (!v) return;
+  v.addEventListener('ended', function() {
+    var playingItem = document.querySelector('.wd-lesson-item.playing');
+    if (playingItem) {
+      var check = playingItem.querySelector('.wd-lesson-check');
+      if (check) check.classList.add('done');
+    }
+  });
+})();
+</script>
+
+</body>
+</html>

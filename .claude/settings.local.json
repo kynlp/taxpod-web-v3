@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__Claude_Preview__preview_start",
+      "Bash(dir \"C:\\\\Users\\\\LohLynPei\\\\OneDrive - YYC Holdings Sdn Bhd\\\\Desktop\\\\claude\\\\projects\\\\taxpod-web\\\\assets\\\\images\" /b)",
+      "Bash(powershell.exe -Command \":*)",
+      "WebFetch(domain:yyc.taxpod.my)",
+      "Bash(python3 -c \":*)",
+      "Bash(python3:*)",
+      "Bash(ls -la \"/c/Users/LohLynPei/OneDrive - YYC Holdings Sdn Bhd/Desktop/claude/projects/taxpod-web/templates/\"css-*.css)",
+      "Bash(node build.js)",
+      "Bash(node -e \":*)"
+    ]
+  }
+}

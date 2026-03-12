@@ -1,0 +1,25 @@
+<script>
+// ── Mobile Menu ──
+function mobMenuOpen() {
+  document.getElementById('mob-menu').classList.add('is-open');
+  document.getElementById('mob-menu-backdrop').classList.add('is-open');
+  document.body.style.overflow = 'hidden';
+  // Sync logo theme
+  var dark = document.documentElement.getAttribute('data-theme') === 'dark';
+  var menu = document.getElementById('mob-menu');
+  menu.querySelector('.logo-light').style.display = dark ? 'none' : 'block';
+  menu.querySelector('.logo-dark').style.display = dark ? 'block' : 'none';
+}
+function mobMenuClose() {
+  document.getElementById('mob-menu').classList.remove('is-open');
+  document.getElementById('mob-menu-backdrop').classList.remove('is-open');
+  document.body.style.overflow = '';
+}
+function mobNavToggle(btn) {
+  btn.closest('.mob-nav-item').classList.toggle('is-open');
+}
+// Close on Escape key
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') mobMenuClose();
+});
+</script>
