@@ -22,7 +22,9 @@ html.theme-transition * {
   transition: background-color 0.35s ease, color 0.35s ease, border-color 0.35s ease !important;
 }
 
-body { background: var(--web-bg-light-blue); }
+body { background: var(--web-bg-light-blue); display: flex; flex-direction: column; min-height: 100vh; }
+.clips-player-wrap { flex: 1; }
+.site-footer { margin-top: auto; }
 
 /* ── Page title ── */
 .clips-page-title {
