@@ -817,6 +817,7 @@ section:has(#c-top10) .tc-carousel-wrap { overflow: visible; }
   z-index: 1;
   border-radius: 14px 14px 0 0;
 }
+#c-top10 .tc-card { border-radius: 14px; overflow: visible; }
 #c-top10 .tc-bar {
   position: relative;
   z-index: 1;
@@ -828,7 +829,8 @@ section:has(#c-top10) .tc-carousel-wrap { overflow: visible; }
 }
 #c-top10 .tc-number { display: none; }
 #c-top10 .tc-card--event { width: 290px; }
-#c-top10 .tc-card--event .tc-thumb { height: 170px; }
+#c-top10 .tc-card--event .tc-thumb { height: 170px; overflow: hidden; }
+#c-top10 .tc-card--event .tc-thumb img { border-radius: 14px 14px 0 0; }
 
 /* ============================================================
    SECTION 9 — Upcoming Update Classes (Tabs)
@@ -1104,6 +1106,8 @@ section:has(#c-top10) .tc-carousel-wrap { overflow: visible; }
 
   /* ── Mobile nav arrows ── */
   div.mob-nav { display: flex; margin-left: auto; }
+  /* Push carousel nav arrows to far right in all sections */
+  .section-row-header .mob-nav { flex: 0; margin-left: auto; }
   .mob-br { display: inline; }
   .section-row-header--inline { flex-wrap: nowrap; align-items: center; gap: 10px; }
   .section-heading { font-size: 20px; }
@@ -1443,10 +1447,109 @@ section:has(#c-top10) .tc-carousel-wrap { overflow: visible; }
 .btn-resume:hover { background: var(--primary-600); }
 .btn-resume:active { background: var(--primary-700); }
 /* CTA button — extends .btn-resume with full width; hidden on desktop */
-.cp-cta { width: 100%; justify-content: center; display: none; }
+.cp-cta { width: 100%; justify-content: center; display: none !important; }
+/* Continue Watching desktop popover — progress bar at bottom */
+#popover-cw-1 .cp-body, #popover-cw-2 .cp-body, #popover-cw-3 .cp-body { display: flex; flex-direction: column; }
+#popover-cw-1 .cp-progress-row, #popover-cw-2 .cp-progress-row, #popover-cw-3 .cp-progress-row { order: 10; margin-top: 12px; margin-bottom: 0; }
 
 .btn-resume svg, .cp-cta svg { width: 14px; height: 14px; fill: currentColor; flex-shrink: 0; }
 
+
+/* ── Clips section ── */
+.clips-heading-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-10);
+}
+.clips-icon {
+  width: 32px;
+  height: 24px;
+  background: var(--primary-500);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.clips-icon svg {
+  width: 12px;
+  height: 12px;
+  fill: #fff;
+}
+.clips-view-all {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--primary-500);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.clips-view-all:hover { text-decoration: underline; }
+
+/* Portrait clip card */
+.clip-row-card {
+  flex-shrink: 0;
+  width: 175px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  display: block;
+  text-decoration: none;
+  background: #000;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.clip-row-card:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(0,0,0,0.18); }
+.clip-row-thumb {
+  display: block;
+  width: 100%;
+  aspect-ratio: 9/16;
+  object-fit: cover;
+  opacity: 0.92;
+  transition: opacity 0.2s;
+}
+.clip-row-card:hover .clip-row-thumb { opacity: 0.8; }
+.clip-row-overlay {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 36px var(--space-10) var(--space-10);
+  background: linear-gradient(to top, rgba(0,0,0,0.82) 0%, transparent 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.clip-row-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #fff;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin: 0;
+}
+.clip-row-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.clip-row-watch {
+  font-size: 11px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.85);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.clip-row-watch svg { width: 10px; height: 10px; fill: rgba(255,255,255,0.85); }
+.clip-row-dur {
+  font-size: 10px;
+  font-weight: 600;
+  color: #fff;
+  background: rgba(0,0,0,0.55);
+  padding: 2px 5px;
+  border-radius: 3px;
+}
 
 /* ── Backdrop: hidden by default, activated on mobile/tablet via JS class ── */
 .cp-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9998; opacity: 0; pointer-events: none; transition: opacity 0.22s ease; }
@@ -1501,9 +1604,6 @@ section:has(#c-top10) .tc-carousel-wrap { overflow: visible; }
   .cp-body { overflow-y: auto; -webkit-overflow-scrolling: touch; flex: 1; min-height: 0; }
   .cp-close { display: flex; }
   .cp-video-bar { display: none; }
-}
-@media (min-width: 1241px) {
-  .cp-cta { display: flex !important; }
 }
 
 </style>
@@ -1874,9 +1974,216 @@ section:has(#c-top10) .tc-carousel-wrap { overflow: visible; }
 </section>
 
 <!-- ============================================================
-     SECTION 6 — Top 10 Courses
+     SECTION 5b — Continue Watching
      ============================================================ -->
 <section class="section-row" style="background:var(--web-bg-light-blue);">
+  <div class="container">
+    <div class="section-row-header">
+      <h2 class="section-heading">Continue Watching</h2>
+    </div>
+    <div class="tc-carousel-wrap" style="--carousel-bg: var(--web-bg-light-blue)">
+      <div class="card-scroll" id="c-continue">
+
+        <!-- Card 1 -->
+        <div class="tc-card tc-card--event tc-card--watched" id="card-cw-1">
+          <div class="tc-thumb">
+            <img src="assets/images/course-images/2.png" alt="Course">
+            <span class="tc-thumb-badge tc-thumb-badge--course">Course</span>
+            <div class="tc-play-overlay"><div class="tc-play-center"><div class="tc-play"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><span class="tc-resume-label">Resume Playing</span></div></div>
+            <button class="tc-heart" onclick="toggleHeart(this)" aria-label="Add to wishlist"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+            <div class="tc-seekbar"><div class="tc-seekbar-fill" style="width:35%"></div></div>
+          </div>
+          <div class="tc-bar">
+            <span class="badge badge-sm badge-pill badge-bonus-outline tc-tag">E-Invoicing</span>
+            <div class="tc-bar-right"><span class="tc-dur"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>1 hr 15 min</span></div>
+          </div>
+          <div class="course-popover" id="popover-cw-1">
+            <div class="cp-video"><img src="assets/images/course-images/2.png" alt=""><button class="cp-close" aria-label="Close" onclick="document.getElementById('popover-cw-1').classList.remove('popover-open')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+            <div class="cp-body">
+              <div class="cp-meta"><span class="badge badge-sm badge-pill badge-bonus-outline">E-Invoicing</span><span class="cp-date">12 Feb 2025</span></div>
+              <h3 class="cp-title">e-Invoicing Implementation Guide for SMEs</h3>
+              <div class="cp-stats"><span class="cp-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>1 hr 15 min</span><span class="cp-stat"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>2 Modules</span></div>
+              <div class="cp-progress-row"><div class="cp-progress-track"><div class="cp-progress-fill" style="width:35%"></div></div><span class="cp-progress-pct">35%</span></div>
+              <div class="cp-divider"></div>
+              <p class="cp-learn-label">What you will learn</p>
+              <ul class="cp-outcomes"><li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Step-by-step e-Invoice submission</li><li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>MyInvois portal walkthrough</li><li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Common SME compliance pitfalls</li></ul>
+              <button class="btn-resume cp-cta" onclick="window.location.href='#'"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Resume Playing</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="tc-card tc-card--event tc-card--watched" id="card-cw-2">
+          <div class="tc-thumb">
+            <img src="assets/images/course-images/5.png" alt="Course">
+            <span class="tc-thumb-badge tc-thumb-badge--webinar">Webinar</span>
+            <div class="tc-play-overlay"><div class="tc-play-center"><div class="tc-play"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><span class="tc-resume-label">Resume Playing</span></div></div>
+            <button class="tc-heart" onclick="toggleHeart(this)" aria-label="Add to wishlist"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+            <div class="tc-seekbar"><div class="tc-seekbar-fill" style="width:62%"></div></div>
+          </div>
+          <div class="tc-bar">
+            <span class="badge badge-sm badge-pill badge-bonus-outline tc-tag">Webinar</span>
+            <div class="tc-bar-right"><span class="tc-dur"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>54 min</span></div>
+          </div>
+          <div class="course-popover" id="popover-cw-2">
+            <div class="cp-video"><img src="assets/images/course-images/5.png" alt=""><button class="cp-close" aria-label="Close" onclick="document.getElementById('popover-cw-2').classList.remove('popover-open')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+            <div class="cp-body">
+              <div class="cp-meta"><span class="badge badge-sm badge-pill badge-bonus-outline">Webinar</span><span class="cp-date">8 May 2025</span></div>
+              <h3 class="cp-title">Tax Updates Webinar 2025</h3>
+              <div class="cp-stats"><span class="cp-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>54 min | CPE</span><span class="cp-stat"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>1 Module</span></div>
+              <div class="cp-progress-row"><div class="cp-progress-track"><div class="cp-progress-fill" style="width:62%"></div></div><span class="cp-progress-pct">62%</span></div>
+              <div class="cp-divider"></div>
+              <p class="cp-learn-label">What you will learn</p>
+              <ul class="cp-outcomes"><li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Latest tax law amendments</li><li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Budget 2025 corporate tax impact</li><li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Key compliance deadlines</li></ul>
+              <button class="btn-resume cp-cta" onclick="window.location.href='#'"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Resume Playing</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="tc-card tc-card--event tc-card--watched" id="card-cw-3">
+          <div class="tc-thumb">
+            <img src="assets/images/course-images/8.png" alt="Course">
+            <span class="tc-thumb-badge tc-thumb-badge--course">Course</span>
+            <div class="tc-play-overlay"><div class="tc-play-center"><div class="tc-play"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><span class="tc-resume-label">Resume Playing</span></div></div>
+            <button class="tc-heart" onclick="toggleHeart(this)" aria-label="Add to wishlist"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+            <div class="tc-seekbar"><div class="tc-seekbar-fill" style="width:20%"></div></div>
+          </div>
+          <div class="tc-bar">
+            <span class="badge badge-sm badge-pill badge-bonus-outline tc-tag">Income Tax</span>
+            <div class="tc-bar-right"><span class="tc-dur"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>2 hr 10 min</span></div>
+          </div>
+          <div class="course-popover" id="popover-cw-3">
+            <div class="cp-video"><img src="assets/images/course-images/8.png" alt=""><button class="cp-close" aria-label="Close" onclick="document.getElementById('popover-cw-3').classList.remove('popover-open')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+            <div class="cp-body">
+              <div class="cp-meta"><span class="badge badge-sm badge-pill badge-bonus-outline">Income Tax</span><span class="cp-date">3 Mar 2025</span></div>
+              <h3 class="cp-title">Personal Tax Filing Masterclass YA 2024</h3>
+              <div class="cp-stats"><span class="cp-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>2 hr 10 min</span><span class="cp-stat"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>3 Modules</span></div>
+              <div class="cp-progress-row"><div class="cp-progress-track"><div class="cp-progress-fill" style="width:20%"></div></div><span class="cp-progress-pct">20%</span></div>
+              <div class="cp-divider"></div>
+              <p class="cp-learn-label">What you will learn</p>
+              <ul class="cp-outcomes"><li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Claim all eligible tax reliefs</li><li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>e-Filing step-by-step walkthrough</li><li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Common mistakes to avoid</li></ul>
+              <button class="btn-resume cp-cta" onclick="window.location.href='#'"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Resume Playing</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 5c — Clips
+     ============================================================ -->
+<section id="clips-section" class="section-row" style="background:var(--web-bg-light-white);">
+  <div class="container">
+    <div class="section-row-header">
+      <div class="clips-heading-row">
+        <span class="clips-icon"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></span>
+        <h2 class="section-heading">Clips</h2>
+        <a href="clips.html" class="clips-view-all">View All &rsaquo;</a>
+      </div>
+      <div class="mob-nav" data-carousel-id="c-clips">
+        <button class="tc-carousel-btn" onclick="tcCarouselScroll('c-clips',-1)" aria-label="Previous"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
+        <button class="tc-carousel-btn" onclick="tcCarouselScroll('c-clips',1)" aria-label="Next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+      </div>
+    </div>
+    <div class="tc-carousel-wrap" style="--carousel-bg: var(--web-bg-light-white)">
+      <div class="card-scroll" id="c-clips">
+
+        <a href="clips.html" class="clip-row-card">
+          <video class="clip-row-thumb" src="assets/videos/When should I start implementing e-Invoicing system into my business_ %23taxunder60seconds.mp4" muted playsinline preload="metadata"></video>
+          <div class="clip-row-overlay">
+            <p class="clip-row-title">When should I start implementing e-Invoicing system?</p>
+            <div class="clip-row-footer">
+              <span class="clip-row-watch"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Watch Now</span>
+              <span class="clip-row-dur">01:00</span>
+            </div>
+          </div>
+        </a>
+
+        <a href="clips.html" class="clip-row-card">
+          <video class="clip-row-thumb" src="assets/videos/Upkeep and Renovation tax deductible.mp4" muted playsinline preload="metadata"></video>
+          <div class="clip-row-overlay">
+            <p class="clip-row-title">Upkeep and Renovation — tax deductible?</p>
+            <div class="clip-row-footer">
+              <span class="clip-row-watch"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Watch Now</span>
+              <span class="clip-row-dur">00:54</span>
+            </div>
+          </div>
+        </a>
+
+        <a href="clips.html" class="clip-row-card">
+          <video class="clip-row-thumb" src="assets/videos/Form EA or Form CP 58, you can't tell the difference.mp4" muted playsinline preload="metadata"></video>
+          <div class="clip-row-overlay">
+            <p class="clip-row-title">Form EA or Form CP 58 — can you tell the difference?</p>
+            <div class="clip-row-footer">
+              <span class="clip-row-watch"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Watch Now</span>
+              <span class="clip-row-dur">01:00</span>
+            </div>
+          </div>
+        </a>
+
+        <a href="clips.html" class="clip-row-card">
+          <video class="clip-row-thumb" src="assets/videos/What are the positive impacts of e-Invoice_ %23taxunder60seconds.mp4" muted playsinline preload="metadata"></video>
+          <div class="clip-row-overlay">
+            <p class="clip-row-title">What are the positive impacts of e-Invoice?</p>
+            <div class="clip-row-footer">
+              <span class="clip-row-watch"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Watch Now</span>
+              <span class="clip-row-dur">00:51</span>
+            </div>
+          </div>
+        </a>
+
+        <a href="clips.html" class="clip-row-card">
+          <video class="clip-row-thumb" src="assets/videos/Document you must not miss after giving commission and incentives.mp4" muted playsinline preload="metadata"></video>
+          <div class="clip-row-overlay">
+            <p class="clip-row-title">Document you must not miss after giving commission and incentives</p>
+            <div class="clip-row-footer">
+              <span class="clip-row-watch"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Watch Now</span>
+              <span class="clip-row-dur">01:15</span>
+            </div>
+          </div>
+        </a>
+
+        <a href="clips.html" class="clip-row-card">
+          <video class="clip-row-thumb" src="assets/videos/Are You Exempted From Paying Taxes For Foreign-Sourced Income.mp4" muted playsinline preload="metadata"></video>
+          <div class="clip-row-overlay">
+            <p class="clip-row-title">Are you exempted from paying taxes for foreign-sourced income?</p>
+            <div class="clip-row-footer">
+              <span class="clip-row-watch"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Watch Now</span>
+              <span class="clip-row-dur">00:58</span>
+            </div>
+          </div>
+        </a>
+
+        <a href="clips.html" class="clip-row-card">
+          <video class="clip-row-thumb" src="assets/videos/Alert!! Can donation via e-wallet eligible for tax deduction_.mp4" muted playsinline preload="metadata"></video>
+          <div class="clip-row-overlay">
+            <p class="clip-row-title">Can donation via e-wallet be eligible for tax deduction?</p>
+            <div class="clip-row-footer">
+              <span class="clip-row-watch"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Watch Now</span>
+              <span class="clip-row-dur">01:05</span>
+            </div>
+          </div>
+        </a>
+
+      </div>
+      <div class="tc-carousel-fade tc-carousel-fade--left tc-fade-hidden" id="fade-l-c-clips">
+        <button class="tc-carousel-btn" onclick="tcCarouselScroll('c-clips',-1)" aria-label="Previous"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
+      </div>
+      <div class="tc-carousel-fade tc-carousel-fade--right" id="fade-r-c-clips">
+        <button class="tc-carousel-btn" onclick="tcCarouselScroll('c-clips',1)" aria-label="Next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 6 — Top 10 Courses
+     ============================================================ -->
+<section class="section-row" style="background:var(--web-bg-light-white);">
   <div class="container">
     <div class="section-row-header">
       <h2 class="section-heading">Top 10 Courses</h2>
@@ -1885,7 +2192,7 @@ section:has(#c-top10) .tc-carousel-wrap { overflow: visible; }
         <button class="tc-carousel-btn" onclick="tcCarouselScroll('c-top10',1)" aria-label="Next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
       </div>
     </div>
-    <div class="tc-carousel-wrap" style="--carousel-bg: var(--web-bg-light-blue)">
+    <div class="tc-carousel-wrap" style="--carousel-bg: var(--web-bg-light-white)">
       <div class="card-scroll" id="c-top10">
       <!-- Card 1 -->
       <div class="tc-card tc-card--event" id="card-t-c1">
@@ -2171,7 +2478,7 @@ section:has(#c-top10) .tc-carousel-wrap { overflow: visible; }
 <!-- ============================================================
      SECTION 7 — Latest Courses
      ============================================================ -->
-<section class="section-row" style="background:var(--web-bg-light-white);">
+<section class="section-row" style="background:var(--web-bg-light-blue);">
   <div class="container">
     <div class="section-row-header section-row-header--inline">
       <h2 class="section-heading">Latest Courses</h2>
@@ -2181,7 +2488,7 @@ section:has(#c-top10) .tc-carousel-wrap { overflow: visible; }
         <button class="tc-carousel-btn" onclick="tcCarouselScroll('c-latest',1)" aria-label="Next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
       </div>
     </div>
-    <div class="tc-carousel-wrap" style="--carousel-bg: var(--web-bg-light-white)">
+    <div class="tc-carousel-wrap" style="--carousel-bg: var(--web-bg-light-blue)">
       <div class="card-scroll" id="c-latest">
       <div class="tc-card tc-card--event" id="card-l-c1">
         <div class="tc-thumb">
@@ -2378,7 +2685,7 @@ section:has(#c-top10) .tc-carousel-wrap { overflow: visible; }
 <!-- ============================================================
      SECTION 8 — Popular Series
      ============================================================ -->
-<section class="section-row" style="background:var(--web-bg-light-blue);">
+<section class="section-row" style="background:var(--web-bg-light-white);">
   <div class="container">
     <div class="section-row-header section-row-header--inline">
       <h2 class="section-heading">Popular Series</h2>
@@ -2388,7 +2695,7 @@ section:has(#c-top10) .tc-carousel-wrap { overflow: visible; }
         <button class="tc-carousel-btn" onclick="tcCarouselScroll('c-popular',1)" aria-label="Next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
       </div>
     </div>
-    <div class="tc-carousel-wrap" style="--carousel-bg: var(--web-bg-light-blue)">
+    <div class="tc-carousel-wrap" style="--carousel-bg: var(--web-bg-light-white)">
       <div class="card-scroll" id="c-popular">
       <!-- Series Card 1 -->
       <div class="tc-series-card">
@@ -3436,6 +3743,8 @@ function toggleHeart(btn) {
     if (closeBtn) closeBtn.addEventListener('click', function(e) { e.stopPropagation(); hideActivePopover(); });
   }
 
+  // Continue Watching (3)
+  initPopover('card-cw-1','popover-cw-1'); initPopover('card-cw-2','popover-cw-2'); initPopover('card-cw-3','popover-cw-3');
   // Recommended (7)
   initPopover('card-r-c1','popover-r-c1'); initPopover('card-r-c2','popover-r-c2'); initPopover('card-r-c3','popover-r-c3');
   initPopover('card-r-c4','popover-r-c4'); initPopover('card-r-c5','popover-r-c5'); initPopover('card-r-c6','popover-r-c6');

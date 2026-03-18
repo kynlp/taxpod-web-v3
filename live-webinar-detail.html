@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>e-Invoicing Phase 2 Extension: What Businesses Need to Know | YYC taxPOD</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="templates/css-variables.css">
+<link rel="stylesheet" href="templates/css-topbar.css">
+<link rel="stylesheet" href="templates/css-footer.css">
+<script>
+(function(){
+  var t=localStorage.getItem('theme')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');
+  document.documentElement.setAttribute('data-theme',t);
+})();
+</script>
+<style>
+
+/* ── Theme transition ── */
+html.theme-transition * {
+  transition: background-color 0.35s ease, color 0.35s ease, border-color 0.35s ease !important;
+}
+
+body {
+  background: var(--web-bg-light-white);
+  font-family: 'Lato', sans-serif;
+  color: var(--grey-800);
+  margin: 0;
+}
+h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif; }
+[data-theme="dark"] body { background: var(--web-bg-light-blue); }
+
+/* ── Page wrapper ── */
+.wd-page {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 24px 24px 64px;
+}
+
+/* ── Breadcrumb ── */
+.wd-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--grey-500);
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+.wd-breadcrumb a {
+  color: var(--grey-500);
+  text-decoration: none;
+}
+.wd-breadcrumb a:hover { color: var(--primary-500); }
+.wd-breadcrumb svg { width: 14px; height: 14px; stroke: var(--grey-500); fill: none; flex-shrink: 0; }
+.wd-breadcrumb span:last-child { color: var(--grey-700); font-weight: 500; }
+
+/* ── Two-column layout ── */
+.wd-layout {
+  display: flex;
+  gap: 32px;
+  align-items: flex-start;
+}
+.wd-main { flex: 1 1 0; min-width: 0; }
+.wd-sidebar { width: 320px; flex-shrink: 0; }
+
+/* ── Hero ── */
+.wd-hero {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  cursor: pointer;
+}
+.wd-hero img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: opacity 0.2s;
+}
+.wd-hero:hover img { opacity: 0.85; }
+
+/* ── Error outline badge (LIVE NOW) ── */
+.badge-error-outline { background: #FFE7EA; color: #E73A3A; border: 1px solid #E73A3A; }
+.badge-error-outline .badge-dot { background: #E73A3A; animation: live-dot-blink 1.2s ease-in-out infinite; }
+[data-theme="dark"] .badge-error-outline { background: #2A1617; color: #FF7B7B; border-color: #FF7B7B; }
+[data-theme="dark"] .badge-error-outline .badge-dot { background: #FF7B7B; }
+@keyframes live-dot-blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+
+/* ── LIVE NOW badge on hero ── */
+.wd-live-hero-badge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #D32F2F;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 100px;
+  font-family: var(--font-primary);
+  z-index: 10;
+}
+.wd-live-hero-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #fff;
+  animation: lw-pulse 1.4s infinite;
+  flex-shrink: 0;
+}
+@keyframes lw-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* ── Hero join overlay ── */
+.wd-play-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 5;
+  transition: background 0.2s;
+}
+.wd-play-overlay:hover { background: rgba(0,0,0,0.48); }
+.wd-play-overlay .tc-play-center { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.wd-play-overlay .tc-play {
+  width: 68px; height: 68px;
+  border-radius: 50%;
+  background: var(--primary-500);
+  display: flex; align-items: center; justify-content: center;
+  transition: transform 0.18s, background 0.18s;
+}
+.wd-play-overlay:hover .tc-play { transform: scale(1.1); background: var(--primary-600); }
+.wd-play-overlay .tc-play svg { width: 28px; height: 28px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.wd-play-overlay .tc-resume-label { font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 700; color: #fff; text-transform: uppercase; letter-spacing: 1.5px; }
+
+/* ── Favourite button ── */
+.wd-fav-btn {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--grey-600);
+  background: none;
+  border: 1.5px solid var(--border-light);
+  border-radius: 100px;
+  padding: 5px 14px;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+  font-family: var(--font-primary);
+}
+.wd-fav-btn:hover { border-color: var(--primary-500); color: var(--primary-500); }
+.wd-fav-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; }
+.wd-fav-btn.active svg { fill: #E73A3A; stroke: #E73A3A; }
+.wd-fav-btn.active { color: #E73A3A; border-color: #E73A3A; }
+
+/* ── Meta row ── */
+.wd-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 16px 0 12px;
+  flex-wrap: wrap;
+}
+
+/* ── Badges ── */
+.badge { display: inline-flex; align-items: center; gap: 5px; font-weight: 600; white-space: nowrap; border-radius: 4px; }
+.badge-md { font-size: 12px; padding: 4px 12px 5px; }
+.badge-neutral-subtle { background: var(--grey-200); color: var(--grey-600); }
+.badge-neutral-outline { background: transparent; color: #688AAA; border: 1px solid #688AAA; }
+[data-theme="dark"] .badge-neutral-subtle { background: #303539; color: #CFD3D9; }
+[data-theme="dark"] .badge-neutral-outline { background: transparent; color: var(--content-tag-text); border-color: var(--content-tag-border); }
+.badge svg { width: 13px; height: 13px; stroke: currentColor; fill: none; }
+.wd-badge-time { border: none; }
+
+/* ── Title ── */
+.wd-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--grey-800);
+  line-height: 1.35;
+  margin: 0 0 10px;
+}
+
+/* ── Tagline ── */
+.wd-tagline {
+  font-size: 15px;
+  color: var(--grey-700);
+  margin: 0 0 20px;
+  line-height: 1.6;
+}
+
+/* ── Divider ── */
+.wd-divider {
+  border: none;
+  border-top: 1px solid var(--border-light);
+  margin: 20px 0;
+}
+
+/* ── Speaker (inline row) ── */
+.wd-speaker {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.wd-speaker-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--primary-200);
+  color: var(--primary-700);
+  font-size: 15px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 2px solid var(--primary-300);
+  overflow: hidden;
+}
+.wd-speaker-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 20%;
+  display: block;
+}
+.wd-speaker-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--primary-500);
+}
+.wd-speaker-role {
+  font-size: 13px;
+  color: var(--grey-600);
+  margin-top: 2px;
+}
+
+/* ── Tabs ── */
+.wd-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--border-lighter);
+  margin: 28px 0 0;
+}
+.wd-tab {
+  font-family: var(--font-primary);
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--tab-underline-unselected-text, var(--grey-500));
+  padding: 8px 16px 0;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: none;
+  border: none;
+  transition: color 0.15s;
+}
+.wd-tab:first-child { padding-left: 0; }
+.wd-tab:hover { color: var(--primary-600); }
+.wd-tab.active { color: var(--tab-underline-selected-text, var(--primary-500)); font-weight: 600; }
+.wd-tab-indicator { width: 100%; height: 3px; border-radius: 2px; background: transparent; }
+.wd-tab.active .wd-tab-indicator { background: var(--tab-underline-selected-text, var(--primary-500)); }
+
+/* ── Tab pane ── */
+.wd-tab-pane { padding: 24px 0 0; display: none; }
+.wd-tab-pane.active { display: block; }
+
+/* ── Materials ── */
+.wd-material-list { display: flex; flex-direction: column; gap: 12px; }
+.wd-material-item { display: flex; align-items: center; gap: 14px; border: 1px solid var(--border-light); border-radius: 10px; padding: 14px 16px; transition: border-color 0.15s; }
+.wd-material-item:hover { border-color: var(--primary-500); }
+.wd-material-icon { width: 40px; height: 40px; border-radius: 8px; background: var(--primary-100); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+[data-theme="dark"] .wd-material-icon { background: var(--primary-200); }
+.wd-material-icon svg { width: 20px; height: 20px; stroke: var(--primary-500); fill: none; }
+.wd-material-info { flex: 1; min-width: 0; }
+.wd-material-name { font-size: 14px; font-weight: 600; color: var(--grey-800); display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.wd-dl-btn { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: var(--radius-md); border: 1.5px solid var(--primary-500); color: var(--primary-500); background: transparent; font-size: 13px; font-weight: 600; font-family: var(--font-primary); cursor: pointer; white-space: nowrap; transition: background 0.15s, color 0.15s, box-shadow 0.15s; text-decoration: none; }
+.wd-dl-btn:hover { background: var(--primary-50); color: var(--primary-600); box-shadow: inset 0 0 0 1.5px var(--primary-600); }
+.wd-dl-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; }
+
+.wd-section-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--grey-800);
+  margin: 0 0 12px;
+}
+.wd-desc-text {
+  font-size: 16px;
+  color: var(--grey-600);
+  line-height: 1.75;
+  margin: 0 0 16px;
+}
+.wd-learn-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.wd-learn-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 16px;
+  color: var(--grey-700);
+  line-height: 1.5;
+}
+.wd-learn-list li svg {
+  width: 16px;
+  height: 16px;
+  stroke: var(--primary-500);
+  fill: none;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* ── Agenda tab ── */
+.wd-agenda { display: flex; flex-direction: column; }
+.wd-agenda-item {
+  display: flex;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border-lighter);
+}
+.wd-agenda-item:last-child { border-bottom: none; }
+.wd-agenda-time {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--primary-500);
+  white-space: nowrap;
+  min-width: 96px;
+  padding-top: 2px;
+  flex-shrink: 0;
+}
+.wd-agenda-content { flex: 1; }
+.wd-agenda-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--grey-800);
+  margin: 0 0 4px;
+  line-height: 1.4;
+}
+[data-theme="dark"] .wd-agenda-title { color: #CFD3D9; }
+.wd-agenda-desc {
+  font-size: 13px;
+  color: var(--grey-600);
+  margin: 0;
+  line-height: 1.55;
+}
+[data-theme="dark"] .wd-agenda-desc { color: #A1A8B3; }
+
+/* ── Speaker tab ── */
+.wd-speaker-profile {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border-lighter);
+}
+.wd-speaker-photo {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center top;
+  flex-shrink: 0;
+  border: 2px solid var(--primary-300);
+}
+.wd-speaker-details { flex: 1; min-width: 0; }
+.wd-speaker-full-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--grey-800);
+  margin: 0 0 4px;
+}
+[data-theme="dark"] .wd-speaker-full-name { color: #CFD3D9; }
+.wd-speaker-title-role {
+  font-size: 14px;
+  color: var(--primary-500);
+  font-weight: 500;
+  margin: 0;
+}
+.wd-speaker-bio-text {
+  font-size: 15px;
+  color: var(--grey-600);
+  line-height: 1.75;
+  margin: 0 0 14px;
+}
+[data-theme="dark"] .wd-speaker-bio-text { color: #A1A8B3; }
+
+/* ── Sidebar info card ── */
+.wd-info-card {
+  position: sticky;
+  top: 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ── Join / Registration card ── */
+.wd-join-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+}
+[data-theme="dark"] .wd-join-card { border-color: var(--border-lighter); box-shadow: none; }
+.wd-join-img { width: 100%; border-radius: 8px; display: block; margin-bottom: 16px; }
+.wd-join-card .badge-error-outline { display: flex; width: fit-content; margin: 0 auto 12px; }
+
+.wd-join-live-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  padding: 10px;
+  background: rgba(211, 47, 47, 0.08);
+  border-radius: 8px;
+}
+[data-theme="dark"] .wd-join-live-status { background: rgba(211, 47, 47, 0.13); }
+.wd-join-live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #D32F2F;
+  animation: lw-pulse 1.4s infinite;
+  flex-shrink: 0;
+}
+.wd-join-live-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #D32F2F;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  font-family: var(--font-primary);
+}
+
+.wd-join-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px;
+  background: var(--primary-500);
+  color: var(--neutral-white);
+  font-family: var(--font-primary);
+  font-weight: 700;
+  font-size: 15px;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.15s;
+  margin-bottom: 20px;
+  box-sizing: border-box;
+}
+.wd-join-btn:hover { background: var(--primary-600); }
+.wd-join-btn:active { background: var(--primary-700); }
+.wd-join-btn svg { width: 16px; height: 16px; fill: currentColor; stroke: none; flex-shrink: 0; }
+
+.wd-join-divider {
+  border: none;
+  border-top: 1px solid var(--border-lighter);
+  margin: 0 0 16px;
+}
+
+.wd-session-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.wd-session-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--grey-700);
+  line-height: 1.4;
+}
+.wd-session-icon {
+  width: 16px;
+  height: 16px;
+  stroke: var(--grey-500);
+  fill: none;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.wd-session-row strong { font-weight: 600; color: var(--grey-800); }
+[data-theme="dark"] .wd-session-row strong { color: #CFD3D9; }
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .wd-layout { flex-direction: column-reverse; }
+  .wd-sidebar { width: 100%; }
+  .wd-info-card { position: static; }
+}
+@media (max-width: 600px) {
+  .wd-page { padding: 16px 16px 48px; }
+  .wd-title { font-size: 20px; }
+  .wd-fav-btn { display: none; }
+  .wd-tab { padding: 10px 12px; font-size: 13px; }
+  .wd-breadcrumb { font-size: 12px; }
+  .wd-agenda-time { min-width: 80px; font-size: 11px; }
+}
+
+</style>
+</head>
+<body>
+
+
+<!-- Topbar -->
+<header class="topbar">
+<div class="topbar-inner">
+  <div class="topbar-logo">
+    <a href="index.html">
+      <img src="assets/images/logo-dark.png" alt="YYC taxPOD" class="logo-light">
+      <img src="assets/images/logo-white.png" alt="YYC taxPOD" class="logo-dark">
+    </a>
+  </div>
+  <div class="topbar-search">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="text" placeholder="Search...">
+  </div>
+  <div class="topbar-row-break"></div>
+  <button class="mob-menu-btn" onclick="mobMenuOpen()" aria-label="Open menu">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+  <div class="topbar-actions">
+    <button class="topbar-lang">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      <span>EN</span>
+      <svg class="tb-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <button class="topbar-icon topbar-theme" onclick="(function(h){h.classList.add('theme-transition');var d=h.getAttribute('data-theme')==='dark'?'light':'dark';h.setAttribute('data-theme',d);localStorage.setItem('theme',d);setTimeout(function(){h.classList.remove('theme-transition')},350)})(document.documentElement)" aria-label="Toggle Dark Mode">
+      <svg class="tb-theme-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <svg class="tb-theme-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+    </button>
+    <button class="topbar-icon">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+    </button>
+    <button class="topbar-icon">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      <span class="topbar-badge">3</span>
+    </button>
+    <div class="topbar-avatar">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    </div>
+  </div>
+</div>
+</header>
+
+<!-- Mobile Menu Backdrop -->
+<div class="mob-menu-backdrop" id="mob-menu-backdrop" onclick="mobMenuClose()"></div>
+
+<!-- Mobile Menu Drawer -->
+<div class="mob-menu" id="mob-menu" role="dialog" aria-modal="true" aria-label="Navigation">
+  <div class="mob-menu-header">
+    <img src="assets/images/logo-dark.png" alt="YYC taxPOD" class="logo-light">
+    <img src="assets/images/logo-white.png" alt="YYC taxPOD" class="logo-dark" style="display:none">
+    <button class="mob-menu-close" onclick="mobMenuClose()" aria-label="Close menu">
+      <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <nav class="mob-nav">
+    <div class="mob-nav-item">
+      <div class="mob-nav-split">
+        <a href="webinars.html" class="mob-nav-split-link">Webinars</a>
+        <button class="mob-nav-split-toggle" onclick="mobNavToggle(this)" aria-label="Toggle Webinars menu"><svg class="mob-nav-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
+      </div>
+      <div class="mob-nav-sub">
+        <a href="#" class="mob-nav-sub-item">Live Webinars</a>
+        <a href="#" class="mob-nav-sub-item">Past Webinars</a>
+      </div>
+    </div>
+    <div class="mob-nav-item">
+      <button class="mob-nav-btn" onclick="mobNavToggle(this)">Update Classes <svg class="mob-nav-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="mob-nav-sub">
+        <a href="#" class="mob-nav-sub-item">2026</a>
+        <a href="#" class="mob-nav-sub-item">2025</a>
+        <a href="#" class="mob-nav-sub-item">2024</a>
+        <a href="#" class="mob-nav-sub-item">2023</a>
+      </div>
+    </div>
+    <div class="mob-nav-item">
+      <div class="mob-nav-split">
+        <a href="e-invoicing.html" class="mob-nav-split-link">E-Invoicing</a>
+        <button class="mob-nav-split-toggle" onclick="mobNavToggle(this)" aria-label="Toggle E-Invoicing menu"><svg class="mob-nav-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
+      </div>
+      <div class="mob-nav-sub">
+        <a href="#" class="mob-nav-sub-item">Mastery (5 Modules)</a>
+        <a href="#" class="mob-nav-sub-item">MyInvois</a>
+        <a href="#" class="mob-nav-sub-item">Industry Focus</a>
+        <a href="#" class="mob-nav-sub-item">e-Invoicing - Others</a>
+      </div>
+    </div>
+    <div class="mob-nav-item">
+      <button class="mob-nav-btn" onclick="mobNavToggle(this)">Income Tax <svg class="mob-nav-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="mob-nav-sub">
+        <a href="#" class="mob-nav-sub-item">Income</a>
+        <a href="#" class="mob-nav-sub-item">Others</a>
+        <a href="#" class="mob-nav-sub-item">Withholding Tax</a>
+        <a href="#" class="mob-nav-sub-item">Expenses</a>
+        <a href="#" class="mob-nav-sub-item">Stamp Duty</a>
+      </div>
+    </div>
+    <div class="mob-nav-item">
+      <button class="mob-nav-btn" onclick="mobNavToggle(this)">Forms <svg class="mob-nav-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="mob-nav-sub">
+        <a href="#" class="mob-nav-sub-item">Form BE</a>
+        <a href="#" class="mob-nav-sub-item">Form CP204 &amp; CP204A</a>
+        <a href="#" class="mob-nav-sub-item">Form B</a>
+        <a href="#" class="mob-nav-sub-item">Form C</a>
+        <a href="#" class="mob-nav-sub-item">MyTax - ezHasil Services</a>
+        <a href="#" class="mob-nav-sub-item">Form E &amp; EA</a>
+      </div>
+    </div>
+    <div class="mob-nav-item">
+      <button class="mob-nav-btn" onclick="mobNavToggle(this)">SST <svg class="mob-nav-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="mob-nav-sub">
+        <a href="#" class="mob-nav-sub-item">Service Tax</a>
+        <a href="#" class="mob-nav-sub-item">Sales Tax</a>
+      </div>
+    </div>
+    <div class="mob-nav-item">
+      <button class="mob-nav-btn" onclick="mobNavToggle(this)">Resources <svg class="mob-nav-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="mob-nav-sub">
+        <a href="#" class="mob-nav-sub-item">Accounting Training Hours/CPE</a>
+        <a href="#" class="mob-nav-sub-item">Articles</a>
+        <a href="#" class="mob-nav-sub-item">Our Speakers</a>
+        <a href="#" class="mob-nav-sub-item">Quick Guides</a>
+        <a href="#" class="mob-nav-sub-item">Tax A Minute</a>
+        <a href="#" class="mob-nav-sub-item">FAQ</a>
+      </div>
+    </div>
+    <div class="mob-nav-item mob-nav-item--expert">
+      <a href="#" class="mob-nav-btn">Ask An Expert</a>
+    </div>
+    <div class="mob-nav-item">
+      <a href="#" class="mob-nav-btn">Deals</a>
+    </div>
+  </nav>
+</div>
+
+<!-- Main Navigation -->
+<nav class="main-nav">
+  <div class="main-nav-inner">
+    <div class="mn-item-wrap">
+      <a href="webinars.html" class="mn-item">Webinars <svg class="mn-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></a>
+      <div class="mn-dropdown">
+        <a href="#" class="mn-dropdown-item">Live Webinars</a>
+        <a href="#" class="mn-dropdown-item">Past Webinars</a>
+      </div>
+    </div>
+    <div class="mn-item-wrap">
+      <button class="mn-item">Update Classes <svg class="mn-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="mn-dropdown">
+        <a href="#" class="mn-dropdown-item">2026</a>
+        <a href="#" class="mn-dropdown-item">2025</a>
+        <a href="#" class="mn-dropdown-item">2024</a>
+        <a href="#" class="mn-dropdown-item">2023</a>
+      </div>
+    </div>
+    <div class="mn-item-wrap">
+      <a href="e-invoicing.html" class="mn-item">E-Invoicing <svg class="mn-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></a>
+      <div class="mn-dropdown">
+        <a href="#" class="mn-dropdown-item">Mastery (5 Modules)</a>
+        <a href="#" class="mn-dropdown-item">MyInvois</a>
+        <a href="#" class="mn-dropdown-item">Industry Focus</a>
+        <a href="#" class="mn-dropdown-item">e-Invoicing - Others</a>
+      </div>
+    </div>
+    <div class="mn-item-wrap">
+      <button class="mn-item">Income Tax <svg class="mn-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="mn-dropdown">
+        <a href="#" class="mn-dropdown-item">Income</a>
+        <a href="#" class="mn-dropdown-item">Others</a>
+        <a href="#" class="mn-dropdown-item">Withholding Tax</a>
+        <a href="#" class="mn-dropdown-item">Expenses</a>
+        <a href="#" class="mn-dropdown-item">Stamp Duty</a>
+      </div>
+    </div>
+    <div class="mn-item-wrap">
+      <button class="mn-item">Forms <svg class="mn-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="mn-dropdown">
+        <a href="#" class="mn-dropdown-item">Form BE</a>
+        <a href="#" class="mn-dropdown-item">Form CP204 &amp; CP204A</a>
+        <a href="#" class="mn-dropdown-item">Form B</a>
+        <a href="#" class="mn-dropdown-item">Form C</a>
+        <a href="#" class="mn-dropdown-item">MyTax - ezHasil Services</a>
+        <a href="#" class="mn-dropdown-item">Form E &amp; EA</a>
+      </div>
+    </div>
+    <div class="mn-item-wrap">
+      <button class="mn-item">SST <svg class="mn-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="mn-dropdown">
+        <a href="#" class="mn-dropdown-item">Service Tax</a>
+        <a href="#" class="mn-dropdown-item">Sales Tax</a>
+      </div>
+    </div>
+    <div class="mn-item-wrap">
+      <button class="mn-item">Resources <svg class="mn-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="mn-dropdown">
+        <a href="#" class="mn-dropdown-item">Accounting Training Hours/CPE</a>
+        <a href="#" class="mn-dropdown-item">Articles</a>
+        <a href="#" class="mn-dropdown-item">Our Speakers</a>
+        <a href="#" class="mn-dropdown-item">Quick Guides</a>
+        <a href="#" class="mn-dropdown-item">Tax A Minute</a>
+        <a href="#" class="mn-dropdown-item">FAQ</a>
+      </div>
+    </div>
+    <a href="#" class="mn-item mn-item--expert">Ask An Expert</a>
+    <a href="#" class="mn-item">Deals</a>
+  </div>
+</nav>
+
+
+<div class="wd-page">
+
+  <!-- Breadcrumb -->
+  <nav class="wd-breadcrumb" aria-label="Breadcrumb">
+    <a href="webinars.html">Webinars</a>
+    <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+    <a href="webinars.html?filter=live">Live Webinars</a>
+    <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+    <span>e-Invoicing Phase 2 Extension</span>
+  </nav>
+
+  <div class="wd-layout">
+
+    <!-- MAIN CONTENT -->
+    <div class="wd-main">
+
+      <!-- Meta -->
+      <div class="wd-meta">
+        <span class="badge badge-md badge-neutral-outline">e-Invoicing</span>
+        <span class="badge badge-md badge-neutral-outline wd-badge-time">
+          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          1 hr | CPE
+        </span>
+        <button class="wd-fav-btn" id="wd-fav" onclick="toggleFav(this)" aria-label="Add to favourites">
+          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          Favourite
+        </button>
+      </div>
+
+      <!-- Title + tagline -->
+      <h1 class="wd-title">e-Invoicing Phase 2 Extension: What Businesses Need to Know</h1>
+      <p class="wd-tagline">Get the latest updates on Malaysia's e-Invoicing Phase 2 mandate — understand the revised timelines, how to request an extension, and the immediate compliance steps for your business.</p>
+
+      <!-- Speaker -->
+      <div class="wd-speaker">
+        <div class="wd-speaker-avatar" aria-hidden="true"><img src="assets/images/speakers/zen.png" alt="Zen Chow"></div>
+        <div>
+          <div class="wd-speaker-name">Zen Chow</div>
+          <div class="wd-speaker-role">YYC Executive Director &amp; Country Tax Leader</div>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="wd-tabs" role="tablist">
+        <button class="wd-tab active" role="tab" aria-selected="true" aria-controls="tab-about" onclick="switchTab('about')"><span>About This Webinar</span><span class="wd-tab-indicator"></span></button>
+        <button class="wd-tab" role="tab" aria-selected="false" aria-controls="tab-materials" onclick="switchTab('materials')"><span>Download Materials</span><span class="wd-tab-indicator"></span></button>
+      </div>
+
+      <!-- Tab: About -->
+      <div class="wd-tab-pane active" id="tab-about" role="tabpanel">
+        <h2 class="wd-section-title">Description</h2>
+        <p class="wd-desc-text">
+          This live webinar provides an in-depth look at the latest developments surrounding Malaysia's e-Invoicing Phase 2 mandate. With LHDN announcing significant changes to implementation timelines, businesses need to understand what these changes mean for their compliance roadmap.
+        </p>
+        <p class="wd-desc-text">
+          Join our expert as we break down the revised Phase 2 timelines, walk through the official extension request process step-by-step, and outline the practical compliance actions businesses should prioritise immediately. Whether you are just starting your e-Invoicing journey or are mid-implementation, this session will give you the clarity you need.
+        </p>
+
+        <hr class="wd-divider">
+
+        <h2 class="wd-section-title">What You'll Learn</h2>
+        <ul class="wd-learn-list">
+          <li>
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Revised Phase 2 mandate timelines and what changed
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            How to request for extension — official process and eligibility criteria
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Compliance steps to take now to avoid penalties
+          </li>
+        </ul>
+      </div>
+
+      <!-- Tab: Materials -->
+      <div class="wd-tab-pane" id="tab-materials" role="tabpanel">
+        <div class="wd-material-list">
+          <div class="wd-material-item">
+            <div class="wd-material-icon">
+              <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            </div>
+            <div class="wd-material-info">
+              <span class="wd-material-name">e-Invoicing Phase 2 Extension — Slide Deck</span>
+            </div>
+            <a href="#" class="wd-dl-btn">
+              <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Download
+            </a>
+          </div>
+          <div class="wd-material-item">
+            <div class="wd-material-icon">
+              <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            </div>
+            <div class="wd-material-info">
+              <span class="wd-material-name">Extension Request Checklist &amp; Guide</span>
+            </div>
+            <a href="#" class="wd-dl-btn">
+              <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Download
+            </a>
+          </div>
+          <div class="wd-material-item">
+            <div class="wd-material-icon">
+              <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            </div>
+            <div class="wd-material-info">
+              <span class="wd-material-name">Compliance Action Plan — Phase 2 Businesses</span>
+            </div>
+            <a href="#" class="wd-dl-btn">
+              <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Download
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /.wd-main -->
+
+    <!-- SIDEBAR -->
+    <div class="wd-sidebar">
+      <div class="wd-info-card">
+
+        <!-- Join card -->
+        <div class="wd-join-card">
+
+          <img src="assets/images/course-images/1.png" alt="e-Invoicing Phase 2 Extension: What Businesses Need to Know" class="wd-join-img">
+
+          <!-- Join Now CTA -->
+          <a href="#" class="wd-join-btn">
+            <svg viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+            Join Now
+          </a>
+
+          <!-- LIVE NOW badge -->
+          <span class="badge badge-sm badge-pill badge-error-outline"><span class="badge-dot"></span> Live Now</span>
+
+          <hr class="wd-join-divider">
+
+          <!-- Session details -->
+          <div class="wd-session-list">
+            <div class="wd-session-row">
+              <svg class="wd-session-icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+              </svg>
+              <div><strong>13 Mar 2026</strong></div>
+            </div>
+            <div class="wd-session-row">
+              <svg class="wd-session-icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+              </svg>
+              <div><strong>10:00 AM – 11:00 AM</strong></div>
+            </div>
+            <div class="wd-session-row">
+              <svg class="wd-session-icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                <circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/>
+              </svg>
+              <div>CPE: <strong>1 CPE Hour</strong></div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div><!-- /.wd-sidebar -->
+
+  </div><!-- /.wd-layout -->
+</div><!-- /.wd-page -->
+
+<footer class="site-footer">
+  <div class="site-footer-body">
+    <div class="site-footer-left">
+      <img src="assets/images/logo-white.png" alt="YYC taxPOD" class="site-footer-logo">
+      <div>
+        <h5 class="site-footer-contact-title">Contact Us</h5>
+        <p class="site-footer-contact-desc">Have questions? We're here to help you with your tax learning journey.</p>
+      </div>
+      <div class="site-footer-contacts">
+        <a href="mailto:support@taxpod.my" class="site-footer-contact-item">
+          <img src="assets/images/icon-email.png" alt="Email" class="site-footer-contact-icon">
+          support@taxpod.my
+        </a>
+        <div class="site-footer-phones">
+          <a href="#" class="site-footer-contact-item">
+            <img src="assets/images/icon-whatsapp.png" alt="WhatsApp" class="site-footer-contact-icon">
+            016-507 7309
+          </a>
+          <span class="site-footer-divider"></span>
+          <a href="#" class="site-footer-contact-item">
+            <img src="assets/images/icon-whatsapp.png" alt="WhatsApp" class="site-footer-contact-icon">
+            016-624 7309
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="site-footer-right">
+      <h5 class="site-footer-app-title">Get the App</h5>
+      <div class="site-footer-apps">
+        <a href="#"><img src="assets/images/footer-applestore.png" alt="App Store" class="site-footer-app-badge"></a>
+        <a href="#"><img src="assets/images/footer-googleplay.png" alt="Google Play" class="site-footer-app-badge"></a>
+        <a href="#"><img src="assets/images/footer-huawei.png" alt="Huawei AppGallery" class="site-footer-app-badge"></a>
+      </div>
+    </div>
+  </div>
+  <div class="site-footer-bar">
+    <span class="site-footer-copy">&copy; 2026 YYC taxPOD. All rights reserved.</span>
+    <div class="site-footer-links">
+      <a href="#" class="site-footer-link">Privacy Policy</a>
+      <span class="site-footer-link-sep">|</span>
+      <a href="#" class="site-footer-link">Terms of Use</a>
+      <span class="site-footer-link-sep">|</span>
+      <a href="#" class="site-footer-link">Refund Policy</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ── Mobile Menu ──
+function mobMenuOpen() {
+  document.getElementById('mob-menu').classList.add('is-open');
+  document.getElementById('mob-menu-backdrop').classList.add('is-open');
+  document.body.style.overflow = 'hidden';
+  var dark = document.documentElement.getAttribute('data-theme') === 'dark';
+  var menu = document.getElementById('mob-menu');
+  menu.querySelector('.logo-light').style.display = dark ? 'none' : 'block';
+  menu.querySelector('.logo-dark').style.display = dark ? 'block' : 'none';
+}
+function mobMenuClose() {
+  document.getElementById('mob-menu').classList.remove('is-open');
+  document.getElementById('mob-menu-backdrop').classList.remove('is-open');
+  document.body.style.overflow = '';
+}
+function mobNavToggle(btn) {
+  btn.closest('.mob-nav-item').classList.toggle('is-open');
+}
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') mobMenuClose();
+});
+</script>
+
+<script>
+function switchTab(tabId) {
+  document.querySelectorAll('.wd-tab').forEach(function(btn) {
+    btn.classList.remove('active');
+    btn.setAttribute('aria-selected', 'false');
+  });
+  document.querySelectorAll('.wd-tab-pane').forEach(function(pane) {
+    pane.classList.remove('active');
+  });
+  document.querySelector('[aria-controls="tab-' + tabId + '"]').classList.add('active');
+  document.querySelector('[aria-controls="tab-' + tabId + '"]').setAttribute('aria-selected', 'true');
+  document.getElementById('tab-' + tabId).classList.add('active');
+}
+function toggleFav(btn) {
+  btn.classList.toggle('active');
+  btn.setAttribute('aria-label', btn.classList.contains('active') ? 'Remove from favourites' : 'Add to favourites');
+}
+</script>
+
+</body>
+</html>

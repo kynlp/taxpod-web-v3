@@ -817,6 +817,7 @@ section:has(#c-top10) .tc-carousel-wrap { overflow: visible; }
   z-index: 1;
   border-radius: 14px 14px 0 0;
 }
+#c-top10 .tc-card { border-radius: 14px; overflow: visible; }
 #c-top10 .tc-bar {
   position: relative;
   z-index: 1;
@@ -828,7 +829,8 @@ section:has(#c-top10) .tc-carousel-wrap { overflow: visible; }
 }
 #c-top10 .tc-number { display: none; }
 #c-top10 .tc-card--event { width: 290px; }
-#c-top10 .tc-card--event .tc-thumb { height: 170px; }
+#c-top10 .tc-card--event .tc-thumb { height: 170px; overflow: hidden; }
+#c-top10 .tc-card--event .tc-thumb img { border-radius: 14px 14px 0 0; }
 
 /* ============================================================
    SECTION 9 — Upcoming Update Classes (Tabs)
@@ -1443,7 +1445,10 @@ section:has(#c-top10) .tc-carousel-wrap { overflow: visible; }
 .btn-resume:hover { background: var(--primary-600); }
 .btn-resume:active { background: var(--primary-700); }
 /* CTA button — extends .btn-resume with full width; hidden on desktop */
-.cp-cta { width: 100%; justify-content: center; display: none; }
+.cp-cta { width: 100%; justify-content: center; display: none !important; }
+/* Continue Watching desktop popover — progress bar at bottom */
+#popover-cw-1 .cp-body, #popover-cw-2 .cp-body, #popover-cw-3 .cp-body { display: flex; flex-direction: column; }
+#popover-cw-1 .cp-progress-row, #popover-cw-2 .cp-progress-row, #popover-cw-3 .cp-progress-row { order: 10; margin-top: 12px; margin-bottom: 0; }
 
 .btn-resume svg, .cp-cta svg { width: 14px; height: 14px; fill: currentColor; flex-shrink: 0; }
 
@@ -1501,9 +1506,6 @@ section:has(#c-top10) .tc-carousel-wrap { overflow: visible; }
   .cp-body { overflow-y: auto; -webkit-overflow-scrolling: touch; flex: 1; min-height: 0; }
   .cp-close { display: flex; }
   .cp-video-bar { display: none; }
-}
-@media (min-width: 1241px) {
-  .cp-cta { display: flex !important; }
 }
 
 </style>
@@ -1579,8 +1581,8 @@ section:has(#c-top10) .tc-carousel-wrap { overflow: visible; }
         <button class="mob-nav-split-toggle" onclick="mobNavToggle(this)" aria-label="Toggle Webinars menu"><svg class="mob-nav-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
       </div>
       <div class="mob-nav-sub">
-        <a href="#" class="mob-nav-sub-item">Live Webinars</a>
-        <a href="#" class="mob-nav-sub-item">Past Webinars</a>
+        <a href="webinars.html?filter=live" class="mob-nav-sub-item">Live Webinars</a>
+        <a href="webinars.html?filter=past" class="mob-nav-sub-item">Past Webinars</a>
       </div>
     </div>
     <div class="mob-nav-item">
@@ -1660,8 +1662,8 @@ section:has(#c-top10) .tc-carousel-wrap { overflow: visible; }
     <div class="mn-item-wrap">
       <a href="webinars.html" class="mn-item">Webinars <svg class="mn-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></a>
       <div class="mn-dropdown">
-        <a href="#" class="mn-dropdown-item">Live Webinars</a>
-        <a href="#" class="mn-dropdown-item">Past Webinars</a>
+        <a href="webinars.html?filter=live" class="mn-dropdown-item">Live Webinars</a>
+        <a href="webinars.html?filter=past" class="mn-dropdown-item">Past Webinars</a>
       </div>
     </div>
     <!-- Update Classes -->
@@ -2087,9 +2089,109 @@ section:has(#c-top10) .tc-carousel-wrap { overflow: visible; }
 </section>
 
 <!-- ============================================================
-     SECTION 6 — Top 10 Courses
+     SECTION 5b — Continue Watching
      ============================================================ -->
 <section class="section-row" style="background:var(--web-bg-light-blue);">
+  <div class="container">
+    <div class="section-row-header">
+      <h2 class="section-heading">Continue Watching</h2>
+    </div>
+    <div class="tc-carousel-wrap" style="--carousel-bg: var(--web-bg-light-blue)">
+      <div class="card-scroll" id="c-continue">
+
+        <!-- Card 1 -->
+        <div class="tc-card tc-card--event tc-card--watched" id="card-cw-1">
+          <div class="tc-thumb">
+            <img src="assets/images/course-images/2.png" alt="Course">
+            <span class="tc-thumb-badge tc-thumb-badge--course">Course</span>
+            <div class="tc-play-overlay"><div class="tc-play-center"><div class="tc-play"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><span class="tc-resume-label">Resume Playing</span></div></div>
+            <button class="tc-heart" onclick="toggleHeart(this)" aria-label="Add to wishlist"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+            <div class="tc-seekbar"><div class="tc-seekbar-fill" style="width:35%"></div></div>
+          </div>
+          <div class="tc-bar">
+            <span class="badge badge-sm badge-pill badge-bonus-outline tc-tag">E-Invoicing</span>
+            <div class="tc-bar-right"><span class="tc-dur"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>1 hr 15 min</span></div>
+          </div>
+          <div class="course-popover" id="popover-cw-1">
+            <div class="cp-video"><img src="assets/images/course-images/2.png" alt=""><button class="cp-close" aria-label="Close" onclick="document.getElementById('popover-cw-1').classList.remove('popover-open')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+            <div class="cp-body">
+              <div class="cp-meta"><span class="badge badge-sm badge-pill badge-bonus-outline">E-Invoicing</span><span class="cp-date">12 Feb 2025</span></div>
+              <h3 class="cp-title">e-Invoicing Implementation Guide for SMEs</h3>
+              <div class="cp-stats"><span class="cp-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>1 hr 15 min</span><span class="cp-stat"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>2 Modules</span></div>
+              <div class="cp-progress-row"><div class="cp-progress-track"><div class="cp-progress-fill" style="width:35%"></div></div><span class="cp-progress-pct">35%</span></div>
+              <div class="cp-divider"></div>
+              <p class="cp-learn-label">What you will learn</p>
+              <ul class="cp-outcomes"><li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Step-by-step e-Invoice submission</li><li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>MyInvois portal walkthrough</li><li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Common SME compliance pitfalls</li></ul>
+              <button class="btn-resume cp-cta" onclick="window.location.href='#'"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Resume Playing</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="tc-card tc-card--event tc-card--watched" id="card-cw-2">
+          <div class="tc-thumb">
+            <img src="assets/images/course-images/5.png" alt="Course">
+            <span class="tc-thumb-badge tc-thumb-badge--webinar">Webinar</span>
+            <div class="tc-play-overlay"><div class="tc-play-center"><div class="tc-play"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><span class="tc-resume-label">Resume Playing</span></div></div>
+            <button class="tc-heart" onclick="toggleHeart(this)" aria-label="Add to wishlist"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+            <div class="tc-seekbar"><div class="tc-seekbar-fill" style="width:62%"></div></div>
+          </div>
+          <div class="tc-bar">
+            <span class="badge badge-sm badge-pill badge-bonus-outline tc-tag">Webinar</span>
+            <div class="tc-bar-right"><span class="tc-dur"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>54 min</span></div>
+          </div>
+          <div class="course-popover" id="popover-cw-2">
+            <div class="cp-video"><img src="assets/images/course-images/5.png" alt=""><button class="cp-close" aria-label="Close" onclick="document.getElementById('popover-cw-2').classList.remove('popover-open')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+            <div class="cp-body">
+              <div class="cp-meta"><span class="badge badge-sm badge-pill badge-bonus-outline">Webinar</span><span class="cp-date">8 May 2025</span></div>
+              <h3 class="cp-title">Tax Updates Webinar 2025</h3>
+              <div class="cp-stats"><span class="cp-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>54 min | CPE</span><span class="cp-stat"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>1 Module</span></div>
+              <div class="cp-progress-row"><div class="cp-progress-track"><div class="cp-progress-fill" style="width:62%"></div></div><span class="cp-progress-pct">62%</span></div>
+              <div class="cp-divider"></div>
+              <p class="cp-learn-label">What you will learn</p>
+              <ul class="cp-outcomes"><li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Latest tax law amendments</li><li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Budget 2025 corporate tax impact</li><li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Key compliance deadlines</li></ul>
+              <button class="btn-resume cp-cta" onclick="window.location.href='#'"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Resume Playing</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="tc-card tc-card--event tc-card--watched" id="card-cw-3">
+          <div class="tc-thumb">
+            <img src="assets/images/course-images/8.png" alt="Course">
+            <span class="tc-thumb-badge tc-thumb-badge--course">Course</span>
+            <div class="tc-play-overlay"><div class="tc-play-center"><div class="tc-play"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><span class="tc-resume-label">Resume Playing</span></div></div>
+            <button class="tc-heart" onclick="toggleHeart(this)" aria-label="Add to wishlist"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+            <div class="tc-seekbar"><div class="tc-seekbar-fill" style="width:20%"></div></div>
+          </div>
+          <div class="tc-bar">
+            <span class="badge badge-sm badge-pill badge-bonus-outline tc-tag">Income Tax</span>
+            <div class="tc-bar-right"><span class="tc-dur"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>2 hr 10 min</span></div>
+          </div>
+          <div class="course-popover" id="popover-cw-3">
+            <div class="cp-video"><img src="assets/images/course-images/8.png" alt=""><button class="cp-close" aria-label="Close" onclick="document.getElementById('popover-cw-3').classList.remove('popover-open')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+            <div class="cp-body">
+              <div class="cp-meta"><span class="badge badge-sm badge-pill badge-bonus-outline">Income Tax</span><span class="cp-date">3 Mar 2025</span></div>
+              <h3 class="cp-title">Personal Tax Filing Masterclass YA 2024</h3>
+              <div class="cp-stats"><span class="cp-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>2 hr 10 min</span><span class="cp-stat"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>3 Modules</span></div>
+              <div class="cp-progress-row"><div class="cp-progress-track"><div class="cp-progress-fill" style="width:20%"></div></div><span class="cp-progress-pct">20%</span></div>
+              <div class="cp-divider"></div>
+              <p class="cp-learn-label">What you will learn</p>
+              <ul class="cp-outcomes"><li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Claim all eligible tax reliefs</li><li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>e-Filing step-by-step walkthrough</li><li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Common mistakes to avoid</li></ul>
+              <button class="btn-resume cp-cta" onclick="window.location.href='#'"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Resume Playing</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 6 — Top 10 Courses
+     ============================================================ -->
+<section class="section-row" style="background:var(--web-bg-light-white);">
   <div class="container">
     <div class="section-row-header">
       <h2 class="section-heading">Top 10 Courses</h2>
@@ -2098,7 +2200,7 @@ section:has(#c-top10) .tc-carousel-wrap { overflow: visible; }
         <button class="tc-carousel-btn" onclick="tcCarouselScroll('c-top10',1)" aria-label="Next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
       </div>
     </div>
-    <div class="tc-carousel-wrap" style="--carousel-bg: var(--web-bg-light-blue)">
+    <div class="tc-carousel-wrap" style="--carousel-bg: var(--web-bg-light-white)">
       <div class="card-scroll" id="c-top10">
       <!-- Card 1 -->
       <div class="tc-card tc-card--event" id="card-t-c1">
@@ -2384,7 +2486,7 @@ section:has(#c-top10) .tc-carousel-wrap { overflow: visible; }
 <!-- ============================================================
      SECTION 7 — Latest Courses
      ============================================================ -->
-<section class="section-row" style="background:var(--web-bg-light-white);">
+<section class="section-row" style="background:var(--web-bg-light-blue);">
   <div class="container">
     <div class="section-row-header section-row-header--inline">
       <h2 class="section-heading">Latest Courses</h2>
@@ -2394,7 +2496,7 @@ section:has(#c-top10) .tc-carousel-wrap { overflow: visible; }
         <button class="tc-carousel-btn" onclick="tcCarouselScroll('c-latest',1)" aria-label="Next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
       </div>
     </div>
-    <div class="tc-carousel-wrap" style="--carousel-bg: var(--web-bg-light-white)">
+    <div class="tc-carousel-wrap" style="--carousel-bg: var(--web-bg-light-blue)">
       <div class="card-scroll" id="c-latest">
       <div class="tc-card tc-card--event" id="card-l-c1">
         <div class="tc-thumb">
@@ -2591,7 +2693,7 @@ section:has(#c-top10) .tc-carousel-wrap { overflow: visible; }
 <!-- ============================================================
      SECTION 8 — Popular Series
      ============================================================ -->
-<section class="section-row" style="background:var(--web-bg-light-blue);">
+<section class="section-row" style="background:var(--web-bg-light-white);">
   <div class="container">
     <div class="section-row-header section-row-header--inline">
       <h2 class="section-heading">Popular Series</h2>
@@ -2601,7 +2703,7 @@ section:has(#c-top10) .tc-carousel-wrap { overflow: visible; }
         <button class="tc-carousel-btn" onclick="tcCarouselScroll('c-popular',1)" aria-label="Next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
       </div>
     </div>
-    <div class="tc-carousel-wrap" style="--carousel-bg: var(--web-bg-light-blue)">
+    <div class="tc-carousel-wrap" style="--carousel-bg: var(--web-bg-light-white)">
       <div class="card-scroll" id="c-popular">
       <!-- Series Card 1 -->
       <div class="tc-series-card">
@@ -3695,6 +3797,8 @@ function toggleHeart(btn) {
     if (closeBtn) closeBtn.addEventListener('click', function(e) { e.stopPropagation(); hideActivePopover(); });
   }
 
+  // Continue Watching (3)
+  initPopover('card-cw-1','popover-cw-1'); initPopover('card-cw-2','popover-cw-2'); initPopover('card-cw-3','popover-cw-3');
   // Recommended (7)
   initPopover('card-r-c1','popover-r-c1'); initPopover('card-r-c2','popover-r-c2'); initPopover('card-r-c3','popover-r-c3');
   initPopover('card-r-c4','popover-r-c4'); initPopover('card-r-c5','popover-r-c5'); initPopover('card-r-c6','popover-r-c6');

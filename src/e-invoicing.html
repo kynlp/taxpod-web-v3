@@ -118,7 +118,7 @@ body { background: var(--web-bg-light-blue); }
   transform: rotate(45deg);
 }
 [data-theme="dark"] .ei-cb input[type="checkbox"]:not(:checked) {
-  background: #343638;
+  background: var(--card-bg);
   border-color: var(--grey-500);
 }
 [data-theme="dark"] .ei-cb input[type="checkbox"]:checked {
@@ -199,7 +199,7 @@ body { background: var(--web-bg-light-blue); }
   .pg-numbered { padding-top: 0; justify-content: flex-end; }
 }
   .ei-result-count { order: 2; margin-left: auto; }
-  .ei-search-row { order: 1; flex: 0 0 auto; }
+  .ei-search-row { order: 1; flex: 0 0 auto; width: 350px; }
   .ei-controls-row { order: 3; }
 }
 .ei-search svg { flex-shrink: 0; color: var(--grey-500); }
@@ -806,6 +806,7 @@ body { background: var(--web-bg-light-blue); }
 .tc-thumb-badge--course,
 .tc-thumb-badge--past,
 .tc-thumb-badge--podcast { background: rgba(0,0,0,0.3); }
+.tc-thumb-badge .tc-star { color: #FFD600; flex-shrink: 0; }
 .tc-thumb-badge--live-now .tc-badge-dot {
   width: 6px; height: 6px; background: #FF3B30;
   border-radius: 50%; flex-shrink: 0;
@@ -968,7 +969,7 @@ body { background: var(--web-bg-light-blue); }
           <div class="cp-meta"><span class="badge badge-sm badge-pill badge-bonus-outline">Mastery (5 Modules)</span><span class="cp-date">15 Jan 2025</span></div>
           <h3 class="cp-title">e-Invoicing Mastery Module 1: Foundation & Framework</h3>
           <div class="cp-stats">
-            <span class="cp-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>1 hr | CPE</span>
+            <span class="cp-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>1 hr</span>
           </div>
           <div class="cp-divider"></div>
           <p class="cp-learn-label">What you will learn</p>
@@ -1001,7 +1002,7 @@ body { background: var(--web-bg-light-blue); }
           <div class="cp-meta"><span class="badge badge-sm badge-pill badge-bonus-outline">MyInvois</span><span class="cp-date">20 Jan 2025</span></div>
           <h3 class="cp-title">Navigating the MyInvois Portal</h3>
           <div class="cp-stats">
-            <span class="cp-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>45 min | CPE</span>
+            <span class="cp-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>45 min</span>
           </div>
           <div class="cp-divider"></div>
           <p class="cp-learn-label">What you will learn</p>
@@ -1035,7 +1036,7 @@ body { background: var(--web-bg-light-blue); }
           <div class="cp-meta"><span class="badge badge-sm badge-pill badge-bonus-outline">Industry Focus</span><span class="cp-date">25 Jan 2025</span></div>
           <h3 class="cp-title">e-Invoicing for Construction Industry</h3>
           <div class="cp-stats">
-            <span class="cp-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>1 hr 30 min | CPE</span>
+            <span class="cp-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>1 hr 30 min</span>
           </div>
           <div class="cp-divider"></div>
           <p class="cp-learn-label">What you will learn</p>
@@ -1072,7 +1073,7 @@ body { background: var(--web-bg-light-blue); }
           <div class="cp-meta"><span class="badge badge-sm badge-pill badge-bonus-outline">Mastery (5 Modules)</span><span class="cp-date">1 Feb 2025</span></div>
           <h3 class="cp-title">e-Invoicing Mastery Module 2: Document Types</h3>
           <div class="cp-stats">
-            <span class="cp-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>40 min | CPE</span>
+            <span class="cp-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>40 min</span>
           </div>
           <div class="cp-divider"></div>
           <p class="cp-learn-label">What you will learn</p>
@@ -1105,7 +1106,7 @@ body { background: var(--web-bg-light-blue); }
           <div class="cp-meta"><span class="badge badge-sm badge-pill badge-bonus-outline">e-Invoicing - Others</span><span class="cp-date">10 Feb 2025</span></div>
           <h3 class="cp-title">e-Invoicing Integration with Accounting Software</h3>
           <div class="cp-stats">
-            <span class="cp-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>55 min | CPE</span>
+            <span class="cp-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>55 min</span>
           </div>
           <div class="cp-divider"></div>
           <p class="cp-learn-label">What you will learn</p>
@@ -1142,7 +1143,7 @@ body { background: var(--web-bg-light-blue); }
           <div class="cp-meta"><span class="badge badge-sm badge-pill badge-bonus-outline">MyInvois</span><span class="cp-date">15 Feb 2025</span></div>
           <h3 class="cp-title">MyInvois Troubleshooting & Error Handling</h3>
           <div class="cp-stats">
-            <span class="cp-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>35 min | CPE</span>
+            <span class="cp-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>35 min</span>
           </div>
           <div class="cp-divider"></div>
           <p class="cp-learn-label">What you will learn</p>
@@ -1178,7 +1179,7 @@ body { background: var(--web-bg-light-blue); }
           <div class="cp-meta"><span class="badge badge-sm badge-pill badge-bonus-outline">Industry Focus</span><span class="cp-date">20 Feb 2025</span></div>
           <h3 class="cp-title">e-Invoicing for Retail & F&B Sector</h3>
           <div class="cp-stats">
-            <span class="cp-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>50 min | CPE</span>
+            <span class="cp-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>50 min</span>
           </div>
           <div class="cp-divider"></div>
           <p class="cp-learn-label">What you will learn</p>
@@ -1211,7 +1212,7 @@ body { background: var(--web-bg-light-blue); }
           <div class="cp-meta"><span class="badge badge-sm badge-pill badge-bonus-outline">e-Invoicing - Others</span><span class="cp-date">25 Feb 2025</span></div>
           <h3 class="cp-title">Cross-Border e-Invoicing Considerations</h3>
           <div class="cp-stats">
-            <span class="cp-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>30 min | CPE</span>
+            <span class="cp-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>30 min</span>
           </div>
           <div class="cp-divider"></div>
           <p class="cp-learn-label">What you will learn</p>
@@ -1248,7 +1249,7 @@ body { background: var(--web-bg-light-blue); }
           <div class="cp-meta"><span class="badge badge-sm badge-pill badge-bonus-outline">Mastery (5 Modules)</span><span class="cp-date">1 Mar 2025</span></div>
           <h3 class="cp-title">e-Invoicing Mastery Module 3: Advanced Scenarios</h3>
           <div class="cp-stats">
-            <span class="cp-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>1 hr 15 min | CPE</span>
+            <span class="cp-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>1 hr 15 min</span>
           </div>
           <div class="cp-divider"></div>
           <p class="cp-learn-label">What you will learn</p>
@@ -1301,11 +1302,6 @@ body { background: var(--web-bg-light-blue); }
 <!-- #include "templates/footer.html" -->
 <!-- #include "templates/js-nav.html" -->
 
-<!-- Theme toggle (bottom right) -->
-<button onclick="(function(h){h.classList.add('theme-transition');var d=h.getAttribute('data-theme')==='dark'?'light':'dark';h.setAttribute('data-theme',d);localStorage.setItem('theme',d);setTimeout(function(){h.classList.remove('theme-transition')},350)})(document.documentElement)" aria-label="Toggle Dark Mode" style="position:fixed;bottom:20px;right:20px;z-index:9999;width:44px;height:44px;border-radius:50%;background:var(--card-bg);border:1px solid var(--border-light);box-shadow:var(--shadow-md);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--grey-800);">
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-</button>
-
 <script>
 (function(){
   var toggle  = document.querySelector('.ei-mob-filter-toggle');
@@ -1349,10 +1345,7 @@ function toggleHeart(btn) {
   var activeCard = null;
 
   function isTouchSheet() {
-    if (window.innerWidth <= 768) return true;
-    if (window.innerWidth >= 1024 && window.innerWidth <= 1100) return true;
-    if (window.innerWidth <= 1100 && window.matchMedia('(orientation: portrait)').matches) return true;
-    return false;
+    return window.innerWidth <= 1100;
   }
 
   function hideActivePopover() {
@@ -1470,6 +1463,10 @@ function applyFilters() {
   // Re-apply current sort
   var sortLabel = document.getElementById('ei-sort-label');
   if (sortLabel && sortLabel.textContent.trim() === 'Oldest first') DISPLAY_CARDS = DISPLAY_CARDS.slice().reverse();
+  // Always pin featured cards to the top
+  var featured = DISPLAY_CARDS.filter(function(c) { return c.featured; });
+  var rest = DISPLAY_CARDS.filter(function(c) { return !c.featured; });
+  DISPLAY_CARDS = featured.concat(rest);
 
   TOTAL_PAGES = Math.max(1, Math.ceil(DISPLAY_CARDS.length / CARDS_PER_PAGE));
   var rc = document.querySelector('.ei-result-count');
@@ -1526,17 +1523,17 @@ function applyFilters() {
 
 // ── Pagination with content ──
 var ALL_CARDS = [
-  { type:'course', img:'5.png', badge:'e-Invoicing - Others', dur:'1 hr 30 min', title:'e-Invoicing Strategic Overview for Business Leaders', date:'5 Jun 2025', speaker:'Zen Chow, YYC Executive Director & Country Tax Leader', outcomes:['Strategic impact of e-Invoicing on business operations','Leadership decisions for digital tax transformation','Aligning e-Invoicing with corporate governance'], detailUrl:'webinar-detail.html' },
+  { type:'course', img:'5.png', badge:'e-Invoicing - Others', dur:'1 hr 30 min', title:'e-Invoicing Strategic Overview for Business Leaders', date:'5 Jun 2025', speaker:'Zen Chow, YYC Executive Director & Country Tax Leader', outcomes:['Strategic impact of e-Invoicing on business operations','Leadership decisions for digital tax transformation','Aligning e-Invoicing with corporate governance'], detailUrl:'webinar-detail.html', featured:true },
   { type:'course', img:'4.png', badge:'Industry Focus', dur:'1 hr 15 min', title:'e-Invoicing for Government Contractors & Suppliers', date:'1 Jun 2025', speaker:'Datin Shin Yap, YYC CEO & Finance Expert', outcomes:['Government procurement e-Invoice rules','ePerolehan integration requirements','Compliance for Bumiputera contractors'] },
   { type:'course', img:'3.png', badge:'MyInvois', dur:'30 min', title:"MyInvois Version Updates: What's New", date:'25 May 2025', speaker:'Tifannyz Yap, YYC Tax Expert', outcomes:['Latest MyInvois feature releases','How to update your integration','Known issues and workarounds'] },
-  { type:'course', img:'2.png', badge:'Mastery (5 Modules)', dur:'50 min', title:'e-Invoicing Implementation Roadmap for Large Enterprises', date:'20 May 2025', speaker:'Fong Ying Chai, YYC Tax Expert', outcomes:['Enterprise rollout phases and milestones','Change management for finance teams','System integration project planning'] },
+  { type:'course', img:'2.png', badge:'Mastery (5 Modules)', dur:'50 min', title:'e-Invoicing Implementation Roadmap for Large Enterprises', date:'20 May 2025', speaker:'Fong Ying Chai, YYC Tax Expert', outcomes:['Enterprise rollout phases and milestones','Change management for finance teams','System integration project planning'], featured:true },
   { type:'past', img:'1.png', badge:'e-Invoicing - Others', dur:'45 min', title:'e-Invoicing Data Security & Privacy Compliance', date:'15 May 2025', speaker:'Hen Yee Goh, YYC Johor Regional Director', outcomes:['Data protection obligations under PDPA','Secure storage of e-Invoice records','Third-party vendor data handling'] },
   { type:'past', img:'23.png', badge:'Industry Focus', dur:'1 hr', title:'e-Invoicing for Manufacturing & Supply Chain', date:'10 May 2025', speaker:'Ida Lim, YYC Penang Regional Director', outcomes:['Purchase order to e-Invoice workflow','Supplier onboarding for e-Invoicing','Inventory and logistics invoicing'], completed:true },
   { type: 'past', img:'22.png', badge:'MyInvois', dur:'35 min', title:'MyInvois Mobile App: Field Use Guide', date:'5 May 2025', speaker:'Jasmine Hau Jia Min, Audit Partner of YYC & CO PLT', outcomes:['Installing and setting up the mobile app','Creating invoices on the go','Offline mode and sync behavior'], detailUrl:'webinar-detail.html' },
   { type:'course', img:'21.png', badge:'Mastery (5 Modules)', dur:'55 min', title:'e-Invoicing Mastery: Complete Review & Q&A', date:'1 May 2025', speaker:'Letitia Chew, YYC, ESME Director', outcomes:['Full recap of all 5 mastery modules','Live Q&A highlights and answers','Key takeaways for implementation'] },
   { type:'past', img:'20.png', badge:'e-Invoicing - Others', dur:'40 min', title:'e-Invoicing for SMEs: Getting Started Fast', date:'25 Apr 2025', speaker:'Eve Tan, YYC Tax Director', outcomes:['SME e-Invoicing readiness checklist','Choosing the right solution for your size','Common SME mistakes to avoid'], resume:true, progress:45 },
   // Page 3
-  { type: 'course', img:'19.png', badge:'Industry Focus', dur:'1 hr 10 min', title:'e-Invoicing for Professional Services Firms', date:'20 Apr 2025', speaker:'Angie Ng, Boss Boleh Chief Operating Officer', outcomes:['Law firms, consultancies and accounting practices','Retainer and milestone invoicing','Cross-border service invoicing'] },
+  { type: 'course', img:'19.png', badge:'Industry Focus', dur:'1 hr 10 min', title:'e-Invoicing for Professional Services Firms', date:'20 Apr 2025', speaker:'Angie Ng, Boss Boleh Chief Operating Officer', outcomes:['Law firms, consultancies and accounting practices','Retainer and milestone invoicing','Cross-border service invoicing'], featured:true },
   { type:'course', img:'18.png', badge:'MyInvois', dur:'45 min', title:'MyInvois Dashboard & Reporting Features', date:'15 Apr 2025', speaker:'Eunice Kwong, Partner at Ricky Tan & Co', outcomes:['Navigating the reporting dashboard','Exporting submission history','Monitoring compliance KPIs'] },
   { type:'course', img:'17.png', badge:'e-Invoicing - Others', dur:'30 min', title:'Handling e-Invoice Rejections & Cancellations', date:'10 Apr 2025', speaker:'Andrew Yoon, Partner at Low & Partners Law Firm', outcomes:['Rejection reasons and how to fix them','72-hour cancellation window explained','Impact on buyer and seller records'] },
   { type: 'past', img:'16.png', badge:'Mastery (5 Modules)', dur:'1 hr 20 min', title:'e-Invoicing Mastery Module 5: Audit & Record Keeping', date:'5 Apr 2025', speaker:'Zen Chow, YYC Executive Director & Country Tax Leader', outcomes:['Document retention periods under e-Invoicing','Audit preparation checklist','Responding to LHDN audit queries'] },
@@ -1571,7 +1568,18 @@ var THUMB_BADGE_HTML = {
   past: '<span class="tc-thumb-badge tc-thumb-badge--past"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="5 3 19 12 5 21 5 3"/></svg>Past Webinar</span>',
   podcast: '<span class="tc-thumb-badge tc-thumb-badge--podcast"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 10a7 7 0 0 0 14 0"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg>Podcast</span>'
 };
-function getThumbBadge(type) { return THUMB_BADGE_HTML[type] || THUMB_BADGE_HTML.course; }
+var THUMB_BADGE_LABEL = { live:'Live Webinar', liveNow:'Live Now', course:'Course', past:'Past Webinar', podcast:'Podcast' };
+function getThumbBadge(type, featured) {
+  var html = THUMB_BADGE_HTML[type] || THUMB_BADGE_HTML.course;
+  var label = THUMB_BADGE_LABEL[type] || 'Course';
+  var tipText = featured ? 'Featured ' + label : label;
+  html = html.replace('class="tc-thumb-badge', 'data-tooltip="' + tipText + '" data-tooltip-pos="top" class="tc-thumb-badge');
+  if (featured) {
+    var star = '<svg class="tc-star" viewBox="0 0 24 24" fill="currentColor" stroke="none" width="11" height="11"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>';
+    html = html.replace(/<span[^>]*class="tc-thumb-badge[^>]*>/, '$&' + star);
+  }
+  return html;
+}
 
 var DISPLAY_CARDS = ALL_CARDS.slice();
 function renderCards(page) {
@@ -1598,11 +1606,11 @@ function renderCards(page) {
         ? '<div class="tc-play-overlay"><div class="tc-play-center"><div class="tc-play">' + playSVG + '</div><div class="tc-resume-label">Resume Playing</div></div></div>'
         : '<div class="tc-play-overlay"><div class="tc-play-center"><div class="tc-play">' + playSVG + '</div><div class="tc-resume-label">Learn More</div></div></div>';
     var completedOv = c.completed ? '<div class="tc-completed-overlay"><div class="tc-play-center"><div class="tc-play">' + playSVG + '</div><div class="tc-completed-text">Course Completed</div></div></div>' : '';
-    var cardClickAttr = c.detailUrl ? ' onclick="if(!event.target.closest(\'.tc-heart,.cp-close\') && window.innerWidth > 1100)window.location.href=\'' + c.detailUrl + '\'" style="cursor:pointer"' : '';
+    var cardClickAttr = c.detailUrl ? ' onclick="if(!event.target.closest(\'.tc-heart,.cp-close\') && window.innerWidth > 1024)window.location.href=\'' + c.detailUrl + '\'" style="cursor:pointer"' : '';
     return '<div class="tc-card' + stateClass + '"' + cardClickAttr + ' id="' + cardId + '">' +
       '<div class="tc-thumb">' +
         '<img src="assets/images/course-images/' + c.img + '" alt="Course">' +
-        getThumbBadge(c.type) +
+        getThumbBadge(c.type, c.featured) +
         overlay + completedOv +
         '<button class="tc-heart" onclick="toggleHeart(this)" aria-label="Add to wishlist">' + heartSVG + '</button>' +
         seekbar +
@@ -1613,7 +1621,7 @@ function renderCards(page) {
           '<span class="tc-dur">' + clockSVG + c.dur + '</span>' +
         '</div>' +
       '</div>' +
-      ((c.type === 'past' || c.type === 'course') ? '<div class="tc-dates"><div class="tc-date-row"><svg viewBox="0 0 24 24" class="tc-speaker-icon" title="Speaker"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="tc-speaker" title="Speaker: ' + (c.speaker || '') + '">' + (c.speaker || '') + '</span></div></div>' : '') +
+      ((c.type === 'past' || c.type === 'course') ? '<div class="tc-dates"><div class="tc-date-row" data-speaker="' + (c.speaker || '') + '"><svg viewBox="0 0 24 24" class="tc-speaker-icon"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="tc-speaker">' + (c.speaker || '') + '</span></div></div>' : '') +
     '</div>';
   }).join('');
 
@@ -1635,7 +1643,7 @@ function renderCards(page) {
     pop.innerHTML =
       '<div class="cp-video">' +
         '<img src="assets/images/course-images/' + c.img + '" alt="' + (c.title || '') + '">' +
-        getThumbBadge(c.type) +
+        getThumbBadge(c.type, c.featured) +
         '<button class="cp-close" aria-label="Close" onclick="eiHidePopover()">' +
           '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>' +
         '</button>' +
@@ -1643,7 +1651,7 @@ function renderCards(page) {
       '<div class="cp-body">' +
         '<div class="cp-meta"><span class="badge badge-sm badge-pill badge-bonus-outline">' + c.badge + '</span><span class="cp-date">' + (c.date || '') + '</span></div>' +
         '<h3 class="cp-title">' + (c.title || c.badge + ' Course') + '</h3>' +
-        '<div class="cp-stats"><span class="cp-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>' + c.dur + ' | CPE</span></div>' +
+        '<div class="cp-stats"><span class="cp-stat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>' + c.dur + '</span></div>' +
         '<div class="cp-divider"></div>' +
         '<p class="cp-learn-label">What you will learn</p>' +
         '<ul class="cp-outcomes">' + outcomes + '</ul>' +
@@ -1738,7 +1746,70 @@ function getPageRange(current, total) {
   return pages;
 }
 
-goToPage(1);
+(function() {
+  var params = new URLSearchParams(window.location.search);
+  var f = params.get('filter');
+  if (f) {
+    document.querySelectorAll('[data-filter-badge]').forEach(function(cb) { cb.checked = false; });
+    f.split(',').forEach(function(badge) {
+      badge = badge.trim();
+      var cb = document.querySelector('[data-filter-badge="' + badge + '"]');
+      if (cb) cb.checked = true;
+    });
+    // Sync parent checkbox state
+    var eiParentLabel = document.getElementById('topic-einvoicing-parent');
+    if (eiParentLabel) {
+      var parent = eiParentLabel.querySelector('input');
+      var kids = [];
+      var el = eiParentLabel.nextElementSibling;
+      while (el && el.classList.contains('ei-cb-child')) { kids.push(el.querySelector('input')); el = el.nextElementSibling; }
+      if (parent && kids.length) {
+        var n = kids.filter(function(c) { return c.checked; }).length;
+        parent.checked = n === kids.length;
+        parent.indeterminate = n > 0 && n < kids.length;
+      }
+    }
+    applyFilters();
+    return;
+  }
+}());
+
+applyFilters();
+
+// ── Speaker tooltip (body-level, escapes card overflow:hidden) ──
+(function() {
+  var tip = document.createElement('div');
+  tip.id = 'speaker-tip';
+  tip.style.cssText = 'position:fixed;z-index:99999;background:var(--tooltip-bg,#1e1e1e);color:var(--tooltip-text,#fff);font-family:var(--font-secondary);font-size:12px;font-weight:500;padding:5px 10px;border-radius:6px;white-space:nowrap;line-height:1.4;box-shadow:var(--shadow-md);pointer-events:none;opacity:0;transition:opacity 0.15s;';
+  document.body.appendChild(tip);
+
+  document.addEventListener('mouseover', function(e) {
+    var row = e.target.closest('[data-speaker]');
+    if (!row) return;
+    var text = row.getAttribute('data-speaker');
+    if (!text) return;
+    tip.textContent = text;
+    tip.style.opacity = '1';
+  });
+  document.addEventListener('mouseout', function(e) {
+    var row = e.target.closest('[data-speaker]');
+    if (!row) return;
+    if (!row.contains(e.relatedTarget)) tip.style.opacity = '0';
+  });
+  document.addEventListener('mousemove', function(e) {
+    if (tip.style.opacity === '0') return;
+    var x = e.clientX, y = e.clientY;
+    var tw = tip.offsetWidth, th = tip.offsetHeight;
+    var left = x - tw / 2;
+    var top = y - th - 10;
+    if (left < 4) left = 4;
+    if (left + tw > window.innerWidth - 4) left = window.innerWidth - tw - 4;
+    if (top < 4) top = y + 14;
+    tip.style.left = left + 'px';
+    tip.style.top = top + 'px';
+  });
+}());
+
 </script>
 
 </body>

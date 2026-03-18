@@ -104,10 +104,13 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif; }
   background: rgba(0,175,237,0.85);
   transform: translate(-50%, -50%) scale(1.08);
 }
+.wd-play-btn {
+  color: var(--neutral-white);
+}
 .wd-play-btn svg {
   width: 28px;
   height: 28px;
-  fill: #fff;
+  fill: currentColor;
   margin-left: 4px;
 }
 .wd-hero-badge {
@@ -179,12 +182,13 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif; }
   width: 68px; height: 68px;
   border-radius: 50%;
   background: var(--primary-500);
+  color: var(--neutral-white);
   display: flex; align-items: center; justify-content: center;
   transition: transform 0.18s, background 0.18s;
 }
 .wd-play-overlay:hover .tc-play { transform: scale(1.1); background: var(--primary-600); }
-.wd-play-overlay .tc-play svg { width: 26px; height: 26px; fill: #fff; stroke: none; margin-left: 4px; }
-.wd-play-overlay .tc-resume-label { font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 700; color: #fff; text-transform: uppercase; letter-spacing: 1.5px; }
+.wd-play-overlay .tc-play svg { width: 26px; height: 26px; fill: currentColor; stroke: none; margin-left: 4px; }
+.wd-play-overlay .tc-resume-label { font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 700; color: var(--neutral-white); text-transform: uppercase; letter-spacing: 1.5px; }
 .wd-fav-btn {
   margin-left: auto;
   display: inline-flex;
@@ -328,10 +332,16 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif; }
 }
 .wd-ai-summary.collapsed .wd-ai-chevron { transform: rotate(180deg); }
 .wd-ai-body {
-  padding: 0 18px 18px;
-  border-top: 1px solid rgba(120,130,200,0.15);
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease;
+  border-top: 0px solid rgba(120,130,200,0.15);
 }
-.wd-ai-body.hidden { display: none; }
+.wd-ai-summary:not(.collapsed) .wd-ai-body {
+  max-height: 1200px;
+  border-top-width: 1px;
+  padding: 0 18px 18px;
+}
 .wd-ai-preview {
   padding: 0 18px 14px;
   font-size: 13px;
@@ -590,24 +600,24 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif; }
   transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .wd-progress-pct {
+  display: inline-flex;
+  align-items: center;
   font-size: 12px;
   font-weight: 700;
   color: var(--progress-bar-color);
-  margin-bottom: 6px;
-}
-[data-theme="dark"] .wd-progress-pct {
-  display: inline-flex;
-  align-items: center;
-  background: var(--progress-bar-color);
-  color: #fff;
   padding: 2px 10px;
   border-radius: var(--radius-full);
   margin-bottom: 8px;
+  background: transparent;
+}
+[data-theme="dark"] .wd-progress-pct {
+  background: var(--progress-bar-color);
+  color: #fff;
 }
 [data-theme="dark"] .wd-progress-bar-wrap { background: var(--grey-300); }
 .wd-progress-note {
   font-size: 11px;
-  color: var(--grey-500);
+  color: var(--grey-600);
   line-height: 1.5;
   margin: 0;
 }
@@ -664,10 +674,12 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif; }
   flex-shrink: 0;
 }
 .wd-chapter-lessons {
-  display: none;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease;
 }
 .wd-chapter-card.open .wd-chapter-lessons {
-  display: block;
+  max-height: 800px;
 }
 .wd-lesson-item {
   display: flex;
@@ -692,8 +704,8 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif; }
   justify-content: center;
 }
 .wd-lesson-check svg { width: 10px; height: 10px; stroke: var(--grey-300); fill: none; }
-.wd-lesson-check.done { background: var(--success-300); border-color: var(--success-300); }
-.wd-lesson-check.done svg { stroke: #fff; }
+.wd-lesson-check.done { background: transparent; border-color: var(--success-300); }
+.wd-lesson-check.done svg { stroke: var(--success-300); }
 .wd-lesson-info { flex: 1; min-width: 0; }
 .wd-lesson-title {
   font-size: 14px;
@@ -741,6 +753,8 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif; }
 [data-theme="dark"] .wd-chapter-count { color: #A1A8B3; }
 [data-theme="dark"] .wd-lesson-check { border-color: #A1A8B3; }
 [data-theme="dark"] .wd-lesson-check svg { stroke: #A1A8B3; }
+[data-theme="dark"] .wd-lesson-check.done { background: transparent; border-color: var(--success-300); }
+[data-theme="dark"] .wd-lesson-check.done svg { stroke: var(--success-300); }
 [data-theme="dark"] .wd-lesson-dur { color: #A1A8B3; }
 
 /* ── Responsive ── */
@@ -773,7 +787,7 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif; }
   <nav class="wd-breadcrumb" aria-label="Breadcrumb">
     <a href="e-invoicing.html">E-Invoicing</a>
     <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
-    <a href="e-invoicing.html">Industry Focus</a>
+    <a href="e-invoicing.html?filter=Industry+Focus">Industry Focus</a>
     <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
     <span>e-Invoicing - Industry Focus: Healthcare</span>
   </nav>
@@ -833,7 +847,7 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif; }
           <svg class="wd-ai-chevron" viewBox="0 0 24 24" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
         </div>
         <div class="wd-ai-preview">This course examines how Malaysia's e-Invoicing mandate applies to the healthcare sector. It addresses the unique billing complexities involving hospitals, insurance companies, patients, and third-party consultants, and how each transaction type must be handled to achieve full compliance.</div>
-        <div class="wd-ai-body hidden" id="wd-ai-body">
+        <div class="wd-ai-body" id="wd-ai-body">
           <p class="wd-ai-course-title">e-Invoicing — Industry Focus: Healthcare</p>
 
           <!-- Overview -->
@@ -1031,17 +1045,20 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif; }
             <span class="wd-chapter-count">0/5</span>
           </div>
           <div class="wd-chapter-lessons">
-            <div class="wd-lesson-item playing">
-              <div class="wd-lesson-check"><svg viewBox="0 0 24 24" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <div class="wd-lesson-item playing" id="wd-lesson-1">
+              <div class="wd-lesson-check" id="wd-lesson-1-check"><svg viewBox="0 0 24 24" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
               <div class="wd-lesson-info">
                 <div class="wd-lesson-title">Overview of Healthcare Industry</div>
                 <div class="wd-lesson-dur">4 mins</div>
               </div>
               <div class="wd-lesson-action">
-                <div class="wd-lesson-play">
-                  <svg viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+                <div class="wd-lesson-play" id="wd-lesson-1-play" onclick="toggleVideoPlay()">
+                  <!-- pause icon (shown when playing) -->
+                  <svg class="icon-pause" viewBox="0 0 24 24" style="display:none"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+                  <!-- play icon (shown when paused) -->
+                  <svg class="icon-play" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
                 </div>
-                <span class="wd-lesson-timer">3:18</span>
+                <span class="wd-lesson-timer" id="wd-lesson-1-timer">0:00</span>
               </div>
             </div>
             <div class="wd-lesson-item">
@@ -1115,10 +1132,31 @@ function toggleChapter(id) {
 }
 
 function toggleAiSummary() {
-  var panel = document.getElementById('wd-ai-summary');
-  var body  = document.getElementById('wd-ai-body');
-  panel.classList.toggle('collapsed');
-  body.classList.toggle('hidden');
+  document.getElementById('wd-ai-summary').classList.toggle('collapsed');
+}
+
+function fmtTime(s) {
+  s = Math.floor(s);
+  return Math.floor(s / 60) + ':' + ('0' + (s % 60)).slice(-2);
+}
+
+function setVideoPlayingState(isPlaying) {
+  var btn = document.getElementById('wd-lesson-1-play');
+  if (!btn) return;
+  btn.querySelector('.icon-pause').style.display = isPlaying ? '' : 'none';
+  btn.querySelector('.icon-play').style.display  = isPlaying ? 'none' : '';
+}
+
+function toggleVideoPlay() {
+  var v = document.getElementById('wd-video');
+  if (!v) return;
+  if (v.paused) {
+    v.play();
+    var o = document.getElementById('wd-play-overlay');
+    if (o) o.style.display = 'none';
+  } else {
+    v.pause();
+  }
 }
 
 function playVideo() {
@@ -1131,12 +1169,25 @@ function playVideo() {
 (function() {
   var v = document.getElementById('wd-video');
   if (!v) return;
+
+  v.addEventListener('play', function() {
+    setVideoPlayingState(true);
+    var o = document.getElementById('wd-play-overlay');
+    if (o) o.style.display = 'none';
+  });
+  v.addEventListener('pause', function() { setVideoPlayingState(false); });
+
+  v.addEventListener('timeupdate', function() {
+    var timer = document.getElementById('wd-lesson-1-timer');
+    if (timer) timer.textContent = fmtTime(v.currentTime);
+  });
+
   v.addEventListener('ended', function() {
-    var playingItem = document.querySelector('.wd-lesson-item.playing');
-    if (playingItem) {
-      var check = playingItem.querySelector('.wd-lesson-check');
-      if (check) check.classList.add('done');
-    }
+    setVideoPlayingState(false);
+    var check = document.getElementById('wd-lesson-1-check');
+    if (check) check.classList.add('done');
+    var timer = document.getElementById('wd-lesson-1-timer');
+    if (timer) timer.textContent = fmtTime(v.duration || 0);
   });
 })();
 </script>
