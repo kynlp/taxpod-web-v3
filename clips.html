@@ -731,7 +731,7 @@ document.addEventListener('keydown', function(e) {
 
   function updateArrowStates() {
     prevBtn.className = 'clips-arrow-btn ' + (idx > 0 ? 'active' : 'inactive');
-    nextBtn.className = 'clips-arrow-btn ' + (idx < clips.length - 1 ? 'active' : 'inactive');
+    nextBtn.className = 'clips-arrow-btn active';
   }
 
   function animateClip(newIdx, exitClass, enterClass) {
@@ -751,7 +751,13 @@ document.addEventListener('keydown', function(e) {
   }
 
   function prevClip() { if (idx > 0) animateClip(idx - 1, 'exit-down', 'enter-down'); }
-  function nextClip() { if (idx < clips.length - 1) animateClip(idx + 1, 'exit-up', 'enter-up'); }
+  function nextClip() {
+    if (idx < clips.length - 1) {
+      animateClip(idx + 1, 'exit-up', 'enter-up');
+    } else {
+      animateClip(0, 'exit-up', 'enter-up');
+    }
+  }
 
   prevBtn.onclick = prevClip;
   nextBtn.onclick = nextClip;
