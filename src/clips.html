@@ -374,7 +374,13 @@ body { background: var(--web-bg-light-blue); }
     seekbar.value = 0;
     seekbar.style.background = 'linear-gradient(to right, var(--primary-500) 0%, var(--primary-500)0%, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.3) 100%)';
     playIcon.innerHTML = '<rect x="6" y="4" width="4" height="16" fill="#fff"/><rect x="14" y="4" width="4" height="16" fill="#fff"/>';
-    video.onended = function() { if (idx < clips.length - 1) loadClip(idx + 1); };
+    video.onended = function() {
+      if (idx < clips.length - 1) {
+        animateClip(idx + 1, 'exit-up', 'enter-up');
+      } else {
+        animateClip(0, 'exit-up', 'enter-up');
+      }
+    };
     if (typeof updateArrowStates === 'function') updateArrowStates();
   }
 
@@ -462,6 +468,18 @@ body { background: var(--web-bg-light-blue); }
 
   prevBtn.onclick = prevClip;
   nextBtn.onclick = nextClip;
+
+  // Click video panel to toggle play/pause (ignore clicks on controls/buttons)
+  document.getElementById('clips-container').addEventListener('click', function(e) {
+    if (e.target.closest('.clips-controls, .clips-vid-actions, .clips-overlay-more')) return;
+    if (video.paused) {
+      video.play();
+      playIcon.innerHTML = '<rect x="6" y="4" width="4" height="16" fill="#fff"/><rect x="14" y="4" width="4" height="16" fill="#fff"/>';
+    } else {
+      video.pause();
+      playIcon.innerHTML = '<polygon points="5 3 19 12 5 21 5 3"/>';
+    }
+  });
 
   // Filter chips
   document.querySelectorAll('.clips-filter-chip').forEach(function(chip) {
