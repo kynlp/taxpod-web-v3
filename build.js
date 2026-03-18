@@ -15,7 +15,7 @@ const path = require('path');
 const ROOT = __dirname;
 const SRC  = path.join(__dirname, 'src');
 
-const PAGES = ['index.html', 'popular-series.html', 'e-invoicing.html', 'webinars.html', 'webinar-detail.html', 'live-webinar-detail.html'];
+const PAGES = ['index.html', 'popular-series.html', 'e-invoicing.html', 'webinars.html', 'webinar-detail.html', 'live-webinar-detail.html', 'clips.html'];
 
 function processIncludes(html) {
   return html.replace(/<!--\s*#include\s+"([^"]+)"\s*-->/g, function(match, filePath) {

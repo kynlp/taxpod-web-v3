@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clips | YYC taxPOD</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="templates/css-variables.css">
+<link rel="stylesheet" href="templates/css-topbar.css">
+<link rel="stylesheet" href="templates/css-footer.css">
+<script>
+(function(){
+  var t=localStorage.getItem('theme')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');
+  document.documentElement.setAttribute('data-theme',t);
+})();
+</script>
+<style>
+
+html.theme-transition * {
+  transition: background-color 0.35s ease, color 0.35s ease, border-color 0.35s ease !important;
+}
+
+body { background: var(--web-bg-light-blue); }
+
+/* ── Page title ── */
+.clips-page-title {
+  text-align: center;
+  padding: 32px var(--space-24) 24px;
+}
+.clips-page-title h1 {
+  font-size: 28px; font-weight: 700; color: var(--text-primary); margin: 0;
+}
+
+/* ── Player wrapper ── */
+.clips-player-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-16);
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 var(--space-24) 48px;
+}
+
+/* ── Video container ── */
+.clips-video-container {
+  position: relative;
+  width: 340px;
+  max-width: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #000;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+  flex-shrink: 0;
+}
+
+.clips-video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 9/16;
+  object-fit: cover;
+  background: #000;
+}
+
+/* ── Video overlay info ── */
+.clips-overlay {
+  position: absolute;
+  bottom: 38px; left: 0; right: 0;
+  padding: 48px 16px 12px;
+  background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 50%, transparent 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.clips-overlay-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px 5px;
+  border-radius: 4px;
+  border: 1.5px solid transparent;
+  font-family: 'Lato', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+  align-self: flex-start;
+  pointer-events: none;
+}
+/* All badges use primary blue — colour adapts via --primary-500 token */
+.clips-overlay-badge { background: var(--primary-500); color: #fff; }
+[data-theme="dark"] .clips-overlay-badge { color: #1E1E1E; }
+
+.clips-overlay-title {
+  font-size: 13px;
+  font-weight: 500;
+  color: #fff;
+  line-height: 1.45;
+  margin: 0;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+.clips-overlay-title.expanded {
+  -webkit-line-clamp: 3;
+}
+.clips-overlay-more {
+  color: rgba(255,255,255,0.7);
+  font-size: 13px;
+  cursor: pointer;
+  pointer-events: auto;
+  margin-top: -2px;
+}
+
+/* ── Custom controls bar ── */
+.clips-controls {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px 10px;
+  z-index: 2;
+}
+.clips-play-btn {
+  width: 24px; height: 24px;
+  background: none; border: none;
+  color: #fff; cursor: pointer; padding: 0;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.clips-play-btn svg { width: 18px; height: 18px; fill: #fff; }
+
+.clips-seekbar {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(to right, var(--primary-500) 0%, var(--primary-500) 0%, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.3) 100%);
+  outline: none;
+  cursor: pointer;
+}
+.clips-seekbar::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: #fff;
+  cursor: pointer;
+}
+
+.clips-time {
+  font-size: 11px;
+  color: rgba(255,255,255,0.8);
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Side action buttons ── */
+.clips-side-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+  align-self: center;
+}
+
+/* Arrow nav — design system pg-arrow-btn style */
+.clips-arrow-btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s, opacity 0.15s;
+  padding: 0;
+}
+.clips-arrow-btn svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+.clips-arrow-btn.active { background: var(--primary-600); color: var(--neutral-white); }
+.clips-arrow-btn.active:hover { background: var(--primary-700); }
+.clips-arrow-btn.inactive { background: var(--grey-200); color: var(--grey-500); cursor: default; }
+
+/* Sound / share buttons */
+.clips-action-btn {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--border-light);
+  background: var(--card-bg);
+  color: var(--text-secondary);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  padding: 0;
+}
+.clips-action-btn:hover { background: var(--primary-500); border-color: var(--primary-500); color: #fff; }
+.clips-action-btn svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ── Sound + share on video (right bottom stack) ── */
+.clips-vid-actions {
+  position: absolute;
+  right: 10px;
+  bottom: 130px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 3;
+}
+.clips-vid-btn {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0,0,0,0.45);
+  color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s;
+  padding: 0;
+}
+.clips-vid-btn:hover { background: rgba(0,0,0,0.65); }
+.clips-vid-btn svg {
+  width: 15px; height: 15px;
+}
+/* ── Clips description ── */
+.clips-description {
+  text-align: center;
+  padding: 0 var(--space-24) var(--space-20);
+  color: var(--text-secondary);
+  font-size: 15px;
+  line-height: 1.6;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* ── Slide transition animations ── */
+@keyframes clipExitUp {
+  from { transform: translateY(0);    opacity: 1; }
+  to   { transform: translateY(-48px); opacity: 0; }
+}
+@keyframes clipExitDown {
+  from { transform: translateY(0);   opacity: 1; }
+  to   { transform: translateY(48px); opacity: 0; }
+}
+@keyframes clipEnterUp {
+  from { transform: translateY(48px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+@keyframes clipEnterDown {
+  from { transform: translateY(-48px); opacity: 0; }
+  to   { transform: translateY(0);     opacity: 1; }
+}
+#clips-container.exit-up   { animation: clipExitUp   0.22s ease forwards; }
+#clips-container.exit-down { animation: clipExitDown 0.22s ease forwards; }
+#clips-container.enter-up  { animation: clipEnterUp  0.25s ease forwards; }
+#clips-container.enter-down{ animation: clipEnterDown 0.25s ease forwards; }
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .clips-page-title { padding: 24px var(--space-16) 16px; }
+  .clips-player-wrap { flex-direction: column; padding: 0 var(--space-16) 32px; }
+  .clips-video-container { width: 100%; max-width: 340px; }
+  .clips-side-actions { flex-direction: row; }
+}
+
+</style>
+</head>
+<body>
+
+<script src="auth.js"></script>
+<!-- Topbar -->
+<header class="topbar">
+<div class="topbar-inner">
+  <div class="topbar-logo">
+    <a href="index.html">
+      <img src="assets/images/logo-dark.png" alt="YYC taxPOD" class="logo-light">
+      <img src="assets/images/logo-white.png" alt="YYC taxPOD" class="logo-dark">
+    </a>
+  </div>
+  <div class="topbar-search">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="text" placeholder="Search...">
+  </div>
+  <!-- Mobile row break: forces row 2 to start after logo+search -->
+  <div class="topbar-row-break"></div>
+  <!-- Hamburger (mobile only) -->
+  <button class="mob-menu-btn" onclick="mobMenuOpen()" aria-label="Open menu">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+  <div class="topbar-actions">
+    <button class="topbar-lang">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      <span>EN</span>
+      <svg class="tb-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <button class="topbar-icon topbar-theme" onclick="(function(h){h.classList.add('theme-transition');var d=h.getAttribute('data-theme')==='dark'?'light':'dark';h.setAttribute('data-theme',d);localStorage.setItem('theme',d);setTimeout(function(){h.classList.remove('theme-transition')},350)})(document.documentElement)" aria-label="Toggle Dark Mode">
+      <svg class="tb-theme-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <svg class="tb-theme-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+    </button>
+    <button class="topbar-icon">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+    </button>
+    <button class="topbar-icon">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      <span class="topbar-badge">3</span>
+    </button>
+    <div class="topbar-avatar">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    </div>
+  </div>
+</div>
+</header>
+
+<!-- Mobile Menu Backdrop -->
+<div class="mob-menu-backdrop" id="mob-menu-backdrop" onclick="mobMenuClose()"></div>
+
+<!-- Mobile Menu Drawer -->
+<div class="mob-menu" id="mob-menu" role="dialog" aria-modal="true" aria-label="Navigation">
+  <div class="mob-menu-header">
+    <img src="assets/images/logo-dark.png" alt="YYC taxPOD" class="logo-light">
+    <img src="assets/images/logo-white.png" alt="YYC taxPOD" class="logo-dark" style="display:none">
+    <button class="mob-menu-close" onclick="mobMenuClose()" aria-label="Close menu">
+      <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <nav class="mob-nav">
+    <div class="mob-nav-item">
+      <div class="mob-nav-split">
+        <a href="webinars.html" class="mob-nav-split-link">Webinars</a>
+        <button class="mob-nav-split-toggle" onclick="mobNavToggle(this)" aria-label="Toggle Webinars menu"><svg class="mob-nav-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
+      </div>
+      <div class="mob-nav-sub">
+        <a href="webinars.html?filter=live" class="mob-nav-sub-item">Live Webinars</a>
+        <a href="webinars.html?filter=past" class="mob-nav-sub-item">Past Webinars</a>
+      </div>
+    </div>
+    <div class="mob-nav-item">
+      <button class="mob-nav-btn" onclick="mobNavToggle(this)">Update Classes <svg class="mob-nav-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="mob-nav-sub">
+        <a href="#" class="mob-nav-sub-item">2026</a>
+        <a href="#" class="mob-nav-sub-item">2025</a>
+        <a href="#" class="mob-nav-sub-item">2024</a>
+        <a href="#" class="mob-nav-sub-item">2023</a>
+      </div>
+    </div>
+    <div class="mob-nav-item">
+      <div class="mob-nav-split">
+        <a href="e-invoicing.html" class="mob-nav-split-link">E-Invoicing</a>
+        <button class="mob-nav-split-toggle" onclick="mobNavToggle(this)" aria-label="Toggle E-Invoicing menu"><svg class="mob-nav-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
+      </div>
+      <div class="mob-nav-sub">
+        <a href="#" class="mob-nav-sub-item">Mastery (5 Modules)</a>
+        <a href="#" class="mob-nav-sub-item">MyInvois</a>
+        <a href="#" class="mob-nav-sub-item">Industry Focus</a>
+        <a href="#" class="mob-nav-sub-item">e-Invoicing - Others</a>
+      </div>
+    </div>
+    <div class="mob-nav-item">
+      <button class="mob-nav-btn" onclick="mobNavToggle(this)">Income Tax <svg class="mob-nav-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="mob-nav-sub">
+        <a href="#" class="mob-nav-sub-item">Income</a>
+        <a href="#" class="mob-nav-sub-item">Others</a>
+        <a href="#" class="mob-nav-sub-item">Withholding Tax</a>
+        <a href="#" class="mob-nav-sub-item">Expenses</a>
+        <a href="#" class="mob-nav-sub-item">Stamp Duty</a>
+      </div>
+    </div>
+    <div class="mob-nav-item">
+      <button class="mob-nav-btn" onclick="mobNavToggle(this)">Forms <svg class="mob-nav-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="mob-nav-sub">
+        <a href="#" class="mob-nav-sub-item">Form BE</a>
+        <a href="#" class="mob-nav-sub-item">Form CP204 &amp; CP204A</a>
+        <a href="#" class="mob-nav-sub-item">Form B</a>
+        <a href="#" class="mob-nav-sub-item">Form C</a>
+        <a href="#" class="mob-nav-sub-item">MyTax - ezHasil Services</a>
+        <a href="#" class="mob-nav-sub-item">Form E &amp; EA</a>
+      </div>
+    </div>
+    <div class="mob-nav-item">
+      <button class="mob-nav-btn" onclick="mobNavToggle(this)">SST <svg class="mob-nav-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="mob-nav-sub">
+        <a href="#" class="mob-nav-sub-item">Service Tax</a>
+        <a href="#" class="mob-nav-sub-item">Sales Tax</a>
+      </div>
+    </div>
+    <div class="mob-nav-item">
+      <button class="mob-nav-btn" onclick="mobNavToggle(this)">Resources <svg class="mob-nav-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="mob-nav-sub">
+        <a href="#" class="mob-nav-sub-item">Accounting Training Hours/CPE</a>
+        <a href="#" class="mob-nav-sub-item">Articles</a>
+        <a href="#" class="mob-nav-sub-item">Our Speakers</a>
+        <a href="#" class="mob-nav-sub-item">Quick Guides</a>
+        <a href="#" class="mob-nav-sub-item">Tax A Minute</a>
+        <a href="#" class="mob-nav-sub-item">FAQ</a>
+        <a href="clips.html" class="mob-nav-sub-item">Clips</a>
+      </div>
+    </div>
+    <div class="mob-nav-item mob-nav-item--expert">
+      <a href="#" class="mob-nav-btn">Ask An Expert</a>
+    </div>
+    <div class="mob-nav-item">
+      <a href="#" class="mob-nav-btn">Deals</a>
+    </div>
+  </nav>
+</div>
+
+<!-- Main Navigation -->
+<nav class="main-nav">
+  <div class="main-nav-inner">
+    <!-- Webinars -->
+    <div class="mn-item-wrap">
+      <a href="webinars.html" class="mn-item">Webinars <svg class="mn-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></a>
+      <div class="mn-dropdown">
+        <a href="webinars.html?filter=live" class="mn-dropdown-item">Live Webinars</a>
+        <a href="webinars.html?filter=past" class="mn-dropdown-item">Past Webinars</a>
+      </div>
+    </div>
+    <!-- Update Classes -->
+    <div class="mn-item-wrap">
+      <button class="mn-item">Update Classes <svg class="mn-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="mn-dropdown">
+        <a href="#" class="mn-dropdown-item">2026</a>
+        <a href="#" class="mn-dropdown-item">2025</a>
+        <a href="#" class="mn-dropdown-item">2024</a>
+        <a href="#" class="mn-dropdown-item">2023</a>
+      </div>
+    </div>
+    <!-- E-Invoicing -->
+    <div class="mn-item-wrap">
+      <a href="e-invoicing.html" class="mn-item">E-Invoicing <svg class="mn-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></a>
+      <div class="mn-dropdown">
+        <a href="#" class="mn-dropdown-item">Mastery (5 Modules)</a>
+        <a href="#" class="mn-dropdown-item">MyInvois</a>
+        <a href="#" class="mn-dropdown-item">Industry Focus</a>
+        <a href="#" class="mn-dropdown-item">e-Invoicing - Others</a>
+      </div>
+    </div>
+    <!-- Income Tax -->
+    <div class="mn-item-wrap">
+      <button class="mn-item">Income Tax <svg class="mn-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="mn-dropdown">
+        <a href="#" class="mn-dropdown-item">Income</a>
+        <a href="#" class="mn-dropdown-item">Others</a>
+        <a href="#" class="mn-dropdown-item">Withholding Tax</a>
+        <a href="#" class="mn-dropdown-item">Expenses</a>
+        <a href="#" class="mn-dropdown-item">Stamp Duty</a>
+      </div>
+    </div>
+    <!-- Forms -->
+    <div class="mn-item-wrap">
+      <button class="mn-item">Forms <svg class="mn-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="mn-dropdown">
+        <a href="#" class="mn-dropdown-item">Form BE</a>
+        <a href="#" class="mn-dropdown-item">Form CP204 &amp; CP204A</a>
+        <a href="#" class="mn-dropdown-item">Form B</a>
+        <a href="#" class="mn-dropdown-item">Form C</a>
+        <a href="#" class="mn-dropdown-item">MyTax - ezHasil Services</a>
+        <a href="#" class="mn-dropdown-item">Form E &amp; EA</a>
+      </div>
+    </div>
+    <!-- SST -->
+    <div class="mn-item-wrap">
+      <button class="mn-item">SST <svg class="mn-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="mn-dropdown">
+        <a href="#" class="mn-dropdown-item">Service Tax</a>
+        <a href="#" class="mn-dropdown-item">Sales Tax</a>
+      </div>
+    </div>
+    <!-- Resources -->
+    <div class="mn-item-wrap">
+      <button class="mn-item">Resources <svg class="mn-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="mn-dropdown">
+        <a href="#" class="mn-dropdown-item">Accounting Training Hours/CPE</a>
+        <a href="#" class="mn-dropdown-item">Articles</a>
+        <a href="#" class="mn-dropdown-item">Our Speakers</a>
+        <a href="#" class="mn-dropdown-item">Quick Guides</a>
+        <a href="#" class="mn-dropdown-item">Tax A Minute</a>
+        <a href="#" class="mn-dropdown-item">FAQ</a>
+        <a href="clips.html" class="mn-dropdown-item">Clips</a>
+      </div>
+    </div>
+    <!-- Ask An Expert -->
+    <a href="#" class="mn-item mn-item--expert">Ask An Expert</a>
+    <!-- Deals -->
+    <a href="#" class="mn-item">Deals</a>
+  </div>
+</nav>
+
+
+<div class="clips-page-title">
+  <h1>Clips</h1>
+</div>
+
+<p class="clips-description">Short, focused video clips on tax topics. Quick insights you can watch in minutes.</p>
+
+<div class="clips-player-wrap">
+
+  <!-- Video player -->
+  <div class="clips-video-container" id="clips-container">
+    <video class="clips-video" id="clips-video" autoplay muted playsinline></video>
+
+    <!-- Sound + share buttons — right bottom of video -->
+    <div class="clips-vid-actions">
+      <button class="clips-vid-btn" id="clips-mute" aria-label="Toggle sound">
+        <svg viewBox="0 0 24 24" id="mute-icon">
+          <line x1="1" y1="1" x2="23" y2="23" stroke="#fff" stroke-width="2"/>
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="#fff" stroke="none"/>
+        </svg>
+      </button>
+      <button class="clips-vid-btn" id="clips-share" aria-label="Share">
+        <svg viewBox="0 0 24 24" stroke="#fff" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+      </button>
+    </div>
+
+    <!-- Info overlay -->
+    <div class="clips-overlay">
+      <span class="clips-overlay-badge" id="clips-badge">e-Invoicing</span>
+      <p class="clips-overlay-title" id="clips-title">When should I start implementing the e-Invoicing system in my business?</p>
+      <span class="clips-overlay-more" id="clips-more" style="display:none">more</span>
+      <span class="clips-overlay-more" id="clips-less" style="display:none">less</span>
+    </div>
+
+    <!-- Controls bar -->
+    <div class="clips-controls">
+      <button class="clips-play-btn" id="clips-play" aria-label="Play">
+        <svg viewBox="0 0 24 24" id="play-icon"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      </button>
+      <input type="range" class="clips-seekbar" id="clips-seekbar" min="0" max="100" value="0">
+      <span class="clips-time" id="clips-time">01:00</span>
+    </div>
+  </div>
+
+  <!-- Side actions: prev / next arrows only -->
+  <div class="clips-side-actions">
+    <button class="clips-arrow-btn active" id="clips-prev" aria-label="Previous clip">
+      <svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
+    </button>
+    <button class="clips-arrow-btn active" id="clips-next" aria-label="Next clip">
+      <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+  </div>
+
+</div>
+
+<footer class="site-footer">
+  <div class="site-footer-body">
+    <div class="site-footer-left">
+      <img src="assets/images/logo-white.png" alt="YYC taxPOD" class="site-footer-logo">
+      <div>
+        <h5 class="site-footer-contact-title">Contact Us</h5>
+        <p class="site-footer-contact-desc">Have questions? We're here to help you with your tax learning journey.</p>
+      </div>
+      <div class="site-footer-contacts">
+        <a href="mailto:support@taxpod.my" class="site-footer-contact-item">
+          <img src="assets/images/icon-email.png" alt="Email" class="site-footer-contact-icon">
+          support@taxpod.my
+        </a>
+        <div class="site-footer-phones">
+          <a href="#" class="site-footer-contact-item">
+            <img src="assets/images/icon-whatsapp.png" alt="WhatsApp" class="site-footer-contact-icon">
+            016-507 7309
+          </a>
+          <span class="site-footer-divider"></span>
+          <a href="#" class="site-footer-contact-item">
+            <img src="assets/images/icon-whatsapp.png" alt="WhatsApp" class="site-footer-contact-icon">
+            016-624 7309
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="site-footer-right">
+      <h5 class="site-footer-app-title">Get the App</h5>
+      <div class="site-footer-apps">
+        <a href="#"><img src="assets/images/footer-applestore.png" alt="App Store" class="site-footer-app-badge"></a>
+        <a href="#"><img src="assets/images/footer-googleplay.png" alt="Google Play" class="site-footer-app-badge"></a>
+        <a href="#"><img src="assets/images/footer-huawei.png" alt="Huawei AppGallery" class="site-footer-app-badge"></a>
+      </div>
+    </div>
+  </div>
+  <div class="site-footer-bar">
+    <span class="site-footer-copy">&copy; 2026 YYC taxPOD. All rights reserved.</span>
+    <div class="site-footer-links">
+      <a href="#" class="site-footer-link">Privacy Policy</a>
+      <span class="site-footer-link-sep">|</span>
+      <a href="#" class="site-footer-link">Terms of Use</a>
+      <span class="site-footer-link-sep">|</span>
+      <a href="#" class="site-footer-link">Refund Policy</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ── Mobile Menu ──
+function mobMenuOpen() {
+  document.getElementById('mob-menu').classList.add('is-open');
+  document.getElementById('mob-menu-backdrop').classList.add('is-open');
+  document.body.style.overflow = 'hidden';
+  // Sync logo theme
+  var dark = document.documentElement.getAttribute('data-theme') === 'dark';
+  var menu = document.getElementById('mob-menu');
+  menu.querySelector('.logo-light').style.display = dark ? 'none' : 'block';
+  menu.querySelector('.logo-dark').style.display = dark ? 'block' : 'none';
+}
+function mobMenuClose() {
+  document.getElementById('mob-menu').classList.remove('is-open');
+  document.getElementById('mob-menu-backdrop').classList.remove('is-open');
+  document.body.style.overflow = '';
+}
+function mobNavToggle(btn) {
+  btn.closest('.mob-nav-item').classList.toggle('is-open');
+}
+// Close on Escape key
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') mobMenuClose();
+});
+</script>
+
+
+<script>
+(function(){
+  var clips = [
+    { src: 'assets/videos/When should I start implementing e-Invoicing system into my business.mp4', badge: 'e-Invoicing', cat: 'e-invoicing', title: 'When should I start implementing the e-Invoicing system in my business, and what are the key steps to get started?', dur: '01:00' },
+    { src: 'assets/videos/Upkeep and Renovation tax deductible.mp4', badge: 'Income Tax', cat: 'income-tax', title: 'Do you know what those expenses for upkeep and renovation are actually tax deductible?', dur: '00:54' },
+    { src: 'assets/videos/Form EA or Form CP 58, you can\'t tell the difference.mp4', badge: 'Forms', cat: 'forms', title: 'Form EA or Form CP 58, can you tell the difference between these two important tax forms?', dur: '01:00' },
+    { src: 'assets/videos/What are the positive impacts of e-Invoice.mp4', badge: 'e-Invoicing', cat: 'e-invoicing', title: 'What are the positive impacts of e-Invoice for your business operations?', dur: '00:51' },
+    { src: 'assets/videos/Document you must not miss after giving commission and incentives.mp4', badge: 'Income Tax', cat: 'income-tax', title: 'Document you must not miss after giving commission and incentives to your employees', dur: '01:15' },
+    { src: 'assets/videos/Are You Exempted From Paying Taxes For Foreign-Sourced Income.mp4', badge: 'Income Tax', cat: 'income-tax', title: 'Are you exempted from paying taxes for foreign-sourced income in Malaysia?', dur: '00:58' },
+    { src: 'assets/videos/Alert!! Can donation via e-wallet eligible for tax deduction_.mp4', badge: 'Income Tax', cat: 'income-tax', title: 'Alert! Can donation via e-wallet be eligible for tax deduction under current rules?', dur: '01:05' }
+  ];
+
+  var idx = 0;
+  var video = document.getElementById('clips-video');
+  var playBtn = document.getElementById('clips-play');
+  var playIcon = document.getElementById('play-icon');
+  var seekbar = document.getElementById('clips-seekbar');
+  var timeEl = document.getElementById('clips-time');
+  var badgeEl = document.getElementById('clips-badge');
+  var titleEl = document.getElementById('clips-title');
+  var muteBtn = document.getElementById('clips-mute');
+  var moreEl = document.getElementById('clips-more');
+  var lessEl = document.getElementById('clips-less');
+
+  function loadClip(i) {
+    idx = i;
+    var c = clips[i];
+    var wasMuted = video.muted;
+    video.src = c.src;
+    video.muted = wasMuted;
+    video.play().catch(function(){});
+    badgeEl.textContent = c.badge;
+    titleEl.classList.remove('expanded');
+    titleEl.textContent = c.title;
+    moreEl.style.display = 'none';
+    lessEl.style.display = 'none';
+    // Check overflow after layout
+    requestAnimationFrame(function() {
+      moreEl.style.display = titleEl.scrollHeight > titleEl.clientHeight + 2 ? 'inline' : 'none';
+    });
+    timeEl.textContent = c.dur;
+    seekbar.value = 0;
+    seekbar.style.background = 'linear-gradient(to right, var(--primary-500) 0%, var(--primary-500)0%, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.3) 100%)';
+    playIcon.innerHTML = '<rect x="6" y="4" width="4" height="16" fill="#fff"/><rect x="14" y="4" width="4" height="16" fill="#fff"/>';
+    video.onended = function() {
+      if (idx < clips.length - 1) {
+        animateClip(idx + 1, 'exit-up', 'enter-up');
+      } else {
+        animateClip(0, 'exit-up', 'enter-up');
+      }
+    };
+    if (typeof updateArrowStates === 'function') updateArrowStates();
+  }
+
+  // Play/pause
+  playBtn.onclick = function() {
+    if (video.paused) {
+      video.play();
+      playIcon.innerHTML = '<rect x="6" y="4" width="4" height="16" fill="#fff"/><rect x="14" y="4" width="4" height="16" fill="#fff"/>';
+    } else {
+      video.pause();
+      playIcon.innerHTML = '<polygon points="5 3 19 12 5 21 5 3"/>';
+    }
+  };
+
+  // Seekbar update
+  video.addEventListener('timeupdate', function() {
+    if (video.duration) {
+      var pct = (video.currentTime / video.duration) * 100;
+      seekbar.value = pct;
+      seekbar.style.background = 'linear-gradient(to right, var(--primary-500) 0%, var(--primary-500)' + pct + '%, rgba(255,255,255,0.3) ' + pct + '%, rgba(255,255,255,0.3) 100%)';
+      var remaining = video.duration - video.currentTime;
+      var m = Math.floor(remaining / 60);
+      var s = Math.floor(remaining % 60);
+      timeEl.textContent = (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+    }
+  });
+
+  seekbar.addEventListener('input', function() {
+    if (video.duration) {
+      video.currentTime = (seekbar.value / 100) * video.duration;
+      seekbar.style.background = 'linear-gradient(to right, var(--primary-500) 0%, var(--primary-500)' + seekbar.value + '%, rgba(255,255,255,0.3) ' + seekbar.value + '%, rgba(255,255,255,0.3) 100%)';
+    }
+  });
+
+  function updateMuteIcon() {
+    document.getElementById('mute-icon').innerHTML = video.muted
+      ? '<line x1="1" y1="1" x2="23" y2="23" stroke="#fff" stroke-width="2"/><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="#fff" stroke="none"/>'
+      : '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="#fff" stroke="none"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07" stroke="#fff"/>';
+  }
+  muteBtn.onclick = function() {
+    video.muted = !video.muted;
+    updateMuteIcon();
+  };
+
+  // "more" expands title to 3 lines
+  moreEl.addEventListener('click', function() {
+    titleEl.classList.add('expanded');
+    moreEl.style.display = 'none';
+    lessEl.style.display = 'inline';
+  });
+
+  // "less" collapses back to 2 lines
+  lessEl.addEventListener('click', function() {
+    titleEl.classList.remove('expanded');
+    lessEl.style.display = 'none';
+    moreEl.style.display = 'inline';
+  });
+
+  var prevBtn = document.getElementById('clips-prev');
+  var nextBtn = document.getElementById('clips-next');
+
+  function updateArrowStates() {
+    prevBtn.className = 'clips-arrow-btn ' + (idx > 0 ? 'active' : 'inactive');
+    nextBtn.className = 'clips-arrow-btn ' + (idx < clips.length - 1 ? 'active' : 'inactive');
+  }
+
+  function animateClip(newIdx, exitClass, enterClass) {
+    var container = document.getElementById('clips-container');
+    container.classList.remove('exit-up','exit-down','enter-up','enter-down');
+    container.classList.add(exitClass);
+    container.addEventListener('animationend', function onExit() {
+      container.removeEventListener('animationend', onExit);
+      container.classList.remove(exitClass);
+      loadClip(newIdx);
+      container.classList.add(enterClass);
+      container.addEventListener('animationend', function onEnter() {
+        container.removeEventListener('animationend', onEnter);
+        container.classList.remove(enterClass);
+      });
+    });
+  }
+
+  function prevClip() { if (idx > 0) animateClip(idx - 1, 'exit-down', 'enter-down'); }
+  function nextClip() { if (idx < clips.length - 1) animateClip(idx + 1, 'exit-up', 'enter-up'); }
+
+  prevBtn.onclick = prevClip;
+  nextBtn.onclick = nextClip;
+
+  // Click video panel to toggle play/pause (ignore clicks on controls/buttons)
+  document.getElementById('clips-container').addEventListener('click', function(e) {
+    if (e.target.closest('.clips-controls, .clips-vid-actions, .clips-overlay-more')) return;
+    if (video.paused) {
+      video.play();
+      playIcon.innerHTML = '<rect x="6" y="4" width="4" height="16" fill="#fff"/><rect x="14" y="4" width="4" height="16" fill="#fff"/>';
+    } else {
+      video.pause();
+      playIcon.innerHTML = '<polygon points="5 3 19 12 5 21 5 3"/>';
+    }
+  });
+
+  // Filter chips
+  document.querySelectorAll('.clips-filter-chip').forEach(function(chip) {
+    chip.addEventListener('click', function() {
+      document.querySelectorAll('.clips-filter-chip').forEach(function(c) { c.classList.remove('active'); });
+      chip.classList.add('active');
+      var cat = chip.dataset.cat;
+      var filtered = cat === 'all' ? clips : clips.filter(function(c) { return c.cat === cat; });
+      if (filtered.length) loadClip(clips.indexOf(filtered[0]));
+    });
+  });
+
+  // Keyboard: up/down arrows
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowUp') { e.preventDefault(); prevClip(); }
+    else if (e.key === 'ArrowDown') { e.preventDefault(); nextClip(); }
+  });
+
+  // Mouse scroll: up = prev, down = next (debounced)
+  var scrollTimer = null;
+  document.addEventListener('wheel', function(e) {
+    if (scrollTimer) return;
+    if (Math.abs(e.deltaY) < 30) return;
+    e.preventDefault();
+    if (e.deltaY > 0) nextClip();
+    else prevClip();
+    scrollTimer = setTimeout(function() { scrollTimer = null; }, 600);
+  }, { passive: false });
+
+  // Swipe: up = next, down = prev
+  var startY = 0;
+  video.addEventListener('touchstart', function(e) { startY = e.touches[0].clientY; });
+  video.addEventListener('touchend', function(e) {
+    var dy = e.changedTouches[0].clientY - startY;
+    if (Math.abs(dy) > 50) {
+      if (dy < 0) nextClip();
+      else prevClip();
+    }
+  });
+
+  // Init
+  loadClip(0);
+})();
+</script>
+
+</body>
+</html>
