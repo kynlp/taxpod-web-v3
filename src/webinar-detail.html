@@ -1934,7 +1934,7 @@ function aiGenerateResponse(question) {
   }
 
   // Key points / summary
-  if (q.indexOf('key point') !== -1 || q.indexOf('main point') !== -1 || q.indexOf('summary') !== -1 || q.indexOf('summarize') !== -1) {
+  if (q.indexOf('key point') !== -1 || q.indexOf('main point') !== -1 || q.indexOf('summary') !== -1 || q.indexOf('summarize') !== -1 || q.indexOf('summarise') !== -1 || q.indexOf('summar') !== -1) {
     if (concepts.length) {
       return 'The key concepts covered in this course are:\n\n' + concepts.map(function(c, i){ return (i+1) + '. ' + c; }).join('\n') + '\n\nEach concept builds your understanding of the compliance requirements in this area.';
     }
