@@ -168,7 +168,7 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif; }
 .wd-play-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0.35);
+  background: rgba(0, 0, 0, 0.85);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -188,7 +188,7 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif; }
 }
 .wd-play-overlay:hover .tc-play { transform: scale(1.1); background: var(--primary-600); }
 .wd-play-overlay .tc-play svg { width: 26px; height: 26px; fill: currentColor; stroke: none; margin-left: 4px; }
-.wd-play-overlay .tc-resume-label { font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 700; color: var(--neutral-white); text-transform: uppercase; letter-spacing: 1.5px; }
+.wd-play-overlay .tc-resume-label { font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 700; color: #fff; text-transform: uppercase; letter-spacing: 1.5px; }
 .wd-fav-btn {
   margin-left: 0;
   display: inline-flex;
@@ -885,6 +885,7 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif; }
 [data-theme="dark"] .ai-panel-action-btn { color: #e8eaed; }
 [data-theme="dark"] .ai-panel-action-btn:hover { background: rgba(255,255,255,0.07); }
 .ai-panel-action-btn svg { width: 16px; height: 16px; }
+[data-theme="dark"] .ai-panel-action-btn img { filter: invert(1) brightness(2); }
 .ai-panel-close {
   background: none;
   border: none;
@@ -936,17 +937,17 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif; }
   font-family: var(--font-primary);
 }
 .ai-msg.user .ai-msg-bubble {
-  background: #F5EFE0;
-  color: var(--grey-900);
+  background: #FFFBF0;
+  color: var(--grey-700);
   border-bottom-right-radius: 4px;
 }
-[data-theme="dark"] .ai-msg.user .ai-msg-bubble { background: #2e2a20; color: #e8eaed; }
+[data-theme="dark"] .ai-msg.user .ai-msg-bubble { background: #2A1E0A; color: var(--grey-700); }
 .ai-msg.bot .ai-msg-bubble {
-  background: #EDF2F8;
-  color: var(--grey-900);
+  background: #F0F9FF;
+  color: var(--grey-700);
   border-bottom-left-radius: 4px;
 }
-[data-theme="dark"] .ai-msg.bot .ai-msg-bubble { background: #212830; color: #cfd3d9; }
+[data-theme="dark"] .ai-msg.bot .ai-msg-bubble { background: #0C1D2C; color: var(--grey-700); }
 .ai-msg-meta {
   display: flex;
   align-items: center;
@@ -979,10 +980,29 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif; }
 [data-theme="dark"] .ai-msg-action:hover { color: #a1a8b3; background: rgba(255,255,255,0.06); }
 .ai-msg-action svg { width: 14px; height: 14px; }
 .ai-msg-action.active { color: var(--primary-500); }
+.ai-msg-action { position: relative; }
+.ai-msg-action .ai-copy-tooltip {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--grey-800);
+  color: #fff;
+  font-size: 11px;
+  font-family: var(--font-primary);
+  white-space: nowrap;
+  padding: 3px 8px;
+  border-radius: 4px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.ai-msg-action .ai-copy-tooltip.show { opacity: 1; }
+[data-theme="dark"] .ai-msg-action .ai-copy-tooltip { background: #e8eaed; color: #1e1e1e; }
 
 /* Bot typing indicator */
-.ai-typing-indicator { display: flex; gap: 5px; padding: 14px 16px; background: #EDF2F8; border-radius: 14px; border-bottom-left-radius: 4px; width: fit-content; }
-[data-theme="dark"] .ai-typing-indicator { background: #212830; }
+.ai-typing-indicator { display: flex; gap: 5px; padding: 14px 16px; background: #F0F9FF; border-radius: 14px; border-bottom-left-radius: 4px; width: fit-content; }
+[data-theme="dark"] .ai-typing-indicator { background: #0C1D2C; }
 .ai-typing-indicator span { width: 7px; height: 7px; border-radius: 50%; background: var(--grey-400); animation: ai-bounce 1.2s infinite; }
 .ai-typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
 .ai-typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
@@ -1201,7 +1221,9 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif; }
   transition: background 0.15s;
 }
 .ai-new-chat-btn:hover { background: #2aaee0; }
-.ai-new-chat-btn svg { width: 16px; height: 16px; stroke: #fff; fill: none; }
+.ai-new-chat-btn svg { width: 16px; height: 16px; fill: currentColor; }
+[data-theme="dark"] .ai-new-chat-btn { background: var(--primary-500); color: var(--neutral-white); }
+[data-theme="dark"] .ai-new-chat-btn:hover { background: var(--primary-600); }
 .ai-history-section-label {
   font-size: 11px;
   font-weight: 700;
@@ -1228,6 +1250,19 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif; }
 .ai-history-item:hover { background: var(--grey-100); }
 [data-theme="dark"] .ai-history-item { color: #cfd3d9; }
 [data-theme="dark"] .ai-history-item:hover { background: rgba(255,255,255,0.06); }
+.ai-history-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 40px 16px;
+  text-align: center;
+  color: var(--grey-400);
+  font-size: 13px;
+}
+.ai-history-empty svg { width: 32px; height: 32px; opacity: 0.4; }
+[data-theme="dark"] .ai-history-empty { color: #6b7280; }
 
 @media (max-width: 480px) {
   .ai-panel { width: 100vw; right: -100vw; }
@@ -1804,19 +1839,11 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif; }
     </div>
     <div class="ai-history-body">
       <button class="ai-new-chat-btn" onclick="aiResetChat()">
-        <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.51"/></svg>
+        <svg width="22" height="22" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg"><path d="M11.0007 1.83372C11.7917 1.83372 12.5599 1.93455 13.2923 2.12247L12.834 3.89805C11.7502 3.61821 10.6167 3.5902 9.52038 3.81614C8.42407 4.04209 7.39403 4.51601 6.50919 5.20158C5.62435 5.88716 4.9082 6.76619 4.4156 7.77133C3.923 8.77647 3.66704 9.88103 3.66733 11.0004C3.66733 12.2232 3.96524 13.3993 4.52899 14.4526L4.84983 15.0511L4.24849 17.7526L6.94991 17.1521L7.54849 17.473C8.61057 18.0403 9.79654 18.336 11.0007 18.3337C12.0375 18.3337 13.0626 18.1139 14.0082 17.6887C14.9539 17.2634 15.7986 16.6425 16.4866 15.8669C17.1747 15.0912 17.6905 14.1785 17.9999 13.1889C18.3093 12.1993 18.4054 11.1553 18.2817 10.1259L20.1032 9.90955C20.1459 10.2671 20.1673 10.6307 20.1673 11.0004C20.1673 16.0631 16.0634 20.1671 11.0007 20.1671C9.49492 20.1692 8.01203 19.7988 6.68408 19.0891L1.83399 20.1671L2.91199 15.317C2.20221 13.989 1.83188 12.5061 1.83399 11.0004C1.83399 5.93764 5.93791 1.83372 11.0007 1.83372ZM17.9032 1.21039C17.9379 1.12457 17.9974 1.05107 18.0742 0.99932C18.151 0.947569 18.2414 0.919922 18.334 0.919922C18.4266 0.919922 18.517 0.947569 18.5938 0.99932C18.6706 1.05107 18.7301 1.12457 18.7648 1.21039L18.9977 1.76955C19.3868 2.71837 20.125 3.48183 21.0602 3.90264L21.7174 4.19597C21.8016 4.23491 21.8728 4.29712 21.9227 4.37525C21.9727 4.45338 21.9992 4.54416 21.9992 4.63689C21.9992 4.72961 21.9727 4.8204 21.9227 4.89853C21.8728 4.97666 21.8016 5.03886 21.7174 5.0778L21.0226 5.38764C20.1101 5.7964 19.3841 6.5323 18.9876 7.45014L18.7621 7.96897C18.7268 8.05346 18.6674 8.12562 18.5912 8.17639C18.515 8.22715 18.4255 8.25424 18.334 8.25424C18.2425 8.25424 18.153 8.22715 18.0768 8.17639C18.0006 8.12562 17.9412 8.05346 17.9059 7.96897L17.6795 7.45105C17.2834 6.53304 16.5577 5.79681 15.6454 5.38764L14.9487 5.0778C14.8643 5.03898 14.7928 4.97676 14.7427 4.89853C14.6926 4.8203 14.6659 4.72934 14.6659 4.63643C14.6659 4.54352 14.6926 4.45256 14.7427 4.37433C14.7928 4.2961 14.8643 4.23388 14.9487 4.19505L15.6069 3.90172C16.5421 3.48154 17.2806 2.71877 17.6703 1.77047L17.9032 1.21039Z"/></svg>
         New Chat
       </button>
       <div class="ai-history-section-label">Recent Chats</div>
-      <div class="ai-history-list">
-        <div class="ai-history-item" onclick="closeAiHistory()">Reimbursement vs Disbursement Explained</div>
-        <div class="ai-history-item" onclick="closeAiHistory()">When to Issue a Self-Billed e-Invoice</div>
-        <div class="ai-history-item" onclick="closeAiHistory()">Understanding Workflow Models</div>
-        <div class="ai-history-item" onclick="closeAiHistory()">API and System Readiness Questions</div>
-        <div class="ai-history-item" onclick="closeAiHistory()">Foreign Income and e-Invoice Rules</div>
-        <div class="ai-history-item" onclick="closeAiHistory()">Consolidated Invoice Scenario Clarification</div>
-        <div class="ai-history-item" onclick="closeAiHistory()">Staff Claim Rules, Supporting Documents,...</div>
-      </div>
+      <div class="ai-history-list" id="ai-history-list"></div>
     </div>
   </div>
 
@@ -1998,6 +2025,67 @@ function toggleVideoPlay() {
 
 /* ── Ask AI chat ── */
 var aiChatHistory = [];
+var aiCurrentSessionId = null;
+var AI_STORAGE_KEY = 'taxpod_ai_sessions_' + window.location.pathname;
+
+function aiGetSessions() {
+  try { return JSON.parse(localStorage.getItem(AI_STORAGE_KEY)) || []; } catch(e) { return []; }
+}
+function aiSaveSessions(sessions) {
+  try { localStorage.setItem(AI_STORAGE_KEY, JSON.stringify(sessions)); } catch(e) {}
+}
+function aiSaveCurrentSession() {
+  if (!aiChatHistory.length) return;
+  var sessions = aiGetSessions();
+  var firstUser = '';
+  for (var i = 0; i < aiChatHistory.length; i++) {
+    if (aiChatHistory[i].role === 'user') { firstUser = aiChatHistory[i].content; break; }
+  }
+  var title = firstUser.length > 50 ? firstUser.slice(0, 47) + '...' : firstUser;
+  if (aiCurrentSessionId) {
+    var idx = sessions.findIndex(function(s){ return s.id === aiCurrentSessionId; });
+    if (idx !== -1) { sessions[idx].messages = aiChatHistory.slice(); sessions[idx].title = title; }
+    else { sessions.unshift({ id: aiCurrentSessionId, title: title, messages: aiChatHistory.slice(), createdAt: Date.now() }); }
+  } else {
+    aiCurrentSessionId = Date.now().toString();
+    sessions.unshift({ id: aiCurrentSessionId, title: title, messages: aiChatHistory.slice(), createdAt: Date.now() });
+  }
+  aiSaveSessions(sessions);
+}
+function aiRenderHistory() {
+  var list = document.getElementById('ai-history-list');
+  if (!list) return;
+  var sessions = aiGetSessions();
+  if (!sessions.length) {
+    list.innerHTML = '<div class="ai-history-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>No chats yet. Start asking questions about this course!</span></div>';
+    return;
+  }
+  list.innerHTML = '';
+  sessions.forEach(function(s) {
+    var item = document.createElement('div');
+    item.className = 'ai-history-item';
+    item.textContent = s.title;
+    item.onclick = function() { aiLoadSession(s.id); };
+    list.appendChild(item);
+  });
+}
+function aiLoadSession(id) {
+  var sessions = aiGetSessions();
+  var session = null;
+  for (var i = 0; i < sessions.length; i++) { if (sessions[i].id === id) { session = sessions[i]; break; } }
+  if (!session) return;
+  aiCurrentSessionId = session.id;
+  aiChatHistory = session.messages.slice();
+  var messages = document.getElementById('ai-chat-messages');
+  var panelBody = document.getElementById('ai-panel-body');
+  messages.innerHTML = '';
+  aiChatHistory.forEach(function(m) {
+    messages.appendChild(aiCreateMsg(m.content, m.role === 'user' ? 'user' : 'bot'));
+  });
+  panelBody.classList.add('has-chat');
+  panelBody.scrollTop = panelBody.scrollHeight;
+  closeAiHistory();
+}
 
 function aiGetSystemPrompt() {
   var title = document.querySelector('.wd-title') ? document.querySelector('.wd-title').textContent.trim() : '';
@@ -2080,6 +2168,7 @@ function aiSendMessage() {
     aiChatHistory.push({ role: 'assistant', content: reply });
     messages.appendChild(aiCreateMsg(reply, 'bot'));
     panelBody.scrollTop = panelBody.scrollHeight;
+    aiSaveCurrentSession();
   }, 900 + Math.random() * 600);
 }
 
@@ -2213,7 +2302,7 @@ function aiCreateMsg(text, role) {
   if (role === 'bot') {
     meta.innerHTML =
       '<div class="ai-msg-actions">' +
-        '<button class="ai-msg-action" title="Copy" onclick="aiCopyMsg(this)"><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>' +
+        '<button class="ai-msg-action" onclick="aiCopyMsg(this)"><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span class="ai-copy-tooltip">Copied!</span></button>' +
         '<button class="ai-msg-action" title="Helpful" onclick="this.classList.toggle(\'active\')"><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg></button>' +
         '<button class="ai-msg-action" title="Not helpful" onclick="this.classList.toggle(\'active\')"><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3H10z"/><path d="M17 2h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"/></svg></button>' +
       '</div>' +
@@ -2229,9 +2318,30 @@ function aiCreateMsg(text, role) {
 
 function aiCopyMsg(btn) {
   var bubble = btn.closest('.ai-msg').querySelector('.ai-msg-bubble');
-  if (navigator.clipboard) navigator.clipboard.writeText(bubble.textContent);
-  btn.classList.add('active');
-  setTimeout(function(){ btn.classList.remove('active'); }, 1500);
+  var text = bubble.textContent;
+  function showTooltip() {
+    btn.classList.add('active');
+    var tooltip = btn.querySelector('.ai-copy-tooltip');
+    if (tooltip) { tooltip.classList.add('show'); }
+    setTimeout(function(){ btn.classList.remove('active'); if (tooltip) tooltip.classList.remove('show'); }, 1500);
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(showTooltip, function() {
+      // fallback on permission denied
+      fallbackCopy(text); showTooltip();
+    });
+  } else {
+    fallbackCopy(text); showTooltip();
+  }
+}
+function fallbackCopy(text) {
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.cssText = 'position:fixed;top:-9999px;left:-9999px;opacity:0';
+  document.body.appendChild(ta);
+  ta.focus(); ta.select();
+  try { document.execCommand('copy'); } catch(e) {}
+  document.body.removeChild(ta);
 }
 
 function openAiPanel() {
@@ -2248,6 +2358,7 @@ function closeAiPanel() {
 }
 
 function openAiHistory() {
+  aiRenderHistory();
   document.getElementById('ai-history-drawer').classList.add('open');
 }
 
@@ -2257,6 +2368,7 @@ function closeAiHistory() {
 
 function aiResetChat() {
   aiChatHistory = [];
+  aiCurrentSessionId = null;
   document.getElementById('ai-panel-body').classList.remove('has-chat');
   document.getElementById('ai-chat-messages').innerHTML = '';
   document.getElementById('ai-input').value = '';
