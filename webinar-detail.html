@@ -951,7 +951,7 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif; }
   border-bottom-left-radius: 4px;
 }
 [data-theme="dark"] .ai-msg.bot .ai-msg-bubble { background: #0C1D2C; color: var(--grey-700); }
-.ai-msg-bubble.collapsed { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+.ai-msg-bubble.collapsed { display: -webkit-box; -webkit-line-clamp: 20; -webkit-box-orient: vertical; overflow: hidden; }
 .ai-msg-more { display: inline-block; margin-top: 6px; font-size: 13px; font-weight: 600; color: #41C8F7; cursor: pointer; background: none; border: none; padding: 0; font-family: var(--font-primary); }
 .ai-msg-more:hover { opacity: 0.75; }
 .ai-msg-meta {
@@ -2310,8 +2310,14 @@ function aiCreateMsg(text, role) {
     moreBtn.className = 'ai-msg-more';
     moreBtn.textContent = 'more';
     moreBtn.onclick = function() {
-      bubble.classList.remove('collapsed');
-      moreBtn.remove();
+      var expanded = bubble.classList.contains('collapsed');
+      if (expanded) {
+        bubble.classList.remove('collapsed');
+        moreBtn.textContent = 'less';
+      } else {
+        bubble.classList.add('collapsed');
+        moreBtn.textContent = 'more';
+      }
     };
   }
 
