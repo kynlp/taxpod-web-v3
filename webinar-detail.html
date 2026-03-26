@@ -1174,6 +1174,32 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif; }
 }
 .ai-credits-number { color: #E87B2B; }
 .ai-credits-text { color: var(--primary-600); }
+.ai-credits-number.empty { color: var(--grey-400); }
+[data-theme="dark"] .ai-credits-number.empty { color: #6b7280; }
+.ai-add-credit-btn {
+  display: none;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--primary-500);
+  background: var(--primary-50, #EFF6FF);
+  border: 1px solid var(--primary-200, #BFDBFE);
+  border-radius: 20px;
+  padding: 3px 10px;
+  cursor: pointer;
+  font-family: var(--font-primary);
+  transition: background 0.15s, border-color 0.15s;
+  white-space: nowrap;
+}
+.ai-add-credit-btn:hover { background: var(--primary-100, #DBEAFE); border-color: var(--primary-400); }
+[data-theme="dark"] .ai-add-credit-btn { color: #7DD3FC; background: rgba(56,189,248,0.08); border-color: rgba(56,189,248,0.2); }
+[data-theme="dark"] .ai-add-credit-btn:hover { background: rgba(56,189,248,0.15); border-color: rgba(56,189,248,0.35); }
+.ai-add-credit-btn.visible { display: inline-flex; }
+.ai-panel-send:disabled { cursor: not-allowed; opacity: 0.35; }
+.ai-panel-credits.no-credits .ai-credits-text { color: var(--grey-400); }
+[data-theme="dark"] .ai-panel-credits.no-credits .ai-credits-text { color: #6b7280; }
 .ai-panel-disclaimer {
   font-size: 11px;
   color: var(--grey-400);
@@ -1911,9 +1937,10 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif; }
     <div class="ai-panel-input-wrap">
       <textarea class="ai-panel-input" id="ai-input" placeholder="Ask a question to get started." rows="3" oninput="aiInputChanged()"></textarea>
       <div class="ai-panel-input-bottom">
-        <div class="ai-panel-credits">
+        <div class="ai-panel-credits" id="ai-panel-credits">
           <img src="assets/images/icon-credits.svg" class="ai-panel-credits-icon" alt="">
-          <span class="ai-credits-number">50</span><span class="ai-credits-text"> / 50 CREDITS REMAINING</span>
+          <span class="ai-credits-number" id="ai-credits-number">50</span><span class="ai-credits-text"> / 50 CREDITS REMAINING</span>
+          <button class="ai-add-credit-btn" id="ai-add-credit-btn" onclick="alert('Credit top-up coming soon!')">+ Add Credit</button>
         </div>
         <button class="ai-panel-send" id="ai-send-btn" aria-label="Send" onclick="aiSendMessage()">
           <img id="ai-send-icon" src="assets/images/btn-send-disabled.svg" width="30" height="30" alt="">
@@ -2165,6 +2192,8 @@ function aiSendMessage() {
   var input = document.getElementById('ai-input');
   var text = input.value.trim();
   if (!text) return;
+  var credEl = document.getElementById('ai-credits-number');
+  if (credEl && parseInt(credEl.textContent, 10) === 0) return;
 
   var panelBody = document.getElementById('ai-panel-body');
   var messages = document.getElementById('ai-chat-messages');
@@ -2174,10 +2203,21 @@ function aiSendMessage() {
   aiInputChanged();
 
   // Deduct 1 credit
-  var credEl = document.querySelector('.ai-credits-number');
+  var credEl = document.getElementById('ai-credits-number');
   if (credEl) {
     var cur = parseInt(credEl.textContent, 10);
-    if (cur > 0) credEl.textContent = cur - 1;
+    if (cur > 0) {
+      var next = cur - 1;
+      credEl.textContent = next;
+      if (next === 0) {
+        credEl.classList.add('empty');
+        document.getElementById('ai-panel-credits').classList.add('no-credits');
+        document.getElementById('ai-add-credit-btn').classList.add('visible');
+        var sendBtn = document.getElementById('ai-send-btn');
+        sendBtn.disabled = true;
+        sendBtn.classList.remove('active');
+      }
+    }
   }
 
   aiChatHistory.push({ role: 'user', content: text });
