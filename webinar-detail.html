@@ -2173,6 +2173,13 @@ function aiSendMessage() {
   input.value = '';
   aiInputChanged();
 
+  // Deduct 1 credit
+  var credEl = document.querySelector('.ai-credits-number');
+  if (credEl) {
+    var cur = parseInt(credEl.textContent, 10);
+    if (cur > 0) credEl.textContent = cur - 1;
+  }
+
   aiChatHistory.push({ role: 'user', content: text });
   messages.appendChild(aiCreateMsg(text, 'user'));
   panelBody.scrollTop = panelBody.scrollHeight;
