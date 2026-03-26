@@ -394,6 +394,7 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif; }
   display: flex;
   align-items: baseline;
   justify-content: space-between;
+  flex-wrap: nowrap;
   gap: 10px;
   margin-bottom: 6px;
 }
@@ -402,6 +403,8 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif; }
   font-weight: 700;
   color: #fff;
   margin: 0;
+  min-width: 0;
+  flex: 1;
 }
 [data-theme="light"] .wd-ai-section-head h3 { color: #1a1d2e; }
 .wd-ai-time {
