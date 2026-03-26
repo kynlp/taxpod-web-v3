@@ -405,7 +405,7 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif; }
 }
 [data-theme="light"] .wd-ai-section-head h3 { color: #1a1d2e; }
 .wd-ai-time {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--primary-500);
   white-space: nowrap;
@@ -413,8 +413,11 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif; }
   align-items: center;
   gap: 4px;
   flex-shrink: 0;
+  cursor: pointer;
+  transition: opacity 0.15s;
 }
-.wd-ai-time svg { width: 16px; height: 16px; stroke: currentColor; fill: none; flex-shrink: 0; }
+.wd-ai-time:hover { opacity: 0.75; }
+.wd-ai-time svg { width: 14px; height: 14px; stroke: currentColor; fill: none; flex-shrink: 0; }
 .wd-ai-text {
   font-size: 16px;
   color: #a1a8b3;
@@ -1444,7 +1447,7 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif; }
           <div class="wd-ai-section">
             <div class="wd-ai-section-head">
               <h3>Overview</h3>
-              <span class="wd-ai-time"><svg viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>00:00 – 04:00</span>
+              <span class="wd-ai-time" onclick="seekToTime('00:00 – 04:00')" title="Jump to 00:00"><svg viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>00:00 – 04:00</span>
             </div>
             <p class="wd-ai-text">This course examines how Malaysia's e-Invoicing mandate applies to the healthcare sector. It addresses the unique billing complexities involving hospitals, insurance companies, patients, and third-party consultants, and how each transaction type must be handled to achieve full compliance.</p>
           </div>
@@ -1458,7 +1461,7 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif; }
             <div class="wd-ai-concept">
               <div class="wd-ai-concept-head">
                 <strong>Healthcare Provider &amp; Insurance Transactions</strong>
-                <span class="wd-ai-time"><svg viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>04:00 – 07:00</span>
+                <span class="wd-ai-time" onclick="seekToTime('04:00 – 07:00')" title="Jump to 04:00"><svg viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>04:00 – 07:00</span>
               </div>
               <p class="wd-ai-text">When payment flows from insurer to provider, the e-Invoice must reflect the actual payer rather than the patient. Correctly identifying the "buyer" in each billing scenario is fundamental to compliance when dual billing is involved.</p>
             </div>
@@ -1466,7 +1469,7 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif; }
             <div class="wd-ai-concept">
               <div class="wd-ai-concept-head">
                 <strong>Refundable &amp; Non-Refundable Deposits</strong>
-                <span class="wd-ai-time"><svg viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>07:00 – 10:00</span>
+                <span class="wd-ai-time" onclick="seekToTime('07:00 – 10:00')" title="Jump to 07:00"><svg viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>07:00 – 10:00</span>
               </div>
               <p class="wd-ai-text">Refundable deposits are not subject to e-Invoicing at collection — only upon forfeiture or conversion. Non-refundable deposits require an e-Invoice at the point of collection. Correct classification prevents compliance gaps.</p>
             </div>
@@ -1474,7 +1477,7 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif; }
             <div class="wd-ai-concept">
               <div class="wd-ai-concept-head">
                 <strong>Third-Party Consultants &amp; Space Rentals</strong>
-                <span class="wd-ai-time"><svg viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>10:00 – 16:00</span>
+                <span class="wd-ai-time" onclick="seekToTime('10:00 – 16:00')" title="Jump to 10:00"><svg viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>10:00 – 16:00</span>
               </div>
               <p class="wd-ai-text">Hospitals engaging external specialists must issue separate e-Invoices for consultant services. Space rental arrangements within hospital premises and staff medical expense reimbursements each carry distinct e-Invoicing obligations that must be documented accurately.</p>
             </div>
@@ -1486,7 +1489,7 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif; }
           <div class="wd-ai-section">
             <div class="wd-ai-section-head">
               <h3>Conclusion</h3>
-              <span class="wd-ai-time"><svg viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>16:00 – 19:00</span>
+              <span class="wd-ai-time" onclick="seekToTime('16:00 – 19:00')" title="Jump to 16:00"><svg viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>16:00 – 19:00</span>
             </div>
             <p class="wd-ai-text">Proper e-Invoicing implementation in healthcare requires understanding each transaction type and its corresponding obligations. Consistent classification and documentation are essential for meeting LHDN requirements while preserving operational efficiency across all billing scenarios.</p>
           </div>
@@ -1799,6 +1802,26 @@ function switchTab(tabId) {
 
 function toggleChapter(id) {
   document.getElementById(id).classList.toggle('open');
+}
+
+function seekToTime(timeStr) {
+  // Parse "MM:SS" or "HH:MM:SS" — use the start time (before " – ")
+  var start = timeStr.split('–')[0].trim().replace(/[–—]/g, '').trim();
+  var parts = start.split(':').map(Number);
+  var seconds = parts.length === 3
+    ? parts[0] * 3600 + parts[1] * 60 + parts[2]
+    : parts[0] * 60 + (parts[1] || 0);
+  var v = document.getElementById('wd-video');
+  if (v) {
+    v.currentTime = seconds;
+    v.play();
+    // Hide overlay if visible
+    var overlay = document.getElementById('wd-play-overlay');
+    if (overlay) overlay.style.display = 'none';
+    // Scroll to video
+    var hero = document.getElementById('wd-hero-area');
+    if (hero) hero.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
 }
 
 function toggleAiSummary() {
