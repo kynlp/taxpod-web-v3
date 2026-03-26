@@ -952,6 +952,11 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif; }
 }
 [data-theme="dark"] .ai-msg.bot .ai-msg-bubble { background: #0C1D2C; color: var(--grey-700); }
 .ai-msg-bubble { max-height: 2000px; overflow: hidden; transition: max-height 0.4s ease; }
+.ai-msg-bubble p { margin: 0 0 6px; }
+.ai-msg-bubble p:last-child { margin-bottom: 0; }
+.ai-msg-bubble ol, .ai-msg-bubble ul { margin: 4px 0 6px; padding-left: 20px; }
+.ai-msg-bubble li { margin-bottom: 3px; }
+.ai-msg-bubble br { display: block; content: ''; margin: 2px 0; }
 .ai-msg-bubble.collapsed { max-height: 300px; }
 .ai-msg-more { display: inline-block; margin-top: 6px; font-size: 13px; font-weight: 600; color: #41C8F7; cursor: pointer; background: none; border: none; padding: 0; font-family: var(--font-primary); }
 .ai-msg-more:hover { opacity: 0.75; }
@@ -2302,6 +2307,42 @@ function aiGenerateResponse(question) {
   return fallbacks[aiChatHistory.length % fallbacks.length];
 }
 
+function aiFormatText(text) {
+  function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  var lines = text.split('\n');
+  var html = '';
+  var i = 0;
+  while (i < lines.length) {
+    var line = lines[i];
+    // Ordered list: lines starting with "1." "2." etc.
+    if (/^\d+\.\s/.test(line)) {
+      html += '<ol>';
+      while (i < lines.length && /^\d+\.\s/.test(lines[i])) {
+        html += '<li>' + esc(lines[i].replace(/^\d+\.\s/, '')) + '</li>';
+        i++;
+      }
+      html += '</ol>';
+      continue;
+    }
+    // Unordered list: lines starting with "- " or "* "
+    if (/^[-*]\s/.test(line)) {
+      html += '<ul>';
+      while (i < lines.length && /^[-*]\s/.test(lines[i])) {
+        html += '<li>' + esc(lines[i].replace(/^[-*]\s/, '')) + '</li>';
+        i++;
+      }
+      html += '</ul>';
+      continue;
+    }
+    // Empty line → skip (spacing handled by CSS)
+    if (line.trim() === '') { html += '<br>'; i++; continue; }
+    // Normal paragraph line
+    html += '<p>' + esc(line) + '</p>';
+    i++;
+  }
+  return html;
+}
+
 function aiCreateMsg(text, role) {
   var ts = aiTimestamp();
   var div = document.createElement('div');
@@ -2309,7 +2350,7 @@ function aiCreateMsg(text, role) {
 
   var bubble = document.createElement('div');
   bubble.className = 'ai-msg-bubble';
-  bubble.textContent = text;
+  bubble.innerHTML = aiFormatText(text);
 
   var moreBtn = null;
   if (role === 'bot') {
