@@ -1322,6 +1322,21 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif; }
 .ai-history-delete:hover { background: #FEE2E2; color: #EF4444; }
 [data-theme="dark"] .ai-history-delete:hover { background: rgba(239,68,68,0.15); color: #F87171; }
 .ai-history-delete svg { width: 14px; height: 14px; stroke: currentColor; fill: none; }
+.ai-history-delete.confirming {
+  opacity: 1;
+  width: auto;
+  padding: 0 8px;
+  gap: 4px;
+  background: #FEE2E2;
+  color: #EF4444;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: var(--font-primary);
+  letter-spacing: 0.03em;
+}
+[data-theme="dark"] .ai-history-delete.confirming { background: rgba(239,68,68,0.15); color: #F87171; }
+.ai-history-delete.confirming:hover { background: #FECACA; }
+[data-theme="dark"] .ai-history-delete.confirming:hover { background: rgba(239,68,68,0.25); }
 @media (max-width: 768px) {
   .ai-history-delete { opacity: 1; }
 }
@@ -2149,7 +2164,21 @@ function aiRenderHistory() {
     delBtn.className = 'ai-history-delete';
     delBtn.title = 'Delete';
     delBtn.innerHTML = '<svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>';
-    delBtn.onclick = function(e) { e.stopPropagation(); aiDeleteSession(s.id); };
+    delBtn.onclick = function(e) {
+      e.stopPropagation();
+      if (delBtn.classList.contains('confirming')) {
+        // Second click — confirmed
+        aiDeleteSession(s.id);
+      } else {
+        // First click — ask confirmation
+        delBtn.classList.add('confirming');
+        delBtn.innerHTML = '<svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>Delete?';
+        delBtn._confirmTimer = setTimeout(function() {
+          delBtn.classList.remove('confirming');
+          delBtn.innerHTML = '<svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>';
+        }, 3000);
+      }
+    };
 
     item.appendChild(label);
     item.appendChild(delBtn);
