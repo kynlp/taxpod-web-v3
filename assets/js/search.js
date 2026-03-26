@@ -37,7 +37,7 @@
   ];
 
   var STORAGE_KEY = 'taxpod_recent_searches';
-  var MAX_RECENT = 5;
+  var MAX_RECENT = 6;
   var activeIndex = -1;
   var currentResults = [];
   var debounceTimer = null;
