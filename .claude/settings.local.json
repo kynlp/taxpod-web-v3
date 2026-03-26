@@ -9,7 +9,17 @@
       "Bash(python3:*)",
       "Bash(ls -la \"/c/Users/LohLynPei/OneDrive - YYC Holdings Sdn Bhd/Desktop/claude/projects/taxpod-web/templates/\"css-*.css)",
       "Bash(node build.js)",
-      "Bash(node -e \":*)"
+      "Bash(node -e \":*)",
+      "Bash(gh auth:*)",
+      "Read(//c/Users/LohLynPei/OneDrive - YYC Holdings Sdn Bhd/Desktop/claude/projects/design-system/**)",
+      "Read(//c/Users/LohLynPei/.claude/**)",
+      "Bash(node \"C:/Users/LohLynPei/OneDrive - YYC Holdings Sdn Bhd/Desktop/claude/projects/design-system/serve.js\")",
+      "WebFetch(domain:localhost)",
+      "Bash(where node:*)",
+      "Read(//c/Program Files/nodejs/**)",
+      "Bash(cmd /c \"where node\")",
+      "Bash(cmd /c \"for %i in \\(node.exe\\) do @echo %~$PATH:i\")",
+      "Bash(cmd /c \"dir /x \"\"C:\\\\Program Files\\\\nodejs\"\"\")"
     ]
   }
 }

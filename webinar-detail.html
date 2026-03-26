@@ -168,7 +168,7 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif; }
 .wd-play-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0.35);
+  background: rgba(0, 0, 0, 0.85);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -188,9 +188,9 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif; }
 }
 .wd-play-overlay:hover .tc-play { transform: scale(1.1); background: var(--primary-600); }
 .wd-play-overlay .tc-play svg { width: 26px; height: 26px; fill: currentColor; stroke: none; margin-left: 4px; }
-.wd-play-overlay .tc-resume-label { font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 700; color: var(--neutral-white); text-transform: uppercase; letter-spacing: 1.5px; }
+.wd-play-overlay .tc-resume-label { font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 700; color: #fff; text-transform: uppercase; letter-spacing: 1.5px; }
 .wd-fav-btn {
-  margin-left: auto;
+  margin-left: 0;
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -209,6 +209,29 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif; }
 .wd-fav-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; }
 .wd-fav-btn.active svg { fill: #E73A3A; stroke: #E73A3A; }
 .wd-fav-btn.active { color: #E73A3A; border-color: #E73A3A; }
+
+/* ── Ask AI button ── */
+.wd-ask-ai-btn {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  background: none;
+  border: 1.5px solid var(--border-light);
+  border-radius: 100px;
+  padding: 5px 14px;
+  cursor: pointer;
+  font-family: var(--font-primary);
+  background: linear-gradient(90deg, #41C8F7, #6774F8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  transition: opacity 0.15s;
+}
+.wd-ask-ai-btn:hover { opacity: 0.8; }
+.wd-ask-ai-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
 
 /* ── Title ── */
 .wd-title {
@@ -340,11 +363,11 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif; }
 .wd-ai-summary:not(.collapsed) .wd-ai-body {
   max-height: 1200px;
   border-top-width: 1px;
-  padding: 0 18px 18px;
+  padding: 16px 18px 18px;
 }
 .wd-ai-preview {
   padding: 0 18px 14px;
-  font-size: 13px;
+  font-size: 16px;
   color: var(--grey-600);
   line-height: 1.65;
   display: none;
@@ -359,7 +382,7 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif; }
 }
 .wd-ai-summary:not(.collapsed) .wd-ai-preview { display: none; }
 .wd-ai-course-title {
-  font-size: 17px;
+  font-size: 20px;
   font-weight: 700;
   color: #fff;
   margin: 16px 0 14px;
@@ -371,18 +394,21 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif; }
   display: flex;
   align-items: baseline;
   justify-content: space-between;
+  flex-wrap: nowrap;
   gap: 10px;
   margin-bottom: 6px;
 }
 .wd-ai-section-head h3 {
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 700;
   color: #fff;
   margin: 0;
+  min-width: 0;
+  flex: 1;
 }
 [data-theme="light"] .wd-ai-section-head h3 { color: #1a1d2e; }
 .wd-ai-time {
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--primary-500);
   white-space: nowrap;
@@ -390,10 +416,13 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif; }
   align-items: center;
   gap: 4px;
   flex-shrink: 0;
+  cursor: pointer;
+  transition: opacity 0.15s;
 }
-.wd-ai-time svg { width: 12px; height: 12px; stroke: currentColor; fill: none; flex-shrink: 0; }
+.wd-ai-time:hover { opacity: 0.75; }
+.wd-ai-time svg { width: 14px; height: 14px; stroke: currentColor; fill: none; flex-shrink: 0; }
 .wd-ai-text {
-  font-size: 13px;
+  font-size: 16px;
   color: #a1a8b3;
   line-height: 1.65;
   margin: 0;
@@ -402,13 +431,13 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif; }
 .wd-ai-concept { margin-bottom: 14px; }
 .wd-ai-concept-head {
   display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 10px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
   margin-bottom: 4px;
 }
 .wd-ai-concept-head strong {
-  font-size: 13px;
+  font-size: 16px;
   font-weight: 700;
   color: #d4d8e2;
 }
@@ -432,7 +461,7 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif; }
 [data-theme="dark"] .wd-progress-card,
 [data-theme="dark"] .wd-chapter-card { box-shadow: none; }
 .wd-progress-card,
-.wd-chapter-card { box-shadow: var(--shadow-xs); }
+.wd-chapter-card { box-shadow: none; }
 
 /* ── Tabs ── */
 .wd-tabs {
@@ -576,7 +605,7 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif; }
   border: 1px solid var(--border-light);
   border-radius: 12px;
   padding: 16px 18px;
-  box-shadow: var(--shadow-sm);
+  box-shadow: none;
 }
 .wd-progress-title {
   font-size: 14px;
@@ -631,7 +660,7 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif; }
   border: 1px solid var(--border-light);
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: var(--shadow-sm);
+  box-shadow: none;
 }
 .wd-chapter-header {
   display: flex;
@@ -759,17 +788,580 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif; }
 
 /* ── Responsive ── */
 @media (max-width: 900px) {
-  .wd-layout { flex-direction: column-reverse; }
+  .wd-layout { flex-direction: column; }
   .wd-sidebar { width: 100%; }
   .wd-info-card { position: static; }
+}
+
+@media (max-width: 768px) {
+  .wd-ask-ai-btn { margin-left: 0; }
 }
 
 @media (max-width: 600px) {
   .wd-page { padding: 16px 16px 48px; }
   .wd-title { font-size: 20px; }
-  .wd-fav-btn { display: none; }
   .wd-tab { padding: 10px 12px; font-size: 13px; }
   .wd-breadcrumb { font-size: 12px; }
+}
+
+/* ── Ask AI Panel ── */
+.ai-panel-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  z-index: 1100;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+.ai-panel-backdrop.open {
+  opacity: 1;
+  pointer-events: all;
+}
+.ai-panel {
+  position: fixed;
+  top: 0;
+  right: -440px;
+  width: 420px;
+  height: 100vh;
+  background: var(--web-bg-light-white);
+  box-shadow: -4px 0 24px rgba(0,0,0,0.12);
+  z-index: 1101;
+  display: flex;
+  flex-direction: column;
+  transition: right 0.32s cubic-bezier(0.4,0,0.2,1);
+  overflow: hidden;
+}
+[data-theme="dark"] .ai-panel { background: #1a1f26; }
+.ai-panel.open { right: 0; }
+
+/* Header */
+.ai-panel-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border-light);
+  flex-shrink: 0;
+}
+[data-theme="dark"] .ai-panel-header { border-color: rgba(255,255,255,0.08); }
+.ai-panel-hamburger {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  color: var(--grey-900);
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  border-radius: 6px;
+  transition: background 0.15s;
+}
+.ai-panel-hamburger:hover { background: var(--grey-100); }
+.ai-panel-hamburger svg { width: 18px; height: 18px; }
+[data-theme="dark"] .ai-panel-hamburger { color: #e8eaed; }
+[data-theme="dark"] .ai-panel-hamburger:hover { background: rgba(255,255,255,0.07); }
+.ai-panel-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-primary);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--grey-900);
+  flex: 1;
+}
+[data-theme="dark"] .ai-panel-title { color: #e8eaed; }
+.ai-panel-title svg { flex-shrink: 0; width: 22px; height: 22px; }
+.ai-panel-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-left: auto;
+}
+.ai-panel-action-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  color: var(--grey-900);
+  display: flex;
+  align-items: center;
+  border-radius: 6px;
+  transition: background 0.15s, color 0.15s;
+}
+.ai-panel-action-btn:hover { background: var(--grey-100); }
+[data-theme="dark"] .ai-panel-action-btn { color: #e8eaed; }
+[data-theme="dark"] .ai-panel-action-btn:hover { background: rgba(255,255,255,0.07); }
+.ai-panel-action-btn svg { width: 16px; height: 16px; }
+[data-theme="dark"] .ai-panel-action-btn img { filter: invert(1) brightness(2); }
+.ai-panel-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  color: var(--grey-900);
+  display: flex;
+  align-items: center;
+  border-radius: 6px;
+  transition: background 0.15s, color 0.15s;
+}
+.ai-panel-close:hover { background: var(--grey-100); }
+[data-theme="dark"] .ai-panel-close { color: #e8eaed; }
+[data-theme="dark"] .ai-panel-close:hover { background: rgba(255,255,255,0.07); }
+.ai-panel-close svg { width: 18px; height: 18px; }
+
+/* Body */
+.ai-panel-body {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 24px 0;
+  text-align: center;
+  scrollbar-width: thin;
+  scrollbar-color: var(--grey-300) transparent;
+}
+.ai-panel-body::-webkit-scrollbar { width: 4px; }
+.ai-panel-body::-webkit-scrollbar-track { background: transparent; }
+.ai-panel-body::-webkit-scrollbar-thumb { background: var(--grey-300); border-radius: 4px; }
+.ai-panel-body::-webkit-scrollbar-thumb:hover { background: var(--grey-400); }
+[data-theme="dark"] .ai-panel-body { scrollbar-color: var(--grey-600) transparent; }
+[data-theme="dark"] .ai-panel-body::-webkit-scrollbar-thumb { background: var(--grey-600); }
+[data-theme="dark"] .ai-panel-body::-webkit-scrollbar-thumb:hover { background: var(--grey-500); }
+.ai-panel-body.has-chat {
+  justify-content: flex-start;
+  align-items: stretch;
+  text-align: left;
+  padding: 16px;
+}
+.ai-panel-body.has-chat .ai-panel-welcome-title,
+.ai-panel-body.has-chat .ai-panel-welcome-sub,
+.ai-panel-body.has-chat .ai-panel-suggested-label,
+.ai-panel-body.has-chat .ai-panel-suggestions { display: none; }
+
+/* Chat messages */
+.ai-chat-messages { display: flex; flex-direction: column; gap: 16px; }
+.ai-msg { display: flex; flex-direction: column; max-width: 88%; }
+.ai-msg.user { align-self: flex-end; align-items: flex-end; }
+.ai-msg.bot  { align-self: flex-start; align-items: flex-start; }
+.ai-msg-bubble {
+  padding: 14px 16px;
+  border-radius: 14px;
+  font-size: 14px;
+  line-height: 1.6;
+  font-family: var(--font-primary);
+}
+.ai-msg.user .ai-msg-bubble {
+  background: #FFFBF0;
+  color: var(--grey-700);
+  border-bottom-right-radius: 4px;
+}
+[data-theme="dark"] .ai-msg.user .ai-msg-bubble { background: #2A1E0A; color: var(--grey-700); }
+.ai-msg.bot .ai-msg-bubble {
+  background: #F0F9FF;
+  color: var(--grey-700);
+  border-bottom-left-radius: 4px;
+}
+[data-theme="dark"] .ai-msg.bot .ai-msg-bubble { background: #0C1D2C; color: var(--grey-700); }
+.ai-msg-bubble { max-height: 2000px; overflow: hidden; transition: max-height 0.4s ease; }
+.ai-msg-bubble p { margin: 0 0 6px; }
+.ai-msg-bubble p:last-child { margin-bottom: 0; }
+.ai-msg-bubble ol { margin: 4px 0 6px; padding-left: 20px; list-style-type: decimal; }
+.ai-msg-bubble ul { margin: 4px 0 6px; padding-left: 20px; list-style-type: disc; }
+.ai-msg-bubble li { margin-bottom: 3px; }
+.ai-msg-bubble br { display: block; content: ''; margin: 2px 0; }
+.ai-msg-bubble.collapsed { max-height: 300px; }
+.ai-msg-more { display: inline-block; margin-top: 6px; font-size: 13px; font-weight: 600; color: #41C8F7; cursor: pointer; background: none; border: none; padding: 0; font-family: var(--font-primary); }
+.ai-msg-more:hover { opacity: 0.75; }
+.ai-msg-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+  padding: 0 2px;
+}
+.ai-msg-time {
+  font-size: 11px;
+  color: var(--grey-400);
+  white-space: nowrap;
+}
+[data-theme="dark"] .ai-msg-time { color: #6b7280; }
+.ai-msg.user .ai-msg-meta { justify-content: flex-end; }
+.ai-msg.bot  .ai-msg-meta { justify-content: flex-start; }
+.ai-msg-actions { display: flex; align-items: center; gap: 4px; }
+.ai-msg-action {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 3px;
+  color: var(--grey-400);
+  display: flex;
+  align-items: center;
+  border-radius: 4px;
+  transition: color 0.15s, background 0.15s;
+}
+.ai-msg-action:hover { color: var(--grey-600); background: var(--grey-100); }
+[data-theme="dark"] .ai-msg-action { color: #6b7280; }
+[data-theme="dark"] .ai-msg-action:hover { color: #a1a8b3; background: rgba(255,255,255,0.06); }
+.ai-msg-action svg { width: 14px; height: 14px; }
+.ai-msg-action.active { color: var(--primary-500); }
+.ai-msg-action { position: relative; }
+.ai-msg-action .ai-copy-tooltip {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--grey-800);
+  color: #fff;
+  font-size: 11px;
+  font-family: var(--font-primary);
+  white-space: nowrap;
+  padding: 3px 8px;
+  border-radius: 4px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.ai-msg-action .ai-copy-tooltip.show { opacity: 1; }
+[data-theme="dark"] .ai-msg-action .ai-copy-tooltip { background: #e8eaed; color: #1e1e1e; }
+
+/* Bot typing indicator */
+.ai-typing-indicator { display: flex; gap: 5px; padding: 14px 16px; background: #F0F9FF; border-radius: 14px; border-bottom-left-radius: 4px; width: fit-content; }
+[data-theme="dark"] .ai-typing-indicator { background: #0C1D2C; }
+.ai-typing-indicator span { width: 7px; height: 7px; border-radius: 50%; background: var(--grey-400); animation: ai-bounce 1.2s infinite; }
+.ai-typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+.ai-typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes ai-bounce { 0%,80%,100%{transform:translateY(0)} 40%{transform:translateY(-6px)} }
+
+/* Active send button */
+.ai-panel-send.active { cursor: pointer; }
+.ai-panel-send.active:hover { opacity: 0.88; }
+.ai-panel-welcome-title {
+  font-family: var(--font-primary);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--grey-900);
+  margin: 0 0 10px;
+}
+[data-theme="dark"] .ai-panel-welcome-title { color: #e8eaed; }
+.ai-panel-welcome-sub {
+  font-size: 14px;
+  color: var(--grey-500);
+  line-height: 1.55;
+  margin: 0 0 28px;
+}
+[data-theme="dark"] .ai-panel-welcome-sub { color: #a1a8b3; }
+.ai-panel-suggested-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--grey-400);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  align-self: flex-start;
+  width: 100%;
+  text-align: left;
+}
+[data-theme="dark"] .ai-panel-suggested-label { color: #6b7280; }
+.ai-panel-suggestions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  align-items: flex-start;
+}
+.ai-suggest-btn {
+  outline: none;
+  background: none;
+  border: none;
+  border-radius: 100px;
+  padding: 8px 18px;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: var(--font-primary);
+  cursor: pointer;
+  background: linear-gradient(90deg, #41C8F7, #6774F8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  position: relative;
+  transition: opacity 0.15s;
+}
+.ai-suggest-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 100px;
+  padding: 1.5px;
+  background: linear-gradient(90deg, #41C8F7, #6774F8);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+.ai-suggest-btn:hover { opacity: 0.75; }
+
+/* Footer */
+.ai-panel-footer {
+  padding: 16px;
+  border-top: 1px solid var(--border-light);
+  flex-shrink: 0;
+}
+[data-theme="dark"] .ai-panel-footer { border-color: rgba(255,255,255,0.08); }
+.ai-panel-input-wrap {
+  position: relative;
+  background: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 14px 10px;
+  margin-bottom: 10px;
+}
+.ai-panel-input-wrap::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  padding: 1px;
+  background: linear-gradient(180deg, #41C8F7, #6774F8);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+[data-theme="dark"] .ai-panel-input-wrap { background: #252b33; }
+.ai-panel-input {
+  width: 100%;
+  border: none;
+  background: none;
+  resize: none;
+  font-size: 13px;
+  font-family: var(--font-primary);
+  color: var(--grey-800);
+  outline: none;
+  min-height: 56px;
+  line-height: 1.5;
+}
+[data-theme="dark"] .ai-panel-input { color: #cfd3d9; }
+.ai-panel-input::placeholder { color: var(--grey-400); }
+[data-theme="dark"] .ai-panel-input::placeholder { color: #6b7280; }
+.ai-panel-input-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 8px;
+}
+.ai-panel-send {
+  background: none;
+  border: none;
+  cursor: not-allowed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 0;
+}
+.ai-panel-send img { display: block; width: 30px; height: 30px; }
+.ai-panel-credits {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+.ai-panel-credits-icon {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+.ai-credits-number { color: #E87B2B; }
+.ai-credits-text { color: var(--primary-600); }
+.ai-credits-number.empty { color: var(--grey-400); }
+[data-theme="dark"] .ai-credits-number.empty { color: #6b7280; }
+.ai-add-credit-btn {
+  display: none;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--primary-500);
+  background: var(--primary-50, #EFF6FF);
+  border: 1px solid var(--primary-200, #BFDBFE);
+  border-radius: 20px;
+  padding: 3px 10px;
+  cursor: pointer;
+  font-family: var(--font-primary);
+  transition: background 0.15s, border-color 0.15s;
+  white-space: nowrap;
+}
+.ai-add-credit-btn:hover { background: var(--primary-100, #DBEAFE); border-color: var(--primary-400); }
+[data-theme="dark"] .ai-add-credit-btn { color: #7DD3FC; background: rgba(56,189,248,0.08); border-color: rgba(56,189,248,0.2); }
+[data-theme="dark"] .ai-add-credit-btn:hover { background: rgba(56,189,248,0.15); border-color: rgba(56,189,248,0.35); }
+.ai-add-credit-btn.visible { display: inline-flex; }
+.ai-panel-send:disabled { cursor: not-allowed; opacity: 0.35; }
+.ai-panel-credits.no-credits .ai-credits-text { color: var(--grey-400); }
+[data-theme="dark"] .ai-panel-credits.no-credits .ai-credits-text { color: #6b7280; }
+.ai-panel-disclaimer {
+  font-size: 11px;
+  color: var(--grey-400);
+  text-align: center;
+  line-height: 1.5;
+}
+[data-theme="dark"] .ai-panel-disclaimer { color: #6b7280; }
+
+/* History drawer */
+.ai-history-drawer {
+  position: absolute;
+  inset: 0;
+  background: var(--web-bg-light-white);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(-100%);
+  transition: transform 0.28s cubic-bezier(0.4,0,0.2,1);
+}
+[data-theme="dark"] .ai-history-drawer { background: #1a1f26; }
+.ai-history-drawer.open { transform: translateX(0); }
+.ai-history-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border-light);
+  flex-shrink: 0;
+}
+[data-theme="dark"] .ai-history-header { border-color: rgba(255,255,255,0.08); }
+.ai-history-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  color: var(--grey-500);
+  display: flex;
+  align-items: center;
+  border-radius: 6px;
+  transition: background 0.15s;
+}
+.ai-history-close:hover { background: var(--grey-100); }
+[data-theme="dark"] .ai-history-close { color: #a1a8b3; }
+[data-theme="dark"] .ai-history-close:hover { background: rgba(255,255,255,0.07); }
+.ai-history-close svg { width: 18px; height: 18px; }
+.ai-history-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+}
+.ai-new-chat-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  background: #3BBFF0;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: var(--font-primary);
+  cursor: pointer;
+  margin-bottom: 24px;
+  transition: background 0.15s;
+}
+.ai-new-chat-btn:hover { background: #2aaee0; }
+.ai-new-chat-btn svg { width: 16px; height: 16px; fill: currentColor; }
+[data-theme="dark"] .ai-new-chat-btn { background: var(--primary-500); color: var(--neutral-white); }
+[data-theme="dark"] .ai-new-chat-btn:hover { background: var(--primary-600); }
+.ai-history-section-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--grey-400);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+[data-theme="dark"] .ai-history-section-label { color: #6b7280; }
+.ai-history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.ai-history-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  font-size: 13px;
+  color: var(--grey-700);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s;
+  line-height: 1.45;
+}
+.ai-history-item:hover { background: var(--grey-100); }
+[data-theme="dark"] .ai-history-item { color: #cfd3d9; }
+[data-theme="dark"] .ai-history-item:hover { background: rgba(255,255,255,0.06); }
+.ai-history-item-label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ai-history-delete {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  border: none;
+  background: none;
+  color: var(--grey-400);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s, background 0.15s, color 0.15s;
+  padding: 0;
+}
+.ai-history-item:hover .ai-history-delete { opacity: 1; }
+.ai-history-delete:hover { background: #FEE2E2; color: #EF4444; }
+[data-theme="dark"] .ai-history-delete:hover { background: rgba(239,68,68,0.15); color: #F87171; }
+.ai-history-delete svg { width: 14px; height: 14px; stroke: currentColor; fill: none; }
+.ai-history-delete.confirming {
+  opacity: 1;
+  width: auto;
+  padding: 0 8px;
+  gap: 4px;
+  background: #FEE2E2;
+  color: #EF4444;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: var(--font-primary);
+  letter-spacing: 0.03em;
+}
+[data-theme="dark"] .ai-history-delete.confirming { background: rgba(239,68,68,0.15); color: #F87171; }
+.ai-history-delete.confirming:hover { background: #FECACA; }
+[data-theme="dark"] .ai-history-delete.confirming:hover { background: rgba(239,68,68,0.25); }
+@media (max-width: 768px) {
+  .ai-history-delete { opacity: 1; }
+}
+.ai-history-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 40px 16px;
+  text-align: center;
+  color: var(--grey-400);
+  font-size: 13px;
+}
+.ai-history-empty svg { width: 32px; height: 32px; opacity: 0.4; }
+[data-theme="dark"] .ai-history-empty { color: #6b7280; }
+
+@media (max-width: 480px) {
+  .ai-panel { width: 100vw; right: -100vw; }
 }
 
 </style>
@@ -1032,6 +1624,10 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif; }
       <div class="wd-meta">
         <span class="badge badge-md badge-neutral-outline">E-Invoicing · Industry Focus</span>
         <span class="badge badge-md badge-neutral-outline wd-badge-time"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> 19 mins</span>
+        <button class="wd-ask-ai-btn" aria-label="Ask AI" onclick="openAiPanel()">
+          <img src="assets/images/icon-ai.svg" width="16" height="16" alt="">
+          Ask AI
+        </button>
         <button class="wd-fav-btn" id="wd-fav" onclick="this.classList.toggle('active')" aria-label="Add to favourites">
           <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
           Favourite
@@ -1062,13 +1658,13 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif; }
         </div>
         <div class="wd-ai-preview">This course examines how Malaysia's e-Invoicing mandate applies to the healthcare sector. It addresses the unique billing complexities involving hospitals, insurance companies, patients, and third-party consultants, and how each transaction type must be handled to achieve full compliance.</div>
         <div class="wd-ai-body" id="wd-ai-body">
-          <p class="wd-ai-course-title">e-Invoicing — Industry Focus: Healthcare</p>
+
 
           <!-- Overview -->
           <div class="wd-ai-section">
             <div class="wd-ai-section-head">
               <h3>Overview</h3>
-              <span class="wd-ai-time"><svg viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>00:00 – 04:00</span>
+              <span class="wd-ai-time" onclick="seekToTime('00:00 – 04:00')" title="Jump to 00:00"><svg viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>00:00 – 04:00</span>
             </div>
             <p class="wd-ai-text">This course examines how Malaysia's e-Invoicing mandate applies to the healthcare sector. It addresses the unique billing complexities involving hospitals, insurance companies, patients, and third-party consultants, and how each transaction type must be handled to achieve full compliance.</p>
           </div>
@@ -1082,7 +1678,7 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif; }
             <div class="wd-ai-concept">
               <div class="wd-ai-concept-head">
                 <strong>Healthcare Provider &amp; Insurance Transactions</strong>
-                <span class="wd-ai-time"><svg viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>04:00 – 07:00</span>
+                <span class="wd-ai-time" onclick="seekToTime('04:00 – 07:00')" title="Jump to 04:00"><svg viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>04:00 – 07:00</span>
               </div>
               <p class="wd-ai-text">When payment flows from insurer to provider, the e-Invoice must reflect the actual payer rather than the patient. Correctly identifying the "buyer" in each billing scenario is fundamental to compliance when dual billing is involved.</p>
             </div>
@@ -1090,7 +1686,7 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif; }
             <div class="wd-ai-concept">
               <div class="wd-ai-concept-head">
                 <strong>Refundable &amp; Non-Refundable Deposits</strong>
-                <span class="wd-ai-time"><svg viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>07:00 – 10:00</span>
+                <span class="wd-ai-time" onclick="seekToTime('07:00 – 10:00')" title="Jump to 07:00"><svg viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>07:00 – 10:00</span>
               </div>
               <p class="wd-ai-text">Refundable deposits are not subject to e-Invoicing at collection — only upon forfeiture or conversion. Non-refundable deposits require an e-Invoice at the point of collection. Correct classification prevents compliance gaps.</p>
             </div>
@@ -1098,7 +1694,7 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif; }
             <div class="wd-ai-concept">
               <div class="wd-ai-concept-head">
                 <strong>Third-Party Consultants &amp; Space Rentals</strong>
-                <span class="wd-ai-time"><svg viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>10:00 – 16:00</span>
+                <span class="wd-ai-time" onclick="seekToTime('10:00 – 16:00')" title="Jump to 10:00"><svg viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>10:00 – 16:00</span>
               </div>
               <p class="wd-ai-text">Hospitals engaging external specialists must issue separate e-Invoices for consultant services. Space rental arrangements within hospital premises and staff medical expense reimbursements each carry distinct e-Invoicing obligations that must be documented accurately.</p>
             </div>
@@ -1110,7 +1706,7 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif; }
           <div class="wd-ai-section">
             <div class="wd-ai-section-head">
               <h3>Conclusion</h3>
-              <span class="wd-ai-time"><svg viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>16:00 – 19:00</span>
+              <span class="wd-ai-time" onclick="seekToTime('16:00 – 19:00')" title="Jump to 16:00"><svg viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>16:00 – 19:00</span>
             </div>
             <p class="wd-ai-text">Proper e-Invoicing implementation in healthcare requires understanding each transaction type and its corresponding obligations. Consistent classification and documentation are essential for meeting LHDN requirements while preserving operational efficiency across all billing scenarios.</p>
           </div>
@@ -1324,6 +1920,86 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif; }
   </div><!-- /.wd-layout -->
 </div><!-- /.wd-page -->
 
+<!-- Ask AI backdrop -->
+<div class="ai-panel-backdrop" id="ai-backdrop" onclick="closeAiPanel()"></div>
+
+<!-- Ask AI Panel -->
+<div class="ai-panel" id="ai-panel">
+
+  <!-- History Drawer -->
+  <div class="ai-history-drawer" id="ai-history-drawer">
+    <div class="ai-history-header">
+      <button class="ai-history-close" onclick="closeAiHistory()" aria-label="Close history">
+        <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="ai-history-body">
+      <button class="ai-new-chat-btn" onclick="aiResetChat()">
+        <svg width="22" height="22" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg"><path d="M11.0007 1.83372C11.7917 1.83372 12.5599 1.93455 13.2923 2.12247L12.834 3.89805C11.7502 3.61821 10.6167 3.5902 9.52038 3.81614C8.42407 4.04209 7.39403 4.51601 6.50919 5.20158C5.62435 5.88716 4.9082 6.76619 4.4156 7.77133C3.923 8.77647 3.66704 9.88103 3.66733 11.0004C3.66733 12.2232 3.96524 13.3993 4.52899 14.4526L4.84983 15.0511L4.24849 17.7526L6.94991 17.1521L7.54849 17.473C8.61057 18.0403 9.79654 18.336 11.0007 18.3337C12.0375 18.3337 13.0626 18.1139 14.0082 17.6887C14.9539 17.2634 15.7986 16.6425 16.4866 15.8669C17.1747 15.0912 17.6905 14.1785 17.9999 13.1889C18.3093 12.1993 18.4054 11.1553 18.2817 10.1259L20.1032 9.90955C20.1459 10.2671 20.1673 10.6307 20.1673 11.0004C20.1673 16.0631 16.0634 20.1671 11.0007 20.1671C9.49492 20.1692 8.01203 19.7988 6.68408 19.0891L1.83399 20.1671L2.91199 15.317C2.20221 13.989 1.83188 12.5061 1.83399 11.0004C1.83399 5.93764 5.93791 1.83372 11.0007 1.83372ZM17.9032 1.21039C17.9379 1.12457 17.9974 1.05107 18.0742 0.99932C18.151 0.947569 18.2414 0.919922 18.334 0.919922C18.4266 0.919922 18.517 0.947569 18.5938 0.99932C18.6706 1.05107 18.7301 1.12457 18.7648 1.21039L18.9977 1.76955C19.3868 2.71837 20.125 3.48183 21.0602 3.90264L21.7174 4.19597C21.8016 4.23491 21.8728 4.29712 21.9227 4.37525C21.9727 4.45338 21.9992 4.54416 21.9992 4.63689C21.9992 4.72961 21.9727 4.8204 21.9227 4.89853C21.8728 4.97666 21.8016 5.03886 21.7174 5.0778L21.0226 5.38764C20.1101 5.7964 19.3841 6.5323 18.9876 7.45014L18.7621 7.96897C18.7268 8.05346 18.6674 8.12562 18.5912 8.17639C18.515 8.22715 18.4255 8.25424 18.334 8.25424C18.2425 8.25424 18.153 8.22715 18.0768 8.17639C18.0006 8.12562 17.9412 8.05346 17.9059 7.96897L17.6795 7.45105C17.2834 6.53304 16.5577 5.79681 15.6454 5.38764L14.9487 5.0778C14.8643 5.03898 14.7928 4.97676 14.7427 4.89853C14.6926 4.8203 14.6659 4.72934 14.6659 4.63643C14.6659 4.54352 14.6926 4.45256 14.7427 4.37433C14.7928 4.2961 14.8643 4.23388 14.9487 4.19505L15.6069 3.90172C16.5421 3.48154 17.2806 2.71877 17.6703 1.77047L17.9032 1.21039Z"/></svg>
+        New Chat
+      </button>
+      <div class="ai-history-section-label">Recent Chats</div>
+      <div class="ai-history-list" id="ai-history-list"></div>
+    </div>
+  </div>
+
+  <!-- Panel Header -->
+  <div class="ai-panel-header">
+    <button class="ai-panel-hamburger" onclick="openAiHistory()" aria-label="Chat history">
+      <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+    <span class="ai-panel-title">
+      <img src="assets/images/icon-ai.svg" width="22" height="22" alt="">
+      Ask AI
+    </span>
+    <div class="ai-panel-actions">
+      <!-- New chat -->
+      <button class="ai-panel-action-btn" aria-label="New chat" onclick="aiResetChat()">
+        <img src="assets/images/icon-new-chat.svg" width="16" height="16" alt="">
+      </button>
+      <!-- Quiz -->
+      <button class="ai-panel-action-btn" aria-label="Quiz">
+        <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+      </button>
+      <button class="ai-panel-close" onclick="closeAiPanel()" aria-label="Close">
+        <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Panel Body -->
+  <div class="ai-panel-body" id="ai-panel-body">
+    <p class="ai-panel-welcome-title">Hey, John Doe, ready to dive in?</p>
+    <p class="ai-panel-welcome-sub">I can tell you what to expect or suggest where to begin in this course.</p>
+    <div class="ai-panel-suggested-label">Suggested</div>
+    <div class="ai-panel-suggestions">
+      <button class="ai-suggest-btn" onclick="aiSuggest(this)">Guide me through this topic</button>
+      <button class="ai-suggest-btn" onclick="aiSuggest(this)">Show key points</button>
+      <button class="ai-suggest-btn" onclick="aiSuggest(this)">Help with the concepts</button>
+    </div>
+    <div class="ai-chat-messages" id="ai-chat-messages"></div>
+  </div>
+
+  <!-- Panel Footer -->
+  <div class="ai-panel-footer">
+    <div class="ai-panel-input-wrap">
+      <textarea class="ai-panel-input" id="ai-input" placeholder="Ask a question to get started." rows="3" oninput="aiInputChanged()"></textarea>
+      <div class="ai-panel-input-bottom">
+        <div class="ai-panel-credits" id="ai-panel-credits">
+          <img src="assets/images/icon-credits.svg" class="ai-panel-credits-icon" alt="">
+          <span class="ai-credits-number" id="ai-credits-number">50</span><span class="ai-credits-text"> / 50 CREDITS REMAINING</span>
+          <button class="ai-add-credit-btn" id="ai-add-credit-btn" onclick="alert('Credit top-up coming soon!')">+ Add Credit</button>
+        </div>
+        <button class="ai-panel-send" id="ai-send-btn" aria-label="Send" onclick="aiSendMessage()">
+          <img id="ai-send-icon" src="assets/images/btn-send-disabled.svg" width="30" height="30" alt="">
+        </button>
+      </div>
+    </div>
+    <p class="ai-panel-disclaimer">I may not always be fully accurate. Please verify key details with official taxPOD resources.</p>
+  </div>
+
+</div>
+
 <footer class="site-footer">
   <div class="site-footer-body">
     <div class="site-footer-left">
@@ -1416,6 +2092,26 @@ function toggleChapter(id) {
   document.getElementById(id).classList.toggle('open');
 }
 
+function seekToTime(timeStr) {
+  // Parse "MM:SS" or "HH:MM:SS" — use the start time (before " – ")
+  var start = timeStr.split('–')[0].trim().replace(/[–—]/g, '').trim();
+  var parts = start.split(':').map(Number);
+  var seconds = parts.length === 3
+    ? parts[0] * 3600 + parts[1] * 60 + parts[2]
+    : parts[0] * 60 + (parts[1] || 0);
+  var v = document.getElementById('wd-video');
+  if (v) {
+    v.currentTime = seconds;
+    v.play();
+    // Hide overlay if visible
+    var overlay = document.getElementById('wd-play-overlay');
+    if (overlay) overlay.style.display = 'none';
+    // Scroll to video
+    var hero = document.getElementById('wd-hero-area');
+    if (hero) hero.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
 function toggleAiSummary() {
   document.getElementById('wd-ai-summary').classList.toggle('collapsed');
 }
@@ -1442,6 +2138,482 @@ function toggleVideoPlay() {
   } else {
     v.pause();
   }
+}
+
+/* ── Ask AI chat ── */
+var aiChatHistory = [];
+var aiCurrentSessionId = null;
+var AI_STORAGE_KEY = 'taxpod_ai_sessions_' + window.location.pathname;
+
+function aiGetSessions() {
+  try { return JSON.parse(localStorage.getItem(AI_STORAGE_KEY)) || []; } catch(e) { return []; }
+}
+function aiSaveSessions(sessions) {
+  try { localStorage.setItem(AI_STORAGE_KEY, JSON.stringify(sessions)); } catch(e) {}
+}
+function aiSaveCurrentSession() {
+  if (!aiChatHistory.length) return;
+  var sessions = aiGetSessions();
+  var firstUser = '';
+  for (var i = 0; i < aiChatHistory.length; i++) {
+    if (aiChatHistory[i].role === 'user') { firstUser = aiChatHistory[i].content; break; }
+  }
+  var title = firstUser.length > 50 ? firstUser.slice(0, 47) + '...' : firstUser;
+  if (aiCurrentSessionId) {
+    var idx = sessions.findIndex(function(s){ return s.id === aiCurrentSessionId; });
+    if (idx !== -1) { sessions[idx].messages = aiChatHistory.slice(); sessions[idx].title = title; }
+    else { sessions.unshift({ id: aiCurrentSessionId, title: title, messages: aiChatHistory.slice(), createdAt: Date.now() }); }
+  } else {
+    aiCurrentSessionId = Date.now().toString();
+    sessions.unshift({ id: aiCurrentSessionId, title: title, messages: aiChatHistory.slice(), createdAt: Date.now() });
+  }
+  aiSaveSessions(sessions);
+}
+function aiRenderHistory() {
+  var list = document.getElementById('ai-history-list');
+  if (!list) return;
+  var sessions = aiGetSessions();
+  if (!sessions.length) {
+    list.innerHTML = '<div class="ai-history-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>No chats yet. Start asking questions about this course!</span></div>';
+    return;
+  }
+  list.innerHTML = '';
+  sessions.forEach(function(s) {
+    var item = document.createElement('div');
+    item.className = 'ai-history-item';
+
+    var label = document.createElement('span');
+    label.className = 'ai-history-item-label';
+    label.textContent = s.title;
+
+    var delBtn = document.createElement('button');
+    delBtn.className = 'ai-history-delete';
+    delBtn.title = 'Delete';
+    delBtn.innerHTML = '<svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>';
+    delBtn.onclick = function(e) {
+      e.stopPropagation();
+      if (delBtn.classList.contains('confirming')) {
+        // Second click — confirmed
+        aiDeleteSession(s.id);
+      } else {
+        // First click — ask confirmation
+        delBtn.classList.add('confirming');
+        delBtn.innerHTML = '<svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>Delete?';
+        delBtn._confirmTimer = setTimeout(function() {
+          delBtn.classList.remove('confirming');
+          delBtn.innerHTML = '<svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>';
+        }, 3000);
+      }
+    };
+
+    item.appendChild(label);
+    item.appendChild(delBtn);
+    item.onclick = function() { aiLoadSession(s.id); };
+    list.appendChild(item);
+  });
+}
+function aiDeleteSession(id) {
+  var sessions = aiGetSessions().filter(function(s) { return s.id !== id; });
+  aiSaveSessions(sessions);
+  if (aiCurrentSessionId === id) { aiCurrentSessionId = null; }
+  aiRenderHistory();
+}
+
+function aiLoadSession(id) {
+  var sessions = aiGetSessions();
+  var session = null;
+  for (var i = 0; i < sessions.length; i++) { if (sessions[i].id === id) { session = sessions[i]; break; } }
+  if (!session) return;
+  aiCurrentSessionId = session.id;
+  aiChatHistory = session.messages.slice();
+  var messages = document.getElementById('ai-chat-messages');
+  var panelBody = document.getElementById('ai-panel-body');
+  messages.innerHTML = '';
+  aiChatHistory.forEach(function(m) {
+    messages.appendChild(aiCreateMsg(m.content, m.role === 'user' ? 'user' : 'bot'));
+  });
+  panelBody.classList.add('has-chat');
+  panelBody.scrollTop = panelBody.scrollHeight;
+  closeAiHistory();
+}
+
+function aiGetSystemPrompt() {
+  var title = document.querySelector('.wd-title') ? document.querySelector('.wd-title').textContent.trim() : '';
+  var tagline = document.querySelector('.wd-tagline') ? document.querySelector('.wd-tagline').textContent.trim() : '';
+  var speaker = document.querySelector('.wd-speaker-name') ? document.querySelector('.wd-speaker-name').textContent.trim() : '';
+  var aiBody = document.getElementById('wd-ai-body');
+  var summary = aiBody ? aiBody.innerText.trim() : '';
+  var desc = document.getElementById('tab-about') ? document.getElementById('tab-about').innerText.trim() : '';
+  var chapters = [];
+  document.querySelectorAll('.wd-lesson-title').forEach(function(el) { chapters.push(el.textContent.trim()); });
+
+  return 'You are an AI learning assistant embedded in the taxPOD e-learning platform. ' +
+    'Your role is to help users understand the course they are currently watching. ' +
+    'Answer questions based on the course content provided below. ' +
+    'Be concise, helpful, and accurate. If a question is outside the scope of this course, politely redirect to the course topics.\n\n' +
+    '## Course: ' + title + '\n' +
+    (tagline ? 'Tagline: ' + tagline + '\n' : '') +
+    (speaker ? 'Presented by: ' + speaker + '\n' : '') +
+    (chapters.length ? '\n## Chapters / Lessons:\n' + chapters.map(function(c,i){return (i+1)+'. '+c;}).join('\n') + '\n' : '') +
+    (summary ? '\n## AI-Generated Course Summary:\n' + summary + '\n' : '') +
+    (desc ? '\n## Full Course Description:\n' + desc + '\n' : '');
+}
+
+function aiTimestamp() {
+  var d = new Date();
+  var day = d.getDate();
+  var mon = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()];
+  var yr = String(d.getFullYear()).slice(2);
+  var h = d.getHours(), m = d.getMinutes();
+  var ampm = h >= 12 ? 'PM' : 'AM';
+  h = h % 12 || 12;
+  return day + ' ' + mon + ' ' + yr + ', ' + h + ':' + (m < 10 ? '0' : '') + m + ' ' + ampm;
+}
+
+function aiInputChanged() {
+  var input = document.getElementById('ai-input');
+  var btn = document.getElementById('ai-send-btn');
+  var icon = document.getElementById('ai-send-icon');
+  if (input.value.trim()) {
+    btn.classList.add('active');
+    if (icon) icon.src = 'assets/images/btn-send.svg';
+  } else {
+    btn.classList.remove('active');
+    if (icon) icon.src = 'assets/images/btn-send-disabled.svg';
+  }
+}
+
+function aiSuggest(btn) {
+  document.getElementById('ai-input').value = btn.textContent.trim();
+  aiInputChanged();
+  aiSendMessage();
+}
+
+function aiSendMessage() {
+  var input = document.getElementById('ai-input');
+  var text = input.value.trim();
+  if (!text) return;
+  var credEl = document.getElementById('ai-credits-number');
+  if (credEl && parseInt(credEl.textContent, 10) === 0) return;
+
+  var panelBody = document.getElementById('ai-panel-body');
+  var messages = document.getElementById('ai-chat-messages');
+
+  panelBody.classList.add('has-chat');
+  input.value = '';
+  aiInputChanged();
+
+  // Deduct 1 credit
+  var credEl = document.getElementById('ai-credits-number');
+  if (credEl) {
+    var cur = parseInt(credEl.textContent, 10);
+    if (cur > 0) {
+      var next = cur - 1;
+      credEl.textContent = next;
+      if (next === 0) {
+        credEl.classList.add('empty');
+        document.getElementById('ai-panel-credits').classList.add('no-credits');
+        document.getElementById('ai-add-credit-btn').classList.add('visible');
+        var sendBtn = document.getElementById('ai-send-btn');
+        sendBtn.disabled = true;
+        sendBtn.classList.remove('active');
+      }
+    }
+  }
+
+  aiChatHistory.push({ role: 'user', content: text });
+  messages.appendChild(aiCreateMsg(text, 'user'));
+  panelBody.scrollTop = panelBody.scrollHeight;
+
+  // Typing indicator
+  var typing = document.createElement('div');
+  typing.className = 'ai-msg bot';
+  typing.innerHTML = '<div class="ai-typing-indicator"><span></span><span></span><span></span></div>';
+  messages.appendChild(typing);
+  panelBody.scrollTop = panelBody.scrollHeight;
+
+  setTimeout(function() {
+    if (typing.parentNode) messages.removeChild(typing);
+    var reply = aiGenerateResponse(text);
+    aiChatHistory.push({ role: 'assistant', content: reply });
+    var botMsg = aiCreateMsg(reply, 'bot');
+    messages.appendChild(botMsg);
+    // Only show more/less if content actually overflows the max-height
+    var bub = botMsg.querySelector('.ai-msg-bubble');
+    var mBtn = botMsg.querySelector('.ai-msg-more');
+    if (bub && mBtn && bub.scrollHeight <= bub.clientHeight) {
+      bub.classList.remove('collapsed');
+      mBtn.remove();
+    }
+    panelBody.scrollTop = panelBody.scrollHeight;
+    aiSaveCurrentSession();
+  }, 900 + Math.random() * 600);
+}
+
+function aiGenerateResponse(question) {
+  var q = question.toLowerCase();
+
+  // Extract live course data from page
+  var title = document.querySelector('.wd-title') ? document.querySelector('.wd-title').textContent.trim() : 'this course';
+  var chapters = [];
+  document.querySelectorAll('.wd-lesson-title').forEach(function(el) { chapters.push(el.textContent.trim()); });
+  var aiSections = [];
+  document.querySelectorAll('.wd-ai-section-head h3').forEach(function(el) { aiSections.push(el.textContent.trim()); });
+  var concepts = [];
+  document.querySelectorAll('.wd-ai-concept-head strong').forEach(function(el) { concepts.push(el.textContent.trim()); });
+  var aiTexts = [];
+  document.querySelectorAll('.wd-ai-text').forEach(function(el) { aiTexts.push(el.textContent.trim()); });
+  var descText = document.getElementById('tab-about') ? document.getElementById('tab-about').innerText.trim() : '';
+
+  // Helper: find matching concept text
+  function findRelevantText(keywords) {
+    for (var i = 0; i < keywords.length; i++) {
+      for (var j = 0; j < aiTexts.length; j++) {
+        if (aiTexts[j].toLowerCase().indexOf(keywords[i]) !== -1) return aiTexts[j];
+      }
+      if (descText.toLowerCase().indexOf(keywords[i]) !== -1) {
+        var sentences = descText.split(/[.!?]/);
+        for (var s = 0; s < sentences.length; s++) {
+          if (sentences[s].toLowerCase().indexOf(keywords[i]) !== -1) return sentences[s].trim() + '.';
+        }
+      }
+    }
+    return null;
+  }
+
+  // Greeting
+  if (/^(hi|hello|hey|good\s*(morning|afternoon|evening))/.test(q)) {
+    return 'Hi there! I\'m here to help you with "' + title + '". Feel free to ask anything about the course content, topics covered, or key concepts.';
+  }
+
+  // Guide me / overview
+  if (q.indexOf('guide') !== -1 || q.indexOf('overview') !== -1 || q.indexOf('what is this course') !== -1 || q.indexOf('what does this course') !== -1) {
+    var chapterList = chapters.length ? '\n\nTopics covered:\n' + chapters.map(function(c, i){ return (i+1) + '. ' + c; }).join('\n') : '';
+    var intro = aiTexts[0] || descText.split('.')[0] + '.';
+    return intro + chapterList;
+  }
+
+  // Key points / summary
+  if (q.indexOf('key point') !== -1 || q.indexOf('main point') !== -1 || q.indexOf('summary') !== -1 || q.indexOf('summarize') !== -1 || q.indexOf('summarise') !== -1 || q.indexOf('summar') !== -1) {
+    if (concepts.length) {
+      return 'The key concepts covered in this course are:\n\n' + concepts.map(function(c, i){ return (i+1) + '. ' + c; }).join('\n') + '\n\nEach concept builds your understanding of the compliance requirements in this area.';
+    }
+    if (aiSections.length) {
+      return 'The main sections of this course are: ' + aiSections.join(', ') + '. ' + (aiTexts[0] || '');
+    }
+  }
+
+  // Chapters / lessons
+  if (q.indexOf('chapter') !== -1 || q.indexOf('lesson') !== -1 || q.indexOf('module') !== -1 || q.indexOf('topic') !== -1) {
+    if (chapters.length) {
+      return 'This course covers ' + chapters.length + ' lessons:\n\n' + chapters.map(function(c, i){ return (i+1) + '. ' + c; }).join('\n');
+    }
+  }
+
+  // Help with concepts
+  if (q.indexOf('help') !== -1 || q.indexOf('explain') !== -1 || q.indexOf('understand') !== -1 || q.indexOf('concept') !== -1) {
+    if (concepts.length && aiTexts.length) {
+      var idx = Math.floor(Math.random() * Math.min(concepts.length, aiTexts.length));
+      return concepts[idx] + ': ' + aiTexts[idx + 1 < aiTexts.length ? idx + 1 : idx];
+    }
+  }
+
+  // Duration / time
+  if (q.indexOf('how long') !== -1 || q.indexOf('duration') !== -1 || q.indexOf('minute') !== -1 || q.indexOf('hour') !== -1) {
+    var timeEl = document.querySelector('.wd-badge-time');
+    var dur = timeEl ? timeEl.textContent.trim() : '';
+    return dur ? 'This course has a total duration of ' + dur + '.' : 'You can check the duration shown next to the course title at the top of the page.';
+  }
+
+  // Instructor / speaker
+  if (q.indexOf('instructor') !== -1 || q.indexOf('speaker') !== -1 || q.indexOf('presenter') !== -1 || q.indexOf('who teach') !== -1 || q.indexOf('who is') !== -1) {
+    var nameEl = document.querySelector('.wd-speaker-name');
+    var roleEl = document.querySelector('.wd-speaker-role');
+    if (nameEl) {
+      return 'This course is presented by ' + nameEl.textContent.trim() + (roleEl ? ', ' + roleEl.textContent.trim() : '') + '.';
+    }
+  }
+
+  // Keyword match against chapter titles
+  for (var ci = 0; ci < chapters.length; ci++) {
+    var chWords = chapters[ci].toLowerCase().split(/\s+/);
+    var matchCount = 0;
+    chWords.forEach(function(w) { if (w.length > 3 && q.indexOf(w) !== -1) matchCount++; });
+    if (matchCount >= 1) {
+      var relText = aiTexts[ci] || aiTexts[Math.min(ci, aiTexts.length - 1)] || '';
+      return 'Regarding "' + chapters[ci] + '": ' + (relText || 'This topic is covered in the course. I recommend watching that section for a detailed explanation.');
+    }
+  }
+
+  // Concept keyword match
+  for (var ki = 0; ki < concepts.length; ki++) {
+    var cWords = concepts[ki].toLowerCase().split(/\s+/);
+    var km = 0;
+    cWords.forEach(function(w) { if (w.length > 3 && q.indexOf(w) !== -1) km++; });
+    if (km >= 1) {
+      var relT = aiTexts[ki + 1] || aiTexts[ki] || '';
+      return 'On the topic of "' + concepts[ki] + '": ' + (relT || 'This is one of the key concepts covered in the course.');
+    }
+  }
+
+  // Fallback
+  var fallbacks = [
+    'That\'s a great question! Based on "' + title + '", I\'d recommend checking the relevant chapter in the course for a detailed explanation. Is there a specific section or concept I can help clarify?',
+    'This course covers ' + (chapters.length ? chapters.length + ' lessons' : 'several topics') + ' related to this area. Could you be more specific about which part you\'d like to know more about?',
+    'I can help you with questions about the course content. Try asking about a specific chapter, concept, or topic covered in "' + title + '".'
+  ];
+  return fallbacks[aiChatHistory.length % fallbacks.length];
+}
+
+function aiFormatText(text) {
+  function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  var lines = text.split('\n');
+  var html = '';
+  var i = 0;
+  while (i < lines.length) {
+    var line = lines[i];
+    // Ordered list: lines starting with "1." "2." etc.
+    if (/^\d+\.\s/.test(line)) {
+      html += '<ol>';
+      while (i < lines.length && /^\d+\.\s/.test(lines[i])) {
+        html += '<li>' + esc(lines[i].replace(/^\d+\.\s/, '')) + '</li>';
+        i++;
+      }
+      html += '</ol>';
+      continue;
+    }
+    // Unordered list: lines starting with "- " or "* "
+    if (/^[-*]\s/.test(line)) {
+      html += '<ul>';
+      while (i < lines.length && /^[-*]\s/.test(lines[i])) {
+        html += '<li>' + esc(lines[i].replace(/^[-*]\s/, '')) + '</li>';
+        i++;
+      }
+      html += '</ul>';
+      continue;
+    }
+    // Empty line → skip (spacing handled by CSS)
+    if (line.trim() === '') { html += '<br>'; i++; continue; }
+    // Normal paragraph line
+    html += '<p>' + esc(line) + '</p>';
+    i++;
+  }
+  return html;
+}
+
+function aiCreateMsg(text, role) {
+  var ts = aiTimestamp();
+  var div = document.createElement('div');
+  div.className = 'ai-msg ' + role;
+
+  var bubble = document.createElement('div');
+  bubble.className = 'ai-msg-bubble';
+  bubble.innerHTML = aiFormatText(text);
+
+  var moreBtn = null;
+  if (role === 'bot') {
+    bubble.classList.add('collapsed');
+    moreBtn = document.createElement('button');
+    moreBtn.className = 'ai-msg-more';
+    moreBtn.textContent = 'more';
+    moreBtn.onclick = function() {
+      if (bubble.classList.contains('collapsed')) {
+        bubble.classList.remove('collapsed');
+        moreBtn.textContent = 'less';
+      } else {
+        bubble.classList.add('collapsed');
+        moreBtn.textContent = 'more';
+      }
+    };
+  }
+
+  var meta = document.createElement('div');
+  meta.className = 'ai-msg-meta';
+
+  if (role === 'bot') {
+    meta.innerHTML =
+      '<div class="ai-msg-actions">' +
+        '<button class="ai-msg-action" onclick="aiCopyMsg(this)"><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span class="ai-copy-tooltip">Copied!</span></button>' +
+        '<button class="ai-msg-action" title="Helpful" onclick="aiToggleFeedback(this)"><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg></button>' +
+        '<button class="ai-msg-action" title="Not helpful" onclick="aiToggleFeedback(this)"><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3H10z"/><path d="M17 2h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"/></svg></button>' +
+      '</div>' +
+      '<span class="ai-msg-time">' + ts + '</span>';
+  } else {
+    meta.innerHTML = '<span class="ai-msg-time">' + ts + '</span>';
+  }
+
+  div.appendChild(bubble);
+  if (moreBtn) div.appendChild(moreBtn);
+  div.appendChild(meta);
+  return div;
+}
+
+function aiToggleFeedback(btn) {
+  var actions = btn.closest('.ai-msg-actions');
+  var siblings = actions.querySelectorAll('.ai-msg-action[title="Helpful"], .ai-msg-action[title="Not helpful"]');
+  var wasActive = btn.classList.contains('active');
+  siblings.forEach(function(b) { b.classList.remove('active'); });
+  if (!wasActive) btn.classList.add('active');
+}
+
+function aiCopyMsg(btn) {
+  var bubble = btn.closest('.ai-msg').querySelector('.ai-msg-bubble');
+  var text = bubble.textContent;
+  function showTooltip() {
+    btn.classList.add('active');
+    var tooltip = btn.querySelector('.ai-copy-tooltip');
+    if (tooltip) { tooltip.classList.add('show'); }
+    setTimeout(function(){ btn.classList.remove('active'); if (tooltip) tooltip.classList.remove('show'); }, 1500);
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(showTooltip, function() {
+      // fallback on permission denied
+      fallbackCopy(text); showTooltip();
+    });
+  } else {
+    fallbackCopy(text); showTooltip();
+  }
+}
+function fallbackCopy(text) {
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.cssText = 'position:fixed;top:-9999px;left:-9999px;opacity:0';
+  document.body.appendChild(ta);
+  ta.focus(); ta.select();
+  try { document.execCommand('copy'); } catch(e) {}
+  document.body.removeChild(ta);
+}
+
+function openAiPanel() {
+  document.getElementById('ai-panel').classList.add('open');
+  document.getElementById('ai-backdrop').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeAiPanel() {
+  document.getElementById('ai-panel').classList.remove('open');
+  document.getElementById('ai-backdrop').classList.remove('open');
+  document.body.style.overflow = '';
+  closeAiHistory();
+}
+
+function openAiHistory() {
+  aiRenderHistory();
+  document.getElementById('ai-history-drawer').classList.add('open');
+}
+
+function closeAiHistory() {
+  document.getElementById('ai-history-drawer').classList.remove('open');
+}
+
+function aiResetChat() {
+  aiChatHistory = [];
+  aiCurrentSessionId = null;
+  document.getElementById('ai-panel-body').classList.remove('has-chat');
+  document.getElementById('ai-chat-messages').innerHTML = '';
+  document.getElementById('ai-input').value = '';
+  aiInputChanged();
+  closeAiHistory();
 }
 
 function playVideo() {
