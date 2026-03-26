@@ -478,8 +478,6 @@
   transition: border-color 0.15s, background 0.15s;
 }
 .sr-chip:hover { border-color: var(--grey-400); }
-[data-theme="dark"] .sr-chip { border-color: var(--grey-600); background: rgba(255,255,255,0.06); }
-[data-theme="dark"] .sr-chip:hover { border-color: var(--grey-400); }
 
 .sr-chip-text {
   font-family: var(--font-secondary);
@@ -519,8 +517,6 @@
 }
 .sr-hot-item:last-child { border-bottom: none; }
 .sr-hot-item:hover { background: var(--grey-50); color: var(--primary-600); }
-[data-theme="dark"] .sr-hot-item { border-top-color: rgba(255,255,255,0.06); }
-[data-theme="dark"] .sr-hot-item:hover { background: rgba(255,255,255,0.04); color: var(--primary-400); }
 
 /* Search result items */
 .sr-item {
@@ -533,16 +529,14 @@
   border-radius: 0;
 }
 .sr-item:hover, .sr-item.active { background: var(--grey-50); }
-[data-theme="dark"] .sr-item:hover, [data-theme="dark"] .sr-item.active { background: rgba(255,255,255,0.06); }
 
 /* Search result tabs */
 .sr-tabs {
   display: flex;
   gap: 4px;
   padding: 8px 14px 4px;
-  border-bottom: 1px solid var(--grey-100);
+  border-bottom: 1px solid var(--grey-150);
 }
-[data-theme="dark"] .sr-tabs { border-bottom-color: rgba(255,255,255,0.08); }
 .sr-tab {
   background: none;
   border: 1px solid transparent;
@@ -560,7 +554,6 @@
 }
 .sr-tab:hover { color: var(--primary-500); }
 .sr-tab.active { background: var(--primary-50); border-color: var(--primary-200); color: var(--primary-600); }
-[data-theme="dark"] .sr-tab.active { background: rgba(56,189,248,0.1); border-color: rgba(56,189,248,0.25); color: var(--primary-400); }
 .sr-tab-count {
   font-size: 11px;
   font-weight: 700;
@@ -578,11 +571,10 @@
 }
 .sr-item-icon svg { width: 16px; height: 16px; }
 .sr-icon-course { background: var(--primary-50); color: var(--primary-500); }
-.sr-icon-webinar { background: #FFF3E0; color: #E65100; }
-.sr-icon-clip { background: #F3E5F5; color: #7B1FA2; }
-[data-theme="dark"] .sr-icon-course { background: rgba(56,189,248,0.1); color: var(--primary-400); }
-[data-theme="dark"] .sr-icon-webinar { background: rgba(230,81,0,0.12); color: #FFA040; }
-[data-theme="dark"] .sr-icon-clip { background: rgba(123,31,162,0.15); color: #CE93D8; }
+.sr-icon-webinar { background: var(--badge-webinar-bg, #FFF3E0); color: var(--badge-webinar-color, #E65100); }
+.sr-icon-clip { background: var(--badge-clip-bg, #F3E5F5); color: var(--badge-clip-color, #7B1FA2); }
+[data-theme="dark"] .sr-icon-webinar { background: rgba(230,81,0,0.15); color: #FFA040; }
+[data-theme="dark"] .sr-icon-clip { background: rgba(123,31,162,0.18); color: #CE93D8; }
 
 .sr-item-body { flex: 1; min-width: 0; }
 .sr-item-title {
@@ -599,7 +591,6 @@
   color: var(--primary-600);
   font-weight: 700;
 }
-[data-theme="dark"] .sr-item-title mark { color: var(--primary-400); }
 
 .sr-item-meta {
   display: flex;
@@ -617,9 +608,8 @@
 .sr-badge-course { background: var(--primary-50); color: var(--primary-600); }
 .sr-badge-webinar { background: #FFF3E0; color: #E65100; }
 .sr-badge-clip { background: #F3E5F5; color: #7B1FA2; }
-[data-theme="dark"] .sr-badge-course { background: rgba(56,189,248,0.1); color: var(--primary-400); }
-[data-theme="dark"] .sr-badge-webinar { background: rgba(230,81,0,0.12); color: #FFA040; }
-[data-theme="dark"] .sr-badge-clip { background: rgba(123,31,162,0.15); color: #CE93D8; }
+[data-theme="dark"] .sr-badge-webinar { background: rgba(230,81,0,0.15); color: #FFA040; }
+[data-theme="dark"] .sr-badge-clip { background: rgba(123,31,162,0.18); color: #CE93D8; }
 
 .sr-item-dur {
   font-family: var(--font-secondary);
@@ -646,10 +636,8 @@
   font-size: 13px;
   color: var(--primary-500);
   cursor: pointer;
-  border-top: 1px solid var(--grey-100);
+  border-top: 1px solid var(--grey-150);
   text-align: center;
   transition: background 0.12s;
 }
 .sr-see-all:hover { background: var(--grey-50); }
-[data-theme="dark"] .sr-see-all { border-top-color: rgba(255,255,255,0.08); }
-[data-theme="dark"] .sr-see-all:hover { background: rgba(255,255,255,0.04); }
