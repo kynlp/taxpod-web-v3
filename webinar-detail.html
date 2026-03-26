@@ -866,8 +866,8 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif; }
   align-items: center;
   gap: 6px;
   font-family: var(--font-primary);
-  font-size: 22px;
-  font-weight: 700;
+  font-size: 20px;
+  font-weight: 600;
   color: var(--grey-900);
   flex: 1;
 }
@@ -1363,6 +1363,161 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif; }
 @media (max-width: 480px) {
   .ai-panel { width: 100vw; right: -100vw; }
 }
+
+/* ── Quiz Mode ── */
+.ai-panel-body.quiz-mode .ai-panel-welcome-title,
+.ai-panel-body.quiz-mode .ai-panel-welcome-sub,
+.ai-panel-body.quiz-mode .ai-panel-suggested-label,
+.ai-panel-body.quiz-mode .ai-panel-suggestions,
+.ai-panel-body.quiz-mode .ai-chat-messages { display: none; }
+
+.ai-quiz-container { display: none; width: 100%; }
+.ai-panel-body.quiz-mode .ai-quiz-container { display: block; }
+.ai-panel-body.quiz-mode { justify-content: flex-start; align-items: stretch; text-align: left; padding: 24px 20px; }
+
+/* Quiz: Landing */
+.quiz-landing { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 40px 16px 0; }
+.quiz-landing-icon { width: 120px; height: 120px; margin-bottom: 24px; }
+.quiz-landing-title { font-family: var(--font-primary); font-size: 20px; font-weight: 700; color: var(--grey-900); margin: 0 0 12px; }
+[data-theme="dark"] .quiz-landing-title { color: #e8eaed; }
+.quiz-landing-desc { font-size: 14px; color: var(--grey-500); line-height: 1.55; margin: 0 0 32px; max-width: 280px; }
+[data-theme="dark"] .quiz-landing-desc { color: #a1a8b3; }
+.quiz-start-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 100%; max-width: 260px; padding: 14px 24px;
+  background: var(--primary-500); color: var(--neutral-white); border: none; border-radius: 100px;
+  font-family: var(--font-primary); font-size: 15px; font-weight: 700;
+  cursor: pointer; transition: background 0.15s;
+}
+.quiz-start-btn:hover { background: var(--primary-600); }
+.quiz-credit-note { font-size: 12px; color: var(--grey-400); margin-top: 14px; }
+[data-theme="dark"] .quiz-credit-note { color: #6b7280; }
+.quiz-credits-display { display: flex; align-items: center; justify-content: center; gap: 5px; margin-top: 10px; font-size: 11px; font-weight: 700; letter-spacing: 0.04em; }
+.quiz-credits-display .ai-credits-number { color: #E87B2B; }
+.quiz-credits-display .ai-credits-text { color: var(--primary-600); }
+
+/* Quiz: Loading */
+.quiz-loading { display: none; flex-direction: column; align-items: center; text-align: center; padding: 80px 16px 0; }
+.quiz-loading.active { display: flex; }
+.quiz-spinner {
+  width: 64px; height: 64px; border: 4px solid var(--grey-200);
+  border-top-color: #3BBFF0; border-radius: 50%;
+  animation: quiz-spin 0.8s linear infinite; margin-bottom: 24px;
+}
+[data-theme="dark"] .quiz-spinner { border-color: #303539; border-top-color: #3BBFF0; }
+@keyframes quiz-spin { to { transform: rotate(360deg); } }
+.quiz-loading-title { font-family: var(--font-primary); font-size: 18px; font-weight: 700; color: var(--grey-900); margin: 0 0 8px; }
+[data-theme="dark"] .quiz-loading-title { color: #e8eaed; }
+.quiz-loading-sub { font-size: 13px; color: var(--grey-500); }
+[data-theme="dark"] .quiz-loading-sub { color: #a1a8b3; }
+
+/* Quiz: Questions */
+.quiz-questions { display: none; }
+.quiz-questions.active { display: block; }
+.quiz-header-label { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #E87B2B; margin: 0 0 4px; }
+.quiz-header-row { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 24px; }
+.quiz-header-answered { font-family: var(--font-primary); font-size: 14px; font-weight: 600; color: var(--grey-700); }
+[data-theme="dark"] .quiz-header-answered { color: #cfd3d9; }
+.quiz-header-count { font-family: var(--font-primary); font-size: 14px; font-weight: 400; color: var(--grey-400); }
+[data-theme="dark"] .quiz-header-count { color: #6b7280; }
+
+.quiz-question { margin-bottom: 28px; }
+.quiz-question-text { font-family: var(--font-primary); font-size: 14px; font-weight: 600; color: var(--grey-900); line-height: 1.5; margin: 0 0 14px; }
+[data-theme="dark"] .quiz-question-text { color: #e8eaed; }
+.quiz-options { display: flex; flex-direction: column; gap: 10px; }
+.quiz-option {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 12px 14px; border: 1.5px solid var(--grey-200);
+  border-radius: 10px; cursor: pointer; transition: all 0.15s;
+  background: transparent;
+}
+[data-theme="dark"] .quiz-option { border-color: #303539; }
+.quiz-option:hover { border-color: var(--grey-300); background: var(--grey-50, #F9FAFB); }
+[data-theme="dark"] .quiz-option:hover { border-color: #404650; background: rgba(255,255,255,0.03); }
+.quiz-option.selected { border-color: #3BBFF0; background: #F0F9FF; }
+[data-theme="dark"] .quiz-option.selected { border-color: #3BBFF0; background: rgba(59,191,240,0.08); }
+.quiz-option-radio {
+  width: 18px; height: 18px; border: 2px solid var(--grey-300);
+  border-radius: 50%; flex-shrink: 0; margin-top: 1px;
+  display: flex; align-items: center; justify-content: center; transition: all 0.15s;
+}
+[data-theme="dark"] .quiz-option-radio { border-color: #505860; }
+.quiz-option.selected .quiz-option-radio { border-color: #3BBFF0; }
+.quiz-option.selected .quiz-option-radio::after {
+  content: ''; width: 8px; height: 8px; border-radius: 50%; background: #3BBFF0;
+}
+.quiz-option-text { font-family: var(--font-primary); font-size: 14px; color: var(--grey-700); line-height: 1.5; }
+[data-theme="dark"] .quiz-option-text { color: #cfd3d9; }
+.quiz-option.selected .quiz-option-text { color: #0891B2; }
+[data-theme="dark"] .quiz-option.selected .quiz-option-text { color: #67E8F9; }
+
+/* Disabled options after submit */
+.quiz-option.disabled { pointer-events: none; }
+
+.quiz-submit-wrap { padding: 8px 0 0; }
+.quiz-submit-btn {
+  width: 100%; padding: 14px; border: none; border-radius: 10px;
+  font-family: var(--font-primary); font-size: 15px; font-weight: 700;
+  cursor: not-allowed; transition: all 0.15s;
+  background: var(--grey-200); color: var(--grey-400);
+}
+[data-theme="dark"] .quiz-submit-btn { background: #303539; color: #505860; }
+.quiz-submit-btn.active { background: #3BBFF0; color: #fff; cursor: pointer; }
+.quiz-submit-btn.active:hover { background: #2aaee0; }
+[data-theme="dark"] .quiz-submit-btn.active { background: var(--primary-500); color: var(--neutral-white); }
+[data-theme="dark"] .quiz-submit-btn.active:hover { background: var(--primary-600); }
+.quiz-footer-note { text-align: center; font-size: 12px; color: var(--grey-400); margin-top: 12px; }
+[data-theme="dark"] .quiz-footer-note { color: #6b7280; }
+.quiz-footer-credits { display: flex; align-items: center; justify-content: center; gap: 5px; margin-top: 8px; font-size: 11px; font-weight: 700; letter-spacing: 0.04em; }
+.quiz-footer-credits .ai-credits-number { color: #E87B2B; }
+.quiz-footer-credits .ai-credits-text { color: var(--primary-600); }
+
+/* Quiz: Results */
+.quiz-results { display: none; }
+.quiz-results.active { display: block; }
+.quiz-results-header { display: flex; align-items: center; gap: 10px; margin-bottom: 28px; }
+.quiz-results-title { font-family: var(--font-primary); font-size: 20px; font-weight: 700; color: var(--grey-900); }
+[data-theme="dark"] .quiz-results-title { color: #e8eaed; }
+.quiz-results-score { font-family: var(--font-primary); font-size: 20px; font-weight: 700; color: var(--grey-900); }
+[data-theme="dark"] .quiz-results-score { color: #e8eaed; }
+
+.quiz-result-item { margin-bottom: 32px; }
+.quiz-result-question { font-family: var(--font-primary); font-size: 14px; font-weight: 700; color: var(--grey-900); line-height: 1.5; margin: 0 0 12px; }
+[data-theme="dark"] .quiz-result-question { color: #e8eaed; }
+.quiz-result-label { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin: 0 0 4px; }
+.quiz-result-label.your-answer { color: var(--grey-500); }
+[data-theme="dark"] .quiz-result-label.your-answer { color: #a1a8b3; }
+.quiz-result-label.correct-answer { color: var(--grey-500); margin-top: 10px; }
+[data-theme="dark"] .quiz-result-label.correct-answer { color: #a1a8b3; }
+
+.quiz-result-answer { display: flex; align-items: flex-start; gap: 8px; font-family: var(--font-primary); font-size: 14px; line-height: 1.5; margin-bottom: 4px; }
+.quiz-result-answer.wrong { color: #EF4444; }
+.quiz-result-answer.correct { color: #22C55E; }
+.quiz-result-icon { flex-shrink: 0; width: 18px; height: 18px; margin-top: 2px; }
+.quiz-result-icon.wrong { color: #EF4444; }
+.quiz-result-icon.correct { color: #22C55E; }
+
+.quiz-result-explanation-label { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--grey-500); margin: 14px 0 6px; }
+[data-theme="dark"] .quiz-result-explanation-label { color: #a1a8b3; }
+.quiz-result-explanation { font-size: 13px; color: var(--grey-600); line-height: 1.6; margin: 0 0 8px; }
+[data-theme="dark"] .quiz-result-explanation { color: #a1a8b3; }
+.quiz-result-ref-label { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--grey-500); margin: 8px 0 4px; }
+[data-theme="dark"] .quiz-result-ref-label { color: #a1a8b3; }
+.quiz-result-ref { font-size: 13px; }
+.quiz-result-ref a { color: #3BBFF0; text-decoration: none; font-weight: 600; }
+.quiz-result-ref a:hover { text-decoration: underline; }
+
+.quiz-newquiz-btn {
+  width: 100%; padding: 14px; border: none; border-radius: 10px;
+  font-family: var(--font-primary); font-size: 15px; font-weight: 700;
+  background: #3BBFF0; color: #fff; cursor: pointer; transition: background 0.15s;
+}
+.quiz-newquiz-btn:hover { background: #2aaee0; }
+[data-theme="dark"] .quiz-newquiz-btn { background: var(--primary-500); color: var(--neutral-white); }
+[data-theme="dark"] .quiz-newquiz-btn:hover { background: var(--primary-600); }
+
+/* Hide footer when in quiz mode */
+.ai-panel.quiz-active .ai-panel-footer { display: none; }
 
 </style>
 </head>
@@ -1958,7 +2113,7 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif; }
         <img src="assets/images/icon-new-chat.svg" width="16" height="16" alt="">
       </button>
       <!-- Quiz -->
-      <button class="ai-panel-action-btn" aria-label="Quiz">
+      <button class="ai-panel-action-btn" aria-label="Quiz" onclick="quizShowLanding()">
         <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
       </button>
       <button class="ai-panel-close" onclick="closeAiPanel()" aria-label="Close">
@@ -1978,6 +2133,63 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif; }
       <button class="ai-suggest-btn" onclick="aiSuggest(this)">Help with the concepts</button>
     </div>
     <div class="ai-chat-messages" id="ai-chat-messages"></div>
+
+    <!-- Quiz Container -->
+    <div class="ai-quiz-container" id="ai-quiz-container">
+      <!-- Landing -->
+      <div class="quiz-landing" id="quiz-landing">
+        <img class="quiz-landing-icon" src="assets/images/icon-quiz.svg" width="120" height="120" alt="Quiz">
+        <h3 class="quiz-landing-title">Ready for a Quick Challenge?</h3>
+        <p class="quiz-landing-desc">Get a set of 10 personalized questions based on the course video you just watched.</p>
+        <button class="quiz-start-btn" onclick="quizStart()">Start Quiz Now</button>
+        <p class="quiz-credit-note">Starting the quiz uses 1 credit</p>
+        <div class="quiz-credits-display">
+          <img src="assets/images/icon-credits.svg" class="ai-panel-credits-icon" alt="">
+          <span class="ai-credits-number" id="quiz-landing-credits">50</span><span class="ai-credits-text"> / 50 CREDITS REMAINING</span>
+        </div>
+      </div>
+
+      <!-- Loading -->
+      <div class="quiz-loading" id="quiz-loading">
+        <div class="quiz-spinner"></div>
+        <h3 class="quiz-loading-title">Creating Your Quiz...</h3>
+        <p class="quiz-loading-sub">Analyzing the video content while preparing questions</p>
+      </div>
+
+      <!-- Questions -->
+      <div class="quiz-questions" id="quiz-questions">
+        <div class="quiz-header-label">COURSE ASSESSMENT</div>
+        <div class="quiz-header-row">
+          <span class="quiz-header-answered">Answered Questions</span>
+          <span class="quiz-header-count" id="quiz-answered-count">0/10</span>
+        </div>
+        <div id="quiz-questions-list"></div>
+        <div class="quiz-submit-wrap">
+          <button class="quiz-submit-btn" id="quiz-submit-btn" onclick="quizSubmit()">Submit</button>
+          <p class="quiz-footer-note">Submitting your answers uses 1 credit</p>
+          <div class="quiz-footer-credits">
+            <img src="assets/images/icon-credits.svg" class="ai-panel-credits-icon" alt="">
+            <span class="ai-credits-number" id="quiz-q-credits">50</span><span class="ai-credits-text"> / 50 CREDITS REMAINING</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Results -->
+      <div class="quiz-results" id="quiz-results">
+        <div class="quiz-results-header">
+          <span class="quiz-results-title">Your Results:</span>
+          <span style="font-size:24px;">&#127942;</span>
+          <span class="quiz-results-score" id="quiz-results-score">0/10 Correct</span>
+        </div>
+        <div id="quiz-results-list"></div>
+        <button class="quiz-newquiz-btn" onclick="quizStart()">Start a New Quiz</button>
+        <p class="quiz-footer-note" style="margin-top:12px;">Starting the quiz uses 1 credit</p>
+        <div class="quiz-footer-credits">
+          <img src="assets/images/icon-credits.svg" class="ai-panel-credits-icon" alt="">
+          <span class="ai-credits-number" id="quiz-r-credits">50</span><span class="ai-credits-text"> / 50 CREDITS REMAINING</span>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Panel Footer -->
@@ -2607,6 +2819,7 @@ function closeAiHistory() {
 }
 
 function aiResetChat() {
+  quizExitToChat();
   aiChatHistory = [];
   aiCurrentSessionId = null;
   document.getElementById('ai-panel-body').classList.remove('has-chat');
@@ -2614,6 +2827,446 @@ function aiResetChat() {
   document.getElementById('ai-input').value = '';
   aiInputChanged();
   closeAiHistory();
+}
+
+/* ── Quiz Feature ── */
+var quizData = [];
+var quizAnswers = {};
+
+function quizSyncCredits() {
+  var mainCredits = document.getElementById('ai-credits-number');
+  var val = mainCredits ? mainCredits.textContent : '50';
+  ['quiz-landing-credits', 'quiz-q-credits', 'quiz-r-credits'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.textContent = val;
+  });
+}
+
+function quizShowLanding() {
+  var panelBody = document.getElementById('ai-panel-body');
+  var panel = document.getElementById('ai-panel');
+  panelBody.classList.add('quiz-mode');
+  panel.classList.add('quiz-active');
+
+  document.getElementById('quiz-landing').style.display = 'flex';
+  document.getElementById('quiz-loading').classList.remove('active');
+  document.getElementById('quiz-questions').classList.remove('active');
+  document.getElementById('quiz-results').classList.remove('active');
+
+  quizSyncCredits();
+}
+
+function quizExitToChat() {
+  var panelBody = document.getElementById('ai-panel-body');
+  var panel = document.getElementById('ai-panel');
+  panelBody.classList.remove('quiz-mode');
+  panel.classList.remove('quiz-active');
+}
+
+function quizStart() {
+  var credEl = document.getElementById('ai-credits-number');
+  if (credEl && parseInt(credEl.textContent, 10) === 0) return;
+
+  // Deduct 1 credit for starting quiz
+  if (credEl) {
+    var cur = parseInt(credEl.textContent, 10);
+    if (cur > 0) {
+      var next = cur - 1;
+      credEl.textContent = next;
+      if (next === 0) {
+        credEl.classList.add('empty');
+        document.getElementById('ai-panel-credits').classList.add('no-credits');
+        document.getElementById('ai-add-credit-btn').classList.add('visible');
+      }
+    }
+  }
+  quizSyncCredits();
+
+  quizAnswers = {};
+  quizData = [];
+
+  // Show loading
+  document.getElementById('quiz-landing').style.display = 'none';
+  document.getElementById('quiz-results').classList.remove('active');
+  document.getElementById('quiz-questions').classList.remove('active');
+  document.getElementById('quiz-loading').classList.add('active');
+
+  // Generate quiz after delay
+  setTimeout(function() {
+    quizData = quizGenerateQuestions();
+    quizRenderQuestions();
+    document.getElementById('quiz-loading').classList.remove('active');
+    document.getElementById('quiz-questions').classList.add('active');
+    document.getElementById('ai-panel-body').scrollTop = 0;
+  }, 1800 + Math.random() * 800);
+}
+
+function quizGenerateQuestions() {
+  var title = document.querySelector('.wd-title') ? document.querySelector('.wd-title').textContent.trim() : 'this course';
+  var chapters = [];
+  document.querySelectorAll('.wd-lesson-title').forEach(function(el) { chapters.push(el.textContent.trim()); });
+  var concepts = [];
+  document.querySelectorAll('.wd-ai-concept-head strong').forEach(function(el) { concepts.push(el.textContent.trim()); });
+  var aiTexts = [];
+  document.querySelectorAll('.wd-ai-text').forEach(function(el) { aiTexts.push(el.textContent.trim()); });
+
+  // Question bank — pool of questions derived from course content
+  var bank = [];
+
+  // Add questions based on chapters
+  if (chapters.length) {
+    bank.push({
+      q: 'How many lessons/chapters does "' + title + '" contain?',
+      options: [chapters.length + ' lessons', (chapters.length + 3) + ' lessons', (chapters.length > 2 ? chapters.length - 2 : 1) + ' lessons', (chapters.length + 7) + ' lessons'],
+      correct: 0,
+      explanation: 'The course "' + title + '" is structured into ' + chapters.length + ' lessons covering the topic comprehensively.',
+      ref: '00:00:00 - 00:02:00'
+    });
+  }
+
+  if (chapters.length >= 2) {
+    bank.push({
+      q: 'Which of the following is a topic covered in this course?',
+      options: [chapters[0], 'Advanced Blockchain for Auditors', 'Personal Income Tax Returns for Freelancers', 'Corporate Governance Best Practices'],
+      correct: 0,
+      explanation: '"' + chapters[0] + '" is one of the key topics covered in this course as part of the structured curriculum.',
+      ref: '00:01:00 - 00:03:00'
+    });
+  }
+
+  if (chapters.length >= 3) {
+    bank.push({
+      q: 'What topic is covered in Chapter 3 of this course?',
+      options: ['Tax Filing Procedures', chapters[2], 'Annual Financial Reporting', 'Payroll Management Basics'],
+      correct: 1,
+      explanation: 'Chapter 3 covers "' + chapters[2] + '", which is an important part of the course curriculum.',
+      ref: '00:05:00 - 00:08:00'
+    });
+  }
+
+  // Concept-based questions
+  if (concepts.length >= 1) {
+    bank.push({
+      q: 'Which of the following is a key concept discussed in this course?',
+      options: [concepts[0], 'Depreciation of Intangible Assets', 'Foreign Exchange Hedging Strategies', 'Intercompany Transfer Pricing'],
+      correct: 0,
+      explanation: '"' + concepts[0] + '" is one of the foundational concepts explained in this course to build a solid understanding of the subject.',
+      ref: '00:03:10 - 00:04:00'
+    });
+  }
+
+  if (concepts.length >= 2) {
+    bank.push({
+      q: 'The course discusses the concept of "' + concepts[1] + '". What area does this relate to?',
+      options: ['Corporate tax incentives', title.split(':')[0], 'International accounting standards', 'Audit risk assessment'],
+      correct: 1,
+      explanation: 'This concept is directly related to the main subject of the course and helps learners understand the practical applications.',
+      ref: '00:06:00 - 00:08:30'
+    });
+  }
+
+  // General e-invoicing questions (if course is about e-invoicing)
+  var isEinvoicing = title.toLowerCase().indexOf('e-invoic') !== -1 || title.toLowerCase().indexOf('einvoic') !== -1;
+  if (isEinvoicing) {
+    bank.push({
+      q: 'What is an e-Invoice according to Malaysia\'s MyInvois system?',
+      options: ['A PDF invoice emailed to LHDN', 'A structured digital document validated through MyInvois', 'A scanned copy of a paper invoice', 'A WhatsApp message sent to customers'],
+      correct: 1,
+      explanation: 'An e-Invoice under MyInvois is a structured digital document that is submitted and validated through the official system. It is not a PDF, image, or message format. The structured format allows LHDN to validate the data automatically.',
+      ref: '00:03:10 - 00:04:00'
+    });
+    bank.push({
+      q: 'Which of the following is a key benefit of e-Invoicing?',
+      options: ['Unlimited invoice redesign', 'Manual data entry becomes mandatory', 'Improved tax compliance and reduced errors', 'Paper invoices are still required as backup'],
+      correct: 2,
+      explanation: 'E-Invoicing improves tax compliance through automated validation and significantly reduces manual data entry errors in the invoicing process.',
+      ref: '00:04:30 - 00:06:00'
+    });
+    bank.push({
+      q: 'Who is required to implement e-Invoicing in Malaysia?',
+      options: ['Only multinational corporations', 'Only government agencies', 'All businesses meeting the annual turnover threshold', 'Only sole proprietors'],
+      correct: 2,
+      explanation: 'The e-Invoicing mandate applies to all businesses that meet the specified annual turnover threshold, with implementation phased by company size.',
+      ref: '00:08:00 - 00:10:00'
+    });
+    bank.push({
+      q: 'What portal is used for e-Invoice submission in Malaysia?',
+      options: ['e-Filing Portal', 'MyTax Portal', 'MyInvois Portal', 'LHDN Direct Portal'],
+      correct: 2,
+      explanation: 'The MyInvois Portal is the designated platform for e-Invoice submission and validation under the Malaysian e-Invoicing framework.',
+      ref: '00:10:00 - 00:12:00'
+    });
+    bank.push({
+      q: 'How many required fields are there for an e-Invoice?',
+      options: ['25 fields', '35 fields', '45 fields', '55 fields'],
+      correct: 3,
+      explanation: 'An e-Invoice requires 55 mandatory fields to be completed for proper submission and validation through the MyInvois system.',
+      ref: '00:15:00 - 00:18:00'
+    });
+    bank.push({
+      q: 'What is a self-billed e-Invoice?',
+      options: ['An invoice generated automatically by accounting software', 'An invoice issued by the buyer instead of the supplier', 'An invoice that doesn\'t require LHDN validation', 'An invoice with self-calculated tax amounts'],
+      correct: 1,
+      explanation: 'A self-billed e-Invoice is issued by the buyer instead of the supplier in specific scenarios, such as when dealing with foreign suppliers or certain types of transactions.',
+      ref: '00:20:00 - 00:22:00'
+    });
+    bank.push({
+      q: 'What happens if a business fails to comply with e-Invoicing requirements?',
+      options: ['Nothing, compliance is voluntary', 'A warning letter is issued once', 'Offences and penalties as specified by LHDN', 'The business license is immediately revoked'],
+      correct: 2,
+      explanation: 'Non-compliance with e-Invoicing requirements can result in offences and penalties as outlined by LHDN. Businesses should ensure timely compliance to avoid these consequences.',
+      ref: '00:12:00 - 00:14:00'
+    });
+    bank.push({
+      q: 'What is a consolidated e-Invoice?',
+      options: ['Multiple invoices merged into a single PDF', 'A summary invoice for multiple transactions within a period', 'An invoice that consolidates all tax types', 'A combined invoice from multiple suppliers'],
+      correct: 1,
+      explanation: 'A consolidated e-Invoice is a summary invoice that covers multiple transactions within a specific period, simplifying the invoicing process for businesses with high transaction volumes.',
+      ref: '00:22:00 - 00:24:00'
+    });
+  }
+
+  // General tax knowledge questions
+  bank.push({
+    q: 'What is the primary purpose of this course?',
+    options: ['Entertainment and recreation', 'Providing comprehensive knowledge on ' + title.split(':')[0], 'Marketing YYC services', 'Preparing for university exams'],
+    correct: 1,
+    explanation: 'This course aims to provide comprehensive knowledge and understanding of the subject matter to help professionals stay informed and compliant.',
+    ref: '00:00:00 - 00:02:00'
+  });
+
+  bank.push({
+    q: 'Who would benefit most from completing this course?',
+    options: ['Students studying unrelated fields', 'Tax professionals and business owners', 'Only LHDN officers', 'Only foreign investors'],
+    correct: 1,
+    explanation: 'This course is designed primarily for tax professionals, accountants, and business owners who need to understand and apply the concepts in their work.',
+    ref: '00:00:30 - 00:01:30'
+  });
+
+  var speaker = document.querySelector('.wd-speaker-name') ? document.querySelector('.wd-speaker-name').textContent.trim() : '';
+  if (speaker) {
+    bank.push({
+      q: 'Who is the presenter of this course?',
+      options: [speaker, 'Datuk Ahmad Ibrahim', 'Professor Lee Wei Ming', 'Dr. Sarah Johnson'],
+      correct: 0,
+      explanation: 'This course is presented by ' + speaker + ', who shares their expertise on the subject matter.',
+      ref: '00:00:00 - 00:01:00'
+    });
+  }
+
+  // Shuffle and pick 10
+  for (var i = bank.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var temp = bank[i]; bank[i] = bank[j]; bank[j] = temp;
+  }
+
+  // Also shuffle options for each question (keeping track of correct answer)
+  var selected = bank.slice(0, Math.min(10, bank.length));
+  selected.forEach(function(q) {
+    var correctOption = q.options[q.correct];
+    // Shuffle options
+    for (var i = q.options.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = q.options[i]; q.options[i] = q.options[j]; q.options[j] = t;
+    }
+    q.correct = q.options.indexOf(correctOption);
+  });
+
+  return selected;
+}
+
+function quizRenderQuestions() {
+  var list = document.getElementById('quiz-questions-list');
+  list.innerHTML = '';
+  quizAnswers = {};
+  document.getElementById('quiz-answered-count').textContent = '0/' + quizData.length;
+  document.getElementById('quiz-submit-btn').classList.remove('active');
+
+  quizData.forEach(function(q, qi) {
+    var qDiv = document.createElement('div');
+    qDiv.className = 'quiz-question';
+
+    var qText = document.createElement('p');
+    qText.className = 'quiz-question-text';
+    qText.textContent = (qi + 1) + '.  ' + q.q;
+    qDiv.appendChild(qText);
+
+    var opts = document.createElement('div');
+    opts.className = 'quiz-options';
+
+    q.options.forEach(function(opt, oi) {
+      var optDiv = document.createElement('div');
+      optDiv.className = 'quiz-option';
+      optDiv.setAttribute('data-q', qi);
+      optDiv.setAttribute('data-o', oi);
+      optDiv.innerHTML =
+        '<div class="quiz-option-radio"></div>' +
+        '<span class="quiz-option-text">' + opt + '</span>';
+      optDiv.onclick = function() { quizSelectOption(qi, oi); };
+      opts.appendChild(optDiv);
+    });
+
+    qDiv.appendChild(opts);
+    list.appendChild(qDiv);
+  });
+}
+
+function quizSelectOption(qi, oi) {
+  // Deselect all options for this question
+  var allOpts = document.querySelectorAll('.quiz-option[data-q="' + qi + '"]');
+  allOpts.forEach(function(o) { o.classList.remove('selected'); });
+
+  // Select clicked option
+  var selected = document.querySelector('.quiz-option[data-q="' + qi + '"][data-o="' + oi + '"]');
+  if (selected) selected.classList.add('selected');
+
+  quizAnswers[qi] = oi;
+
+  // Update answered count
+  var answered = Object.keys(quizAnswers).length;
+  document.getElementById('quiz-answered-count').textContent = answered + '/' + quizData.length;
+
+  // Enable submit if all answered
+  var submitBtn = document.getElementById('quiz-submit-btn');
+  if (answered === quizData.length) {
+    submitBtn.classList.add('active');
+  } else {
+    submitBtn.classList.remove('active');
+  }
+}
+
+function quizSubmit() {
+  if (Object.keys(quizAnswers).length < quizData.length) return;
+
+  // Deduct 1 credit for submitting
+  var credEl = document.getElementById('ai-credits-number');
+  if (credEl) {
+    var cur = parseInt(credEl.textContent, 10);
+    if (cur > 0) {
+      var next = cur - 1;
+      credEl.textContent = next;
+      if (next === 0) {
+        credEl.classList.add('empty');
+        document.getElementById('ai-panel-credits').classList.add('no-credits');
+        document.getElementById('ai-add-credit-btn').classList.add('visible');
+      }
+    }
+  }
+  quizSyncCredits();
+
+  // Show loading briefly
+  document.getElementById('quiz-questions').classList.remove('active');
+  document.getElementById('quiz-loading').classList.add('active');
+  document.querySelector('.quiz-loading-title').textContent = 'Grading Your Quiz...';
+  document.querySelector('.quiz-loading-sub').textContent = 'Checking your answers and preparing feedback';
+
+  setTimeout(function() {
+    document.getElementById('quiz-loading').classList.remove('active');
+    // Reset loading text
+    document.querySelector('.quiz-loading-title').textContent = 'Creating Your Quiz...';
+    document.querySelector('.quiz-loading-sub').textContent = 'Analyzing the video content while preparing questions';
+    quizShowResults();
+  }, 1200 + Math.random() * 500);
+}
+
+function quizShowResults() {
+  var correct = 0;
+  quizData.forEach(function(q, qi) {
+    if (quizAnswers[qi] === q.correct) correct++;
+  });
+
+  document.getElementById('quiz-results-score').textContent = correct + '/' + quizData.length + ' Correct';
+
+  var list = document.getElementById('quiz-results-list');
+  list.innerHTML = '';
+
+  var letters = ['A', 'B', 'C', 'D', 'E', 'F'];
+
+  quizData.forEach(function(q, qi) {
+    var userAnswer = quizAnswers[qi];
+    var isCorrect = userAnswer === q.correct;
+
+    var item = document.createElement('div');
+    item.className = 'quiz-result-item';
+
+    // Question
+    var qText = document.createElement('p');
+    qText.className = 'quiz-result-question';
+    qText.textContent = (qi + 1) + '.  ' + q.q;
+    item.appendChild(qText);
+
+    // Your Answer
+    var yourLabel = document.createElement('p');
+    yourLabel.className = 'quiz-result-label your-answer';
+    yourLabel.textContent = 'YOUR ANSWER:';
+    item.appendChild(yourLabel);
+
+    var yourAns = document.createElement('div');
+    yourAns.className = 'quiz-result-answer ' + (isCorrect ? 'correct' : 'wrong');
+    yourAns.innerHTML =
+      '<svg class="quiz-result-icon ' + (isCorrect ? 'correct' : 'wrong') + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">' +
+      (isCorrect
+        ? '<path d="M20 6L9 17l-5-5"/>'
+        : '<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>') +
+      '</svg>' +
+      '<span>' + letters[userAnswer] + '.  ' + q.options[userAnswer] + '</span>';
+    item.appendChild(yourAns);
+
+    // Correct Answer (if wrong)
+    if (!isCorrect) {
+      var corrLabel = document.createElement('p');
+      corrLabel.className = 'quiz-result-label correct-answer';
+      corrLabel.textContent = 'CORRECT  ANSWER:';
+      item.appendChild(corrLabel);
+
+      var corrAns = document.createElement('div');
+      corrAns.className = 'quiz-result-answer correct';
+      corrAns.innerHTML =
+        '<svg class="quiz-result-icon correct" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>' +
+        '<span>' + letters[q.correct] + '.  ' + q.options[q.correct] + '</span>';
+      item.appendChild(corrAns);
+    }
+
+    // Explanation
+    var expLabel = document.createElement('p');
+    expLabel.className = 'quiz-result-explanation-label';
+    expLabel.textContent = 'EXPLANATION:';
+    item.appendChild(expLabel);
+
+    var expText = document.createElement('p');
+    expText.className = 'quiz-result-explanation';
+    expText.textContent = q.explanation;
+    item.appendChild(expText);
+
+    // Reference
+    var refLabel = document.createElement('p');
+    refLabel.className = 'quiz-result-ref-label';
+    refLabel.textContent = 'REFERENCE:';
+    item.appendChild(refLabel);
+
+    var refLink = document.createElement('p');
+    refLink.className = 'quiz-result-ref';
+    refLink.innerHTML = '<a href="javascript:void(0)" onclick="quizSeekVideo(\'' + q.ref + '\')">[' + q.ref + ']</a>';
+    item.appendChild(refLink);
+
+    list.appendChild(item);
+  });
+
+  document.getElementById('quiz-results').classList.add('active');
+  document.getElementById('ai-panel-body').scrollTop = 0;
+}
+
+function quizSeekVideo(ref) {
+  // Parse timestamp like "00:03:10 - 00:04:00" and seek to start
+  var parts = ref.split(' - ')[0].split(':');
+  var seconds = parseInt(parts[0]) * 3600 + parseInt(parts[1]) * 60 + parseInt(parts[2]);
+  var v = document.getElementById('wd-video');
+  if (v) {
+    v.currentTime = seconds;
+    v.play();
+    var o = document.getElementById('wd-play-overlay');
+    if (o) o.style.display = 'none';
+  }
 }
 
 function playVideo() {
