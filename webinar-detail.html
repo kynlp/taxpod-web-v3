@@ -431,10 +431,18 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif; }
 .wd-ai-concept { margin-bottom: 14px; }
 .wd-ai-concept-head {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 4px;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
   margin-bottom: 4px;
+  flex-wrap: wrap;
+}
+@media (max-width: 768px) {
+  .wd-ai-concept-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
 }
 .wd-ai-concept-head strong {
   font-size: 16px;
@@ -719,7 +727,7 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif; }
   cursor: pointer;
   transition: background 0.12s;
 }
-.wd-lesson-item:hover { background: var(--primary-100); }
+.wd-lesson-item:hover { background: var(--primary-50); }
 [data-theme="dark"] .wd-lesson-item:hover { background: var(--primary-100); }
 .wd-lesson-check {
   width: 18px;
