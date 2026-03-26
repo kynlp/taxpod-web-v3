@@ -915,7 +915,16 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif; }
   justify-content: center;
   padding: 32px 24px 0;
   text-align: center;
+  scrollbar-width: thin;
+  scrollbar-color: var(--grey-300) transparent;
 }
+.ai-panel-body::-webkit-scrollbar { width: 4px; }
+.ai-panel-body::-webkit-scrollbar-track { background: transparent; }
+.ai-panel-body::-webkit-scrollbar-thumb { background: var(--grey-300); border-radius: 4px; }
+.ai-panel-body::-webkit-scrollbar-thumb:hover { background: var(--grey-400); }
+[data-theme="dark"] .ai-panel-body { scrollbar-color: var(--grey-600) transparent; }
+[data-theme="dark"] .ai-panel-body::-webkit-scrollbar-thumb { background: var(--grey-600); }
+[data-theme="dark"] .ai-panel-body::-webkit-scrollbar-thumb:hover { background: var(--grey-500); }
 .ai-panel-body.has-chat {
   justify-content: flex-start;
   align-items: stretch;
