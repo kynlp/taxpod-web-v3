@@ -27,7 +27,14 @@
     { title: 'e-Invoice for Foreign Transactions', type: 'Clip', category: 'E-Invoicing', url: 'clips.html', duration: '3 mins' },
   ];
 
-  var HOT_TOPICS = ['e-Invoicing', 'SST', 'Income Tax', 'MyInvois', 'Budget 2025', 'Benefit in Kind'];
+  var HOT_TOPICS = [
+    'Stamp Duty Self-Assessment 2026: Are You Prepared?',
+    'e-Invoicing Mastery 2025 Q4: 5 Modules',
+    'e-Invoicing Mastery 2025 Q3: 5 Modules',
+    'SST Updates & Recent Changes',
+    'Budget 2025 Tax Highlights',
+    'Transfer Pricing: Case Studies'
+  ];
 
   var STORAGE_KEY = 'taxpod_recent_searches';
   var MAX_RECENT = 5;
@@ -167,48 +174,59 @@
     var html = '';
 
     if (recent.length) {
-      html += '<div class="sr-section-label"><span>Recent Searches</span><button class="sr-clear-btn" onclick="(function(){' +
-        'var k=\'taxpod_recent_searches\';localStorage.removeItem(k);' +
-        'var d=document.querySelector(\'.search-dropdown\');if(d){' +
-        'var i=d.previousSibling;while(i&&i.tagName!==\'INPUT\')i=i.previousSibling;' +
-        'var wrap=document.querySelector(\'.topbar-search\');if(wrap){' +
-        'var inp=wrap.querySelector(\'input\');if(inp){inp.dispatchEvent(new Event(\'input\'));}}}' +
-        '})()">Clear all</button></div>';
+      html += '<div class="sr-section-label"><span>Recent Search</span>' +
+        '<button class="sr-clear-all-btn" title="Clear all">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>' +
+        '</button></div>';
+      html += '<div class="sr-recent-chips">';
       recent.forEach(function (term) {
-        html += '<div class="sr-item sr-recent" data-term="' + esc(term) + '">' +
-          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>' +
-          '<span>' + esc(term) + '</span>' +
-          '<button class="sr-remove" data-term="' + esc(term) + '" title="Remove">✕</button>' +
-          '</div>';
+        html += '<span class="sr-chip" data-term="' + esc(term) + '">' +
+          '<span class="sr-chip-text">' + esc(term) + '</span>' +
+          '<button class="sr-chip-x" data-term="' + esc(term) + '" title="Remove">&times;</button>' +
+          '</span>';
       });
+      html += '</div>';
     }
 
-    html += '<div class="sr-section-label"><span>Hot Topics</span></div>';
-    html += '<div class="sr-hot-topics">';
+    html += '<div class="sr-section-label sr-section-label--hot"><span>Hot Topic</span>' +
+      '<svg class="sr-trending-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>' +
+      '</div>';
+    html += '<div class="sr-hot-list">';
     HOT_TOPICS.forEach(function (t) {
-      html += '<button class="sr-hot-tag" data-term="' + esc(t) + '">' + esc(t) + '</button>';
+      html += '<a class="sr-hot-item" data-term="' + esc(t) + '">' + esc(t) + '</a>';
     });
     html += '</div>';
 
     dropdown.innerHTML = html;
 
-    // Bind recent item clicks
-    dropdown.querySelectorAll('.sr-recent').forEach(function (el) {
+    // Bind clear all
+    var clearBtn = dropdown.querySelector('.sr-clear-all-btn');
+    if (clearBtn) {
+      clearBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        clearRecent();
+      });
+    }
+
+    // Bind chip clicks (fill search)
+    dropdown.querySelectorAll('.sr-chip').forEach(function (el) {
       el.addEventListener('click', function (e) {
-        if (e.target.classList.contains('sr-remove')) return;
+        if (e.target.classList.contains('sr-chip-x')) return;
         input.value = el.dataset.term;
         onInput();
       });
     });
-    dropdown.querySelectorAll('.sr-remove').forEach(function (btn) {
+    // Bind chip × (remove)
+    dropdown.querySelectorAll('.sr-chip-x').forEach(function (btn) {
       btn.addEventListener('click', function (e) {
         e.stopPropagation();
         removeRecent(btn.dataset.term);
       });
     });
-    dropdown.querySelectorAll('.sr-hot-tag').forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        input.value = btn.dataset.term;
+    // Bind hot topic items
+    dropdown.querySelectorAll('.sr-hot-item').forEach(function (el) {
+      el.addEventListener('click', function () {
+        input.value = el.dataset.term;
         render();
       });
     });
